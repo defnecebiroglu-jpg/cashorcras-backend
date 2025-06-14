@@ -243,6 +243,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Buy/Sell Stock endpoint
+  app.post('/api/teams/:teamId/stocks/trade', async (req, res) => {
+    try {
+      const { companyId, shares, action } = req.body; // action: 'buy' or 'sell'
+      const teamId = parseInt(req.params.teamId);
+      
+      if (!['buy', 'sell'].includes(action)) {
+        return res.status(400).json({ message: 'Invalid action' });
+      }
+      
+      const sharesAmount = action === 'sell' ? -Math.abs(shares) : Math.abs(shares);
+      
+      const teamStock = await storage.createTeamStock({
+        teamId,
+        companyId,
+        shares: sharesAmount
+      });
+      
+      res.status(201).json(teamStock);
+    } catch (error) {
+      res.status(400).json({ message: 'Trade failed' });
+    }
+  });
+
   app.put('/api/team-stocks/:id', async (req, res) => {
     try {
       const teamStock = await storage.updateTeamStock(parseInt(req.params.id), req.body);
@@ -269,6 +293,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(teamCurrency);
     } catch (error) {
       res.status(400).json({ message: 'Invalid team currency data' });
+    }
+  });
+
+  // Buy/Sell Currency endpoint
+  app.post('/api/teams/:teamId/currencies/trade', async (req, res) => {
+    try {
+      const { currencyId, amount, action } = req.body; // action: 'buy' or 'sell'
+      const teamId = parseInt(req.params.teamId);
+      
+      if (!['buy', 'sell'].includes(action)) {
+        return res.status(400).json({ message: 'Invalid action' });
+      }
+      
+      const currencyAmount = action === 'sell' ? -Math.abs(parseFloat(amount)) : Math.abs(parseFloat(amount));
+      
+      const teamCurrency = await storage.createTeamCurrency({
+        teamId,
+        currencyId,
+        amount: currencyAmount.toFixed(2)
+      });
+      
+      res.status(201).json(teamCurrency);
+    } catch (error) {
+      res.status(400).json({ message: 'Trade failed' });
     }
   });
 

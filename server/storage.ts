@@ -276,11 +276,38 @@ export class MemStorage implements IStorage {
   // Team Stocks
   async getTeamStocks(teamId: number): Promise<(TeamStock & { company: Company })[]> {
     const teamStocks = Array.from(this.teamStocks.values()).filter(s => s.teamId === teamId);
-    return teamStocks.map(stock => {
-      const company = this.companies.get(stock.companyId);
-      if (!company) throw new Error("Company not found");
-      return { ...stock, company };
+    
+    // Group by companyId and sum shares
+    const holdingsMap = new Map<number, { totalShares: number, companyId: number, teamId: number, id: number }>();
+    
+    teamStocks.forEach(stock => {
+      const existing = holdingsMap.get(stock.companyId);
+      if (existing) {
+        existing.totalShares += stock.shares;
+      } else {
+        holdingsMap.set(stock.companyId, {
+          totalShares: stock.shares,
+          companyId: stock.companyId,
+          teamId: stock.teamId,
+          id: stock.id
+        });
+      }
     });
+    
+    // Filter out zero or negative holdings and return with company data
+    return Array.from(holdingsMap.values())
+      .filter(holding => holding.totalShares > 0)
+      .map(holding => {
+        const company = this.companies.get(holding.companyId);
+        if (!company) throw new Error("Company not found");
+        return {
+          id: holding.id,
+          teamId: holding.teamId,
+          companyId: holding.companyId,
+          shares: holding.totalShares,
+          company
+        };
+      });
   }
 
   async createTeamStock(teamStock: InsertTeamStock): Promise<TeamStock> {
@@ -305,11 +332,39 @@ export class MemStorage implements IStorage {
   // Team Currencies
   async getTeamCurrencies(teamId: number): Promise<(TeamCurrency & { currency: Currency })[]> {
     const teamCurrencies = Array.from(this.teamCurrencies.values()).filter(c => c.teamId === teamId);
-    return teamCurrencies.map(currency => {
-      const currencyData = this.currencies.get(currency.currencyId);
-      if (!currencyData) throw new Error("Currency not found");
-      return { ...currency, currency: currencyData };
+    
+    // Group by currencyId and sum amounts
+    const holdingsMap = new Map<number, { totalAmount: number, currencyId: number, teamId: number, id: number }>();
+    
+    teamCurrencies.forEach(currency => {
+      const existing = holdingsMap.get(currency.currencyId);
+      const amount = parseFloat(currency.amount);
+      if (existing) {
+        existing.totalAmount += amount;
+      } else {
+        holdingsMap.set(currency.currencyId, {
+          totalAmount: amount,
+          currencyId: currency.currencyId,
+          teamId: currency.teamId,
+          id: currency.id
+        });
+      }
     });
+    
+    // Filter out zero or negative holdings and return with currency data
+    return Array.from(holdingsMap.values())
+      .filter(holding => holding.totalAmount > 0)
+      .map(holding => {
+        const currencyData = this.currencies.get(holding.currencyId);
+        if (!currencyData) throw new Error("Currency not found");
+        return {
+          id: holding.id,
+          teamId: holding.teamId,
+          currencyId: holding.currencyId,
+          amount: holding.totalAmount.toFixed(2),
+          currency: currencyData
+        };
+      });
   }
 
   async createTeamCurrency(teamCurrency: InsertTeamCurrency): Promise<TeamCurrency> {
