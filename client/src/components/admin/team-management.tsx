@@ -258,7 +258,7 @@ export function TeamManagement() {
                   name="shares"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Number of Shares</FormLabel>
+                      <FormLabel>Hisse Sayısı</FormLabel>
                       <FormControl>
                         <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
                       </FormControl>
@@ -267,7 +267,7 @@ export function TeamManagement() {
                   )}
                 />
                 <Button type="submit" className="w-full" disabled={createStockMutation.isPending}>
-                  Assign Stock
+                  Hisse Ata
                 </Button>
               </form>
             </Form>
@@ -281,11 +281,11 @@ export function TeamManagement() {
                   name="currencyId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Currency</FormLabel>
+                      <FormLabel>Döviz</FormLabel>
                       <Select onValueChange={(value) => field.onChange(parseInt(value))}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select currency" />
+                            <SelectValue placeholder="Döviz seçin" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -305,7 +305,7 @@ export function TeamManagement() {
                   name="amount"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Amount</FormLabel>
+                      <FormLabel>Miktar</FormLabel>
                       <FormControl>
                         <Input type="number" step="0.01" {...field} />
                       </FormControl>
@@ -314,7 +314,7 @@ export function TeamManagement() {
                   )}
                 />
                 <Button type="submit" className="w-full" disabled={createCurrencyMutation.isPending}>
-                  Assign Currency
+                  Döviz Ata
                 </Button>
               </form>
             </Form>
@@ -328,7 +328,7 @@ export function TeamManagement() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Startup Name</FormLabel>
+                      <FormLabel>Girişim Adı</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -341,7 +341,7 @@ export function TeamManagement() {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>Açıklama</FormLabel>
                       <FormControl>
                         <Textarea {...field} />
                       </FormControl>
@@ -354,7 +354,7 @@ export function TeamManagement() {
                   name="value"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Investment Value ($)</FormLabel>
+                      <FormLabel>Yatırım Değeri (₺)</FormLabel>
                       <FormControl>
                         <Input type="number" step="0.01" {...field} />
                       </FormControl>
@@ -367,7 +367,7 @@ export function TeamManagement() {
                   name="industry"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Industry</FormLabel>
+                      <FormLabel>Sektör</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -380,18 +380,18 @@ export function TeamManagement() {
                   name="riskLevel"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Risk Level</FormLabel>
+                      <FormLabel>Risk Seviyesi</FormLabel>
                       <Select onValueChange={field.onChange}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select risk level" />
+                            <SelectValue placeholder="Risk seviyesi seçin" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="Low">Low</SelectItem>
-                          <SelectItem value="Medium">Medium</SelectItem>
-                          <SelectItem value="Medium-High">Medium-High</SelectItem>
-                          <SelectItem value="High">High</SelectItem>
+                          <SelectItem value="Düşük">Düşük</SelectItem>
+                          <SelectItem value="Orta">Orta</SelectItem>
+                          <SelectItem value="Orta-Yüksek">Orta-Yüksek</SelectItem>
+                          <SelectItem value="Yüksek">Yüksek</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
