@@ -25,12 +25,12 @@ export function StartupDesk({ teamId }: StartupDeskProps) {
       <div className="max-w-4xl mx-auto">
         <Card>
           <CardHeader>
-            <CardTitle>Your Startup Investment</CardTitle>
-            <p className="text-sm text-muted-foreground">Current startup venture assignment</p>
+            <CardTitle>Girişim Yatırımınız</CardTitle>
+            <p className="text-sm text-muted-foreground">Mevcut girişim projesi ataması</p>
           </CardHeader>
           <CardContent>
             <div className="text-center py-8 text-slate-500">
-              No startup assigned to this team
+              Bu takıma henüz girişim atanmamış
             </div>
           </CardContent>
         </Card>

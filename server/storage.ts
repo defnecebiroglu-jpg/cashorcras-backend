@@ -116,10 +116,17 @@ export class MemStorage implements IStorage {
 
     // Initialize teams
     const initialTeams: InsertTeam[] = [
-      { name: "Alfa Takımı", cashBalance: "25430.00", accessCode: "ALFA2024", profilePicUrl: null },
-      { name: "Beta Takımı", cashBalance: "18250.00", accessCode: "BETA2024", profilePicUrl: null },
-      { name: "Gama Takımı", cashBalance: "32100.00", accessCode: "GAMA2024", profilePicUrl: null },
-      { name: "Delta Takımı", cashBalance: "28750.00", accessCode: "DELTA2024", profilePicUrl: null }
+      { name: "1 Takımı", cashBalance: "100000.00", accessCode: "00012024", profilePicUrl: null },
+      { name: "2 Takımı", cashBalance: "100000.00", accessCode: "00022024", profilePicUrl: null },
+      { name: "3 Takımı", cashBalance: "100000.00", accessCode: "00032024", profilePicUrl: null },
+      { name: "4 Takımı", cashBalance: "100000.00", accessCode: "00042024", profilePicUrl: null },
+      { name: "5 Takımı", cashBalance: "100000.00", accessCode: "00052024", profilePicUrl: null },
+      { name: "6 Takımı", cashBalance: "100000.00", accessCode: "00062024", profilePicUrl: null },
+      { name: "7 Takımı", cashBalance: "100000.00", accessCode: "00072024", profilePicUrl: null },
+      { name: "8 Takımı", cashBalance: "100000.00", accessCode: "00082024", profilePicUrl: null },
+      { name: "9 Takımı", cashBalance: "100000.00", accessCode: "00092024", profilePicUrl: null },
+      { name: "10 Takımı", cashBalance: "100000.00", accessCode: "00102024", profilePicUrl: null }
+  
     ];
 
     initialTeams.forEach(team => {
@@ -127,48 +134,13 @@ export class MemStorage implements IStorage {
       this.teams.set(id, { 
         ...team, 
         id,
-        cashBalance: team.cashBalance || "50000.00",
+        cashBalance: team.cashBalance || "100000.00",
         accessCode: team.accessCode,
         profilePicUrl: team.profilePicUrl || null
       });
     });
 
-    // Initialize team stocks for Team Alpha
-    const teamAlphaStocks: InsertTeamStock[] = [
-      { teamId: 1, companyId: 1, shares: 25 }, // Apple
-      { teamId: 1, companyId: 2, shares: 15 }, // Microsoft
-      { teamId: 1, companyId: 3, shares: 8 }   // Tesla
-    ];
-
-    teamAlphaStocks.forEach(stock => {
-      const id = this.currentTeamStockId++;
-      this.teamStocks.set(id, { ...stock, id });
-    });
-
-    // Initialize team currencies for Team Alpha
-    const teamAlphaCurrencies: InsertTeamCurrency[] = [
-      { teamId: 1, currencyId: 1, amount: "2500.00" }, // EUR
-      { teamId: 1, currencyId: 2, amount: "1200.00" }, // GBP
-      { teamId: 1, currencyId: 3, amount: "150000.00" } // JPY
-    ];
-
-    teamAlphaCurrencies.forEach(currency => {
-      const id = this.currentTeamCurrencyId++;
-      this.teamCurrencies.set(id, { ...currency, id });
-    });
-
-    // Initialize team startup for Team Alpha
-    const teamAlphaStartup: InsertTeamStartup = {
-      teamId: 1,
-      name: "EcoTech Solutions",
-      description: "A revolutionary green technology startup focused on developing sustainable energy storage solutions for residential and commercial applications. The company specializes in advanced battery technology and smart grid integration.",
-      value: "25000.00",
-      industry: "Clean Technology",
-      riskLevel: "Medium-High"
-    };
-
-    const startupId = this.currentTeamStartupId++;
-    this.teamStartups.set(startupId, { ...teamAlphaStartup, id: startupId });
+    
   }
 
   // Companies

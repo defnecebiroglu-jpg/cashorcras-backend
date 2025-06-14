@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Settings, DollarSign, TrendingUp, Briefcase } from "lucide-react";
+import { Plus, Settings, DollarSign, TrendingUp, Briefcase, Edit, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
 import { insertTeamStockSchema, insertTeamCurrencySchema, insertTeamStartupSchema, type Team, type Company, type Currency } from "@shared/schema";
@@ -171,7 +171,7 @@ export function TeamManagement() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">Team Management</h3>
+        <h3 className="text-lg font-semibold">Takım Yönetimi</h3>
       </div>
 
       <div className="grid gap-4">
@@ -187,7 +187,7 @@ export function TeamManagement() {
                     onClick={() => handleManageTeam(team, "stocks")}
                   >
                     <TrendingUp className="h-4 w-4 mr-1" />
-                    Stocks
+                    Hisseler
                   </Button>
                   <Button
                     variant="outline"
@@ -195,7 +195,7 @@ export function TeamManagement() {
                     onClick={() => handleManageTeam(team, "currencies")}
                   >
                     <DollarSign className="h-4 w-4 mr-1" />
-                    Currencies
+                    Dövizler
                   </Button>
                   <Button
                     variant="outline"
@@ -203,16 +203,17 @@ export function TeamManagement() {
                     onClick={() => handleManageTeam(team, "startup")}
                   >
                     <Briefcase className="h-4 w-4 mr-1" />
-                    Startup
+                    Girişim
                   </Button>
                 </div>
               </CardTitle>
             </CardHeader>
-            <CardContent>
+          <CardContent>
               <p className="text-sm text-muted-foreground">
-                Cash Balance: ${parseFloat(team.cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                Nakit Bakiye: ₺{parseFloat(team.cashBalance).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </CardContent>
+
           </Card>
         ))}
       </div>
@@ -221,7 +222,7 @@ export function TeamManagement() {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>
-              Manage {selectedTeam?.name} - {managementType === "stocks" ? "Stocks" : managementType === "currencies" ? "Currencies" : "Startup"}
+              {selectedTeam?.name} Yönetimi - {managementType === "stocks" ? "Hisseler" : managementType === "currencies" ? "Dövizler" : "Girişim"}
             </DialogTitle>
           </DialogHeader>
           
@@ -233,11 +234,11 @@ export function TeamManagement() {
                   name="companyId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Company</FormLabel>
+                      <FormLabel>Şirket</FormLabel>
                       <Select onValueChange={(value) => field.onChange(parseInt(value))}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select company" />
+                            <SelectValue placeholder="Şirket seçin" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>

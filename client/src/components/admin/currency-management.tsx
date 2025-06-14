@@ -214,7 +214,6 @@ export function CurrencyManagement() {
                           type="file"
                           accept="image/*"
                           onChange={(e) => onChange(e.target.files)}
-                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
