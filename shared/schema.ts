@@ -24,6 +24,8 @@ export const teams = pgTable("teams", {
   id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
   cashBalance: decimal("cash_balance", { precision: 12, scale: 2 }).notNull().default("50000"),
+  accessCode: text("access_code").notNull().unique(),
+  profilePicUrl: text("profile_pic_url"),
 });
 
 export const teamStocks = pgTable("team_stocks", {

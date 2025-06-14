@@ -29,6 +29,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Serve uploaded files
   app.use('/uploads', express.static('uploads'));
 
+  // Authentication routes
+  app.post('/api/auth/team', async (req, res) => {
+    try {
+      const { accessCode } = req.body;
+      const team = await storage.authenticateTeam(accessCode);
+      if (!team) {
+        return res.status(401).json({ message: 'Geçersiz erişim kodu' });
+      }
+      
+      req.session = req.session || {};
+      req.session.teamId = team.id;
+      res.json({ team });
+    } catch (error) {
+      res.status(500).json({ message: 'Kimlik doğrulama hatası' });
+    }
+  });
+
+  app.post('/api/auth/admin', async (req, res) => {
+    try {
+      const { password } = req.body;
+      const isValid = await storage.authenticateAdmin(password);
+      if (!isValid) {
+        return res.status(401).json({ message: 'Geçersiz admin şifresi' });
+      }
+      
+      req.session = req.session || {};
+      req.session.isAdmin = true;
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ message: 'Kimlik doğrulama hatası' });
+    }
+  });
+
+  app.post('/api/auth/logout', (req, res) => {
+    req.session = {};
+    res.json({ success: true });
+  });
+
   // Companies
   app.get('/api/companies', async (req, res) => {
     try {
@@ -163,12 +201,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/teams/:id', async (req, res) => {
+  app.put('/api/teams/:id', upload.single('profilePic'), async (req, res) => {
     try {
-      const team = await storage.updateTeam(parseInt(req.params.id), req.body);
+      const data = { ...req.body };
+      if (req.file) {
+        data.profilePicUrl = `/uploads/${req.file.filename}`;
+      }
+      const team = await storage.updateTeam(parseInt(req.params.id), data);
       res.json(team);
     } catch (error) {
-      res.status(400).json({ message: 'Failed to update team' });
+      res.status(400).json({ message: 'Takım güncelleme hatası' });
+    }
+  });
+
+  app.delete('/api/teams/:id', async (req, res) => {
+    try {
+      await storage.deleteTeam(parseInt(req.params.id));
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: 'Takım silme hatası' });
     }
   });
 

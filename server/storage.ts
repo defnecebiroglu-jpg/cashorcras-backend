@@ -44,10 +44,14 @@ export interface IStorage {
   deleteTeamCurrency(id: number): Promise<void>;
 
   // Team Startups
-  getTeamStartup(teamId: number): Promise<TeamStartup | undefined>;
+  getTeamStartup(teamId: number): Promise<TeamStartup | null>;
   createTeamStartup(teamStartup: InsertTeamStartup): Promise<TeamStartup>;
   updateTeamStartup(id: number, teamStartup: Partial<InsertTeamStartup>): Promise<TeamStartup>;
   deleteTeamStartup(id: number): Promise<void>;
+
+  // Authentication
+  authenticateTeam(accessCode: string): Promise<Team | null>;
+  authenticateAdmin(password: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -92,13 +96,13 @@ export class MemStorage implements IStorage {
       });
     });
 
-    // Initialize currencies
+    // Initialize currencies (rates relative to Turkish Lira)
     const initialCurrencies: InsertCurrency[] = [
-      { name: "Euro", code: "EUR", rate: "1.10", logoUrl: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "British Pound", code: "GBP", rate: "1.245", logoUrl: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "Japanese Yen", code: "JPY", rate: "0.0068", logoUrl: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "Canadian Dollar", code: "CAD", rate: "0.74", logoUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "Swiss Franc", code: "CHF", rate: "1.10", logoUrl: "https://images.unsplash.com/photo-1531973576160-7125cd663d86?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" }
+      { name: "ABD Doları", code: "USD", rate: "0.032", logoUrl: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "Euro", code: "EUR", rate: "0.029", logoUrl: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "İngiliz Sterlini", code: "GBP", rate: "0.025", logoUrl: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "Japon Yeni", code: "JPY", rate: "4.75", logoUrl: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "Kanada Doları", code: "CAD", rate: "0.024", logoUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" }
     ];
 
     initialCurrencies.forEach(currency => {
@@ -112,10 +116,10 @@ export class MemStorage implements IStorage {
 
     // Initialize teams
     const initialTeams: InsertTeam[] = [
-      { name: "Team Alpha", cashBalance: "25430.00" },
-      { name: "Team Beta", cashBalance: "18250.00" },
-      { name: "Team Gamma", cashBalance: "32100.00" },
-      { name: "Team Delta", cashBalance: "28750.00" }
+      { name: "Alfa Takımı", cashBalance: "25430.00", accessCode: "ALFA2024", profilePicUrl: null },
+      { name: "Beta Takımı", cashBalance: "18250.00", accessCode: "BETA2024", profilePicUrl: null },
+      { name: "Gama Takımı", cashBalance: "32100.00", accessCode: "GAMA2024", profilePicUrl: null },
+      { name: "Delta Takımı", cashBalance: "28750.00", accessCode: "DELTA2024", profilePicUrl: null }
     ];
 
     initialTeams.forEach(team => {
@@ -123,7 +127,9 @@ export class MemStorage implements IStorage {
       this.teams.set(id, { 
         ...team, 
         id,
-        cashBalance: team.cashBalance || "50000.00"
+        cashBalance: team.cashBalance || "50000.00",
+        accessCode: team.accessCode,
+        profilePicUrl: team.profilePicUrl || null
       });
     });
 
@@ -244,7 +250,9 @@ export class MemStorage implements IStorage {
     const newTeam: Team = { 
       ...team, 
       id,
-      cashBalance: team.cashBalance || "50000.00"
+      cashBalance: team.cashBalance || "50000.00",
+      accessCode: team.accessCode,
+      profilePicUrl: team.profilePicUrl || null
     };
     this.teams.set(id, newTeam);
     return newTeam;
@@ -373,6 +381,18 @@ export class MemStorage implements IStorage {
 
   async deleteTeamStartup(id: number): Promise<void> {
     this.teamStartups.delete(id);
+  }
+
+  // Authentication methods
+  async authenticateTeam(accessCode: string): Promise<Team | null> {
+    const teams = Array.from(this.teams.values());
+    return teams.find(team => team.accessCode === accessCode) || null;
+  }
+
+  async authenticateAdmin(password: string): Promise<boolean> {
+    // You can change this password or make it environment-based
+    const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
+    return password === adminPassword;
   }
 }
 
