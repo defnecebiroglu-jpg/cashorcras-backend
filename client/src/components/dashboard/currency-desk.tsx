@@ -31,8 +31,8 @@ export function CurrencyDesk({ teamId }: CurrencyDeskProps) {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Your Currency Portfolio</CardTitle>
-            <p className="text-sm text-muted-foreground">Foreign currency holdings</p>
+            <CardTitle>Döviz Portföyünüz</CardTitle>
+            <p className="text-sm text-muted-foreground">Yabancı para birimleriniz</p>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -54,10 +54,10 @@ export function CurrencyDesk({ teamId }: CurrencyDeskProps) {
                   </div>
                   <div className="text-right">
                     <div className="font-medium text-slate-900">
-                      ${(parseFloat(currency.amount) * parseFloat(currency.currency.rate)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ₺{(parseFloat(currency.amount) * parseFloat(currency.currency.rate)).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
                     <div className="text-sm text-green-600">
-                      {parseFloat(currency.currency.rate).toFixed(currency.currency.code === "JPY" ? 4 : 3)} USD
+                      {parseFloat(currency.currency.rate).toFixed(currency.currency.code === "JPY" ? 4 : 3)} TL
                     </div>
                   </div>
                 </div>
@@ -65,15 +65,15 @@ export function CurrencyDesk({ teamId }: CurrencyDeskProps) {
               
               {portfolio?.currencies.length === 0 && (
                 <div className="text-center py-8 text-slate-500">
-                  No currency holdings
+                  Döviz yok
                 </div>
               )}
               
               <Separator />
               <div className="flex justify-between items-center pt-4">
-                <span className="font-medium text-slate-900">Total Currency Value:</span>
+                <span className="font-medium text-slate-900">Toplam Döviz Değeri:</span>
                 <span className="font-bold text-lg text-slate-900">
-                  ${portfolio ? parseFloat(portfolio.totalCurrencyValue).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0.00"}
+                  ₺{portfolio ? parseFloat(portfolio.totalCurrencyValue).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00"}
                 </span>
               </div>
             </div>
@@ -85,8 +85,8 @@ export function CurrencyDesk({ teamId }: CurrencyDeskProps) {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Exchange Rates</CardTitle>
-            <p className="text-sm text-muted-foreground">Current foreign exchange rates</p>
+            <CardTitle>Döviz Kurları</CardTitle>
+            <p className="text-sm text-muted-foreground">Güncel döviz kurları</p>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

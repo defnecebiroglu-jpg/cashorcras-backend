@@ -46,15 +46,15 @@ export function StockMarketDesk({ teamId }: StockMarketDeskProps) {
                     />
                     <div>
                       <div className="font-medium text-slate-900">{stock.company.name}</div>
-                      <div className="text-sm text-slate-600">{stock.shares} shares</div>
+                      <div className="text-sm text-slate-600">{stock.shares} adet hisse</div>
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="font-medium text-slate-900">
-                      ${(parseFloat(stock.company.price) * stock.shares).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ₺{(parseFloat(stock.company.price) * stock.shares).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
                     <div className="text-sm text-green-600">
-                      {parseFloat(stock.company.dividend) > 0 ? `${stock.company.dividend}% dividend` : "No dividend"}
+                      {parseFloat(stock.company.dividend) > 0 ? `%${stock.company.dividend} temettü` : "Temettü yok"}
                     </div>
                   </div>
                 </div>
@@ -62,15 +62,15 @@ export function StockMarketDesk({ teamId }: StockMarketDeskProps) {
               
               {portfolio?.stocks.length === 0 && (
                 <div className="text-center py-8 text-slate-500">
-                  No stock holdings
+                  Hisse senedi yok
                 </div>
               )}
               
               <Separator />
               <div className="flex justify-between items-center pt-4">
-                <span className="font-medium text-slate-900">Total Stock Value:</span>
+                <span className="font-medium text-slate-900">Toplam Hisse Değeri:</span>
                 <span className="font-bold text-lg text-slate-900">
-                  ${portfolio ? parseFloat(portfolio.totalStockValue).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0.00"}
+                  ₺{portfolio ? parseFloat(portfolio.totalStockValue).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00"}
                 </span>
               </div>
             </div>
@@ -82,8 +82,8 @@ export function StockMarketDesk({ teamId }: StockMarketDeskProps) {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Market Companies</CardTitle>
-            <p className="text-sm text-muted-foreground">Available stocks for investment</p>
+            <CardTitle>Piyasa Şirketleri</CardTitle>
+            <p className="text-sm text-muted-foreground">Yatırım için mevcut hisse senetleri</p>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -103,10 +103,10 @@ export function StockMarketDesk({ teamId }: StockMarketDeskProps) {
                         </div>
                         <div className="text-right ml-4">
                           <div className="font-bold text-slate-900">
-                            ${parseFloat(company.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            ₺{parseFloat(company.price).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                           </div>
                           <div className="text-sm text-green-600">
-                            {parseFloat(company.dividend) > 0 ? `${company.dividend}% dividend` : "No dividend"}
+                            {parseFloat(company.dividend) > 0 ? `%${company.dividend} temettü` : "Temettü yok"}
                           </div>
                         </div>
                       </div>
