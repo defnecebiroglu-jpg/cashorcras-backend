@@ -8,6 +8,7 @@ import { CompanyManagement } from "@/components/admin/company-management";
 import { CurrencyManagement } from "@/components/admin/currency-management";
 import { TeamManagement } from "@/components/admin/team-management";
 import { FinancialOverview } from "@/components/admin/financial-overview";
+import { PortfolioOverview } from "@/components/admin/portfolio-overview";
 
 export default function Admin() {
   return (
@@ -34,13 +35,18 @@ export default function Admin() {
             <CardTitle>Cash or Crash - Administration</CardTitle>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="financial" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
+            <Tabs defaultValue="portfolios" className="w-full">
+              <TabsList className="grid w-full grid-cols-5">
+                <TabsTrigger value="portfolios">Portföyler</TabsTrigger>
                 <TabsTrigger value="financial">Mali Durum</TabsTrigger>
                 <TabsTrigger value="companies">Şirketler</TabsTrigger>
                 <TabsTrigger value="currencies">Dövizler</TabsTrigger>
                 <TabsTrigger value="teams">Takımlar</TabsTrigger>
               </TabsList>
+              
+              <TabsContent value="portfolios" className="mt-6">
+                <PortfolioOverview />
+              </TabsContent>
               
               <TabsContent value="financial" className="mt-6">
                 <FinancialOverview />
