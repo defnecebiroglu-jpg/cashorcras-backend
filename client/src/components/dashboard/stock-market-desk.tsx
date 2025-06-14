@@ -31,8 +31,8 @@ export function StockMarketDesk({ teamId }: StockMarketDeskProps) {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Your Stock Portfolio</CardTitle>
-            <p className="text-sm text-muted-foreground">Current holdings and performance</p>
+            <CardTitle>Hisse Senedi Portföyünüz</CardTitle>
+            <p className="text-sm text-muted-foreground">Mevcut varlıklar ve performans</p>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

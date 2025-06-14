@@ -7,9 +7,9 @@ interface NavigationTabsProps {
 
 export function NavigationTabs({ activeTab, onTabChange }: NavigationTabsProps) {
   const tabs = [
-    { id: "stocks" as const, label: "Stock Market Desk", icon: ChartLine },
-    { id: "currency" as const, label: "Currency Desk", icon: Coins },
-    { id: "startup" as const, label: "Startup Desk", icon: Rocket },
+    { id: "stocks" as const, label: "Borsa Masası", icon: ChartLine },
+    { id: "currency" as const, label: "Döviz Masası", icon: Coins },
+    { id: "startup" as const, label: "Girişim Masası", icon: Rocket },
   ];
 
   return (
