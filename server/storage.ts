@@ -84,7 +84,12 @@ export class MemStorage implements IStorage {
 
     initialCompanies.forEach(company => {
       const id = this.currentCompanyId++;
-      this.companies.set(id, { ...company, id });
+      this.companies.set(id, { 
+        ...company, 
+        id, 
+        dividend: company.dividend || "0",
+        logoUrl: company.logoUrl || null 
+      });
     });
 
     // Initialize currencies
@@ -98,7 +103,11 @@ export class MemStorage implements IStorage {
 
     initialCurrencies.forEach(currency => {
       const id = this.currentCurrencyId++;
-      this.currencies.set(id, { ...currency, id });
+      this.currencies.set(id, { 
+        ...currency, 
+        id,
+        logoUrl: currency.logoUrl || null 
+      });
     });
 
     // Initialize teams
@@ -111,7 +120,11 @@ export class MemStorage implements IStorage {
 
     initialTeams.forEach(team => {
       const id = this.currentTeamId++;
-      this.teams.set(id, { ...team, id });
+      this.teams.set(id, { 
+        ...team, 
+        id,
+        cashBalance: team.cashBalance || "50000.00"
+      });
     });
 
     // Initialize team stocks for Team Alpha
@@ -163,7 +176,12 @@ export class MemStorage implements IStorage {
 
   async createCompany(company: InsertCompany): Promise<Company> {
     const id = this.currentCompanyId++;
-    const newCompany: Company = { ...company, id };
+    const newCompany: Company = { 
+      ...company, 
+      id,
+      dividend: company.dividend || "0",
+      logoUrl: company.logoUrl || null
+    };
     this.companies.set(id, newCompany);
     return newCompany;
   }
@@ -191,7 +209,11 @@ export class MemStorage implements IStorage {
 
   async createCurrency(currency: InsertCurrency): Promise<Currency> {
     const id = this.currentCurrencyId++;
-    const newCurrency: Currency = { ...currency, id };
+    const newCurrency: Currency = { 
+      ...currency, 
+      id,
+      logoUrl: currency.logoUrl || null
+    };
     this.currencies.set(id, newCurrency);
     return newCurrency;
   }
@@ -219,7 +241,11 @@ export class MemStorage implements IStorage {
 
   async createTeam(team: InsertTeam): Promise<Team> {
     const id = this.currentTeamId++;
-    const newTeam: Team = { ...team, id };
+    const newTeam: Team = { 
+      ...team, 
+      id,
+      cashBalance: team.cashBalance || "50000.00"
+    };
     this.teams.set(id, newTeam);
     return newTeam;
   }
@@ -326,8 +352,8 @@ export class MemStorage implements IStorage {
   }
 
   // Team Startups
-  async getTeamStartup(teamId: number): Promise<TeamStartup | undefined> {
-    return Array.from(this.teamStartups.values()).find(s => s.teamId === teamId);
+  async getTeamStartup(teamId: number): Promise<TeamStartup | null> {
+    return Array.from(this.teamStartups.values()).find(s => s.teamId === teamId) || null;
   }
 
   async createTeamStartup(teamStartup: InsertTeamStartup): Promise<TeamStartup> {
