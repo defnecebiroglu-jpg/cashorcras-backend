@@ -79,12 +79,12 @@ export function TeamManagement() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
-      toast({ title: "Stock assigned successfully" });
+      toast({ title: "Hisse başarıyla atandı" });
       setIsDialogOpen(false);
       stockForm.reset();
     },
     onError: () => {
-      toast({ title: "Failed to assign stock", variant: "destructive" });
+      toast({ title: "Hisse atanamadı", variant: "destructive" });
     },
   });
 
@@ -100,12 +100,12 @@ export function TeamManagement() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
-      toast({ title: "Currency assigned successfully" });
+      toast({ title: "Döviz başarıyla atandı" });
       setIsDialogOpen(false);
       currencyForm.reset();
     },
     onError: () => {
-      toast({ title: "Failed to assign currency", variant: "destructive" });
+      toast({ title: "Döviz atanamadı", variant: "destructive" });
     },
   });
 
@@ -121,12 +121,12 @@ export function TeamManagement() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
-      toast({ title: "Startup assigned successfully" });
+      toast({ title: "Girişim başarıyla atandı" });
       setIsDialogOpen(false);
       startupForm.reset();
     },
     onError: () => {
-      toast({ title: "Failed to assign startup", variant: "destructive" });
+      toast({ title: "Girişim atanamadı", variant: "destructive" });
     },
   });
 
@@ -165,7 +165,7 @@ export function TeamManagement() {
   };
 
   if (teamsLoading) {
-    return <div>Loading teams...</div>;
+    return <div>Takımlar yükleniyor...</div>;
   }
 
   return (
@@ -399,7 +399,7 @@ export function TeamManagement() {
                   )}
                 />
                 <Button type="submit" className="w-full" disabled={createStartupMutation.isPending}>
-                  Assign Startup
+                  Girişim Ata
                 </Button>
               </form>
             </Form>
