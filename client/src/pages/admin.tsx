@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { CompanyManagement } from "@/components/admin/company-management";
 import { CurrencyManagement } from "@/components/admin/currency-management";
 import { TeamManagement } from "@/components/admin/team-management";
+import { FinancialOverview } from "@/components/admin/financial-overview";
 
 export default function Admin() {
   return (
@@ -33,12 +34,17 @@ export default function Admin() {
             <CardTitle>Cash or Crash - Administration</CardTitle>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="companies" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="companies">Companies</TabsTrigger>
-                <TabsTrigger value="currencies">Currencies</TabsTrigger>
-                <TabsTrigger value="teams">Teams</TabsTrigger>
+            <Tabs defaultValue="financial" className="w-full">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="financial">Mali Durum</TabsTrigger>
+                <TabsTrigger value="companies">Şirketler</TabsTrigger>
+                <TabsTrigger value="currencies">Dövizler</TabsTrigger>
+                <TabsTrigger value="teams">Takımlar</TabsTrigger>
               </TabsList>
+              
+              <TabsContent value="financial" className="mt-6">
+                <FinancialOverview />
+              </TabsContent>
               
               <TabsContent value="companies" className="mt-6">
                 <CompanyManagement />

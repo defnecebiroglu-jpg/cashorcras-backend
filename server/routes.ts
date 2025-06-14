@@ -214,6 +214,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.patch('/api/teams/:id', async (req, res) => {
+    try {
+      const team = await storage.updateTeam(parseInt(req.params.id), req.body);
+      res.json(team);
+    } catch (error) {
+      res.status(400).json({ message: 'Takım güncelleme hatası' });
+    }
+  });
+
   app.delete('/api/teams/:id', async (req, res) => {
     try {
       await storage.deleteTeam(parseInt(req.params.id));
