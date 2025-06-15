@@ -314,7 +314,7 @@ export function PortfolioOverview() {
 
                 <TabsContent value="startup" className="mt-4">
                   {portfolio.startup ? (
-                    <div className="p-4 bg-slate-50 rounded-lg">
+                    <div className="p-4 bg-muted rounded-lg">
                       <div className="flex items-start gap-3">
                         <Briefcase className="h-6 w-6 text-purple-600 mt-1" />
                         <div className="flex-1">
@@ -370,7 +370,7 @@ export function PortfolioOverview() {
           </DialogHeader>
           {sellDialog && (
             <div className="space-y-4">
-              <div className="p-4 bg-slate-50 rounded-lg">
+              <div className="p-4 bg-muted rounded-lg">
                 <div className="flex items-center gap-3">
                   <img 
                     src={sellDialog.type === 'stock' ? 
