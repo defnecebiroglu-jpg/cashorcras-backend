@@ -243,7 +243,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Buy/Sell Stock endpoint
+  // Buy/Sell Stock endpoint with cash balance handling
   app.post('/api/teams/:teamId/stocks/trade', async (req, res) => {
     try {
       const { companyId, shares, action } = req.body; // action: 'buy' or 'sell'
@@ -253,17 +253,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Invalid action' });
       }
       
-      const sharesAmount = action === 'sell' ? -Math.abs(shares) : Math.abs(shares);
+      const team = await storage.getTeam(teamId);
+      const company = await storage.getCompany(companyId);
       
-      const teamStock = await storage.createTeamStock({
-        teamId,
-        companyId,
-        shares: sharesAmount
-      });
+      if (!team || !company) {
+        return res.status(404).json({ message: 'Team or company not found' });
+      }
       
-      res.status(201).json(teamStock);
+      const currentBalance = parseFloat(team.cashBalance);
+      const shareCount = Math.abs(shares);
+      
+      if (action === 'buy') {
+        const totalCost = shareCount * parseFloat(company.price);
+        
+        if (currentBalance < totalCost) {
+          return res.status(400).json({ message: 'Yetersiz bakiye' });
+        }
+        
+        // Deduct cost from team balance
+        await storage.updateTeam(teamId, {
+          cashBalance: (currentBalance - totalCost).toFixed(2)
+        });
+        
+        // Add shares to portfolio
+        await storage.createTeamStock({
+          teamId,
+          companyId,
+          shares: shareCount
+        });
+        
+      } else { // sell
+        // Check if team has enough shares
+        const teamStocks = await storage.getTeamStocks(teamId);
+        const currentStock = teamStocks.find(s => s.companyId === companyId);
+        
+        if (!currentStock || currentStock.shares < shareCount) {
+          return res.status(400).json({ message: 'Yetersiz hisse' });
+        }
+        
+        const totalRevenue = shareCount * parseFloat(company.sellPrice);
+        
+        // Add revenue to team balance
+        await storage.updateTeam(teamId, {
+          cashBalance: (currentBalance + totalRevenue).toFixed(2)
+        });
+        
+        // Remove shares from portfolio
+        await storage.createTeamStock({
+          teamId,
+          companyId,
+          shares: -shareCount
+        });
+      }
+      
+      res.status(201).json({ success: true, action, shares: shareCount });
     } catch (error) {
-      res.status(400).json({ message: 'Trade failed' });
+      res.status(400).json({ message: 'İşlem başarısız' });
     }
   });
 

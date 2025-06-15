@@ -76,14 +76,14 @@ export class MemStorage implements IStorage {
   private initializeData() {
     // Initialize companies
     const initialCompanies: InsertCompany[] = [
-      { name: "Apple Inc.", symbol: "AAPL", price: "170.00", dividend: "2.1", description: "Technology company specializing in consumer electronics and software", logoUrl: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "Microsoft Corp.", symbol: "MSFT", price: "340.00", dividend: "1.8", description: "Technology corporation developing software and cloud services", logoUrl: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "Tesla Inc.", symbol: "TSLA", price: "240.00", dividend: "0", description: "Electric vehicle and clean energy company", logoUrl: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "Amazon Inc.", symbol: "AMZN", price: "3420.50", dividend: "1.2", description: "E-commerce and cloud computing leader with global reach", logoUrl: "https://images.unsplash.com/photo-1586880244386-8b3e34c8382c?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "Alphabet Inc.", symbol: "GOOGL", price: "2750.25", dividend: "0", description: "Search engine and advertising technology company", logoUrl: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "Netflix Inc.", symbol: "NFLX", price: "485.75", dividend: "0", description: "Global streaming entertainment platform and content creator", logoUrl: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "Nike Inc.", symbol: "NKE", price: "128.40", dividend: "1.1", description: "Global athletic footwear and apparel brand", logoUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "Coca-Cola Co.", symbol: "KO", price: "58.90", dividend: "3.2", description: "Global beverage corporation and brand", logoUrl: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" }
+      { name: "Apple Inc.", symbol: "AAPL", price: "170.00", sellPrice: "162.00", dividend: "2.1", description: "Technology company specializing in consumer electronics and software", logoUrl: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "Microsoft Corp.", symbol: "MSFT", price: "340.00", sellPrice: "325.00", dividend: "1.8", description: "Technology corporation developing software and cloud services", logoUrl: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "Tesla Inc.", symbol: "TSLA", price: "240.00", sellPrice: "230.00", dividend: "0", description: "Electric vehicle and clean energy company", logoUrl: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "Amazon Inc.", symbol: "AMZN", price: "3420.50", sellPrice: "3280.00", dividend: "1.2", description: "E-commerce and cloud computing leader with global reach", logoUrl: "https://images.unsplash.com/photo-1586880244386-8b3e34c8382c?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "Alphabet Inc.", symbol: "GOOGL", price: "2750.25", sellPrice: "2640.00", dividend: "0", description: "Search engine and advertising technology company", logoUrl: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "Netflix Inc.", symbol: "NFLX", price: "485.75", sellPrice: "465.00", dividend: "0", description: "Global streaming entertainment platform and content creator", logoUrl: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "Nike Inc.", symbol: "NKE", price: "128.40", sellPrice: "123.00", dividend: "1.1", description: "Global athletic footwear and apparel brand", logoUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "Coca-Cola Co.", symbol: "KO", price: "58.90", sellPrice: "56.50", dividend: "3.2", description: "Global beverage corporation and brand", logoUrl: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" }
     ];
 
     initialCompanies.forEach(company => {
@@ -98,11 +98,11 @@ export class MemStorage implements IStorage {
 
     // Initialize currencies (rates relative to Turkish Lira)
     const initialCurrencies: InsertCurrency[] = [
-      { name: "ABD Doları", code: "USD", rate: "0.032", logoUrl: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "Euro", code: "EUR", rate: "0.029", logoUrl: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "İngiliz Sterlini", code: "GBP", rate: "0.025", logoUrl: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "Japon Yeni", code: "JPY", rate: "4.75", logoUrl: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
-      { name: "Kanada Doları", code: "CAD", rate: "0.024", logoUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" }
+      { name: "ABD Doları", code: "USD", rate: "34.20", sellRate: "32.80", logoUrl: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "Euro", code: "EUR", rate: "37.40", sellRate: "35.60", logoUrl: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "İngiliz Sterlini", code: "GBP", rate: "42.80", sellRate: "40.20", logoUrl: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "Japon Yeni", code: "JPY", rate: "0.24", sellRate: "0.22", logoUrl: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" },
+      { name: "Kanada Doları", code: "CAD", rate: "25.40", sellRate: "23.80", logoUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=64&h=64" }
     ];
 
     initialCurrencies.forEach(currency => {

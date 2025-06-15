@@ -6,7 +6,8 @@ export const companies = pgTable("companies", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   symbol: text("symbol").notNull().unique(),
-  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(), // Buy price
+  sellPrice: decimal("sell_price", { precision: 10, scale: 2 }).notNull(), // Sell price
   dividend: decimal("dividend", { precision: 5, scale: 2 }).notNull().default("0"),
   description: text("description").notNull(),
   logoUrl: text("logo_url"),
@@ -16,7 +17,8 @@ export const currencies = pgTable("currencies", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   code: text("code").notNull().unique(),
-  rate: decimal("rate", { precision: 10, scale: 6 }).notNull(),
+  rate: decimal("rate", { precision: 10, scale: 6 }).notNull(), // Buy rate (TL per unit)
+  sellRate: decimal("sell_rate", { precision: 10, scale: 6 }).notNull(), // Sell rate (TL per unit)
   logoUrl: text("logo_url"),
 });
 
