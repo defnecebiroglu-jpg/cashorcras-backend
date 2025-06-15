@@ -79,7 +79,8 @@ export function CompanyManagement() {
       formData.append("name", data.name);
       formData.append("symbol", data.symbol);
       formData.append("price", data.price);
-      formData.append("dividend", data.dividend);
+      formData.append("sellPrice", data.sellPrice || data.price);
+      formData.append("dividend", data.dividend || "0");
       formData.append("description", data.description);
       if (data.logo && data.logo.length > 0) {
         formData.append("logo", data.logo[0]);
@@ -209,7 +210,20 @@ export function CompanyManagement() {
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Price ($)</FormLabel>
+                      <FormLabel>Alış Fiyatı (₺)</FormLabel>
+                      <FormControl>
+                        <Input type="number" step="0.01" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="sellPrice"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Satış Fiyatı (₺)</FormLabel>
                       <FormControl>
                         <Input type="number" step="0.01" {...field} />
                       </FormControl>
@@ -222,7 +236,7 @@ export function CompanyManagement() {
                   name="dividend"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Dividend (%)</FormLabel>
+                      <FormLabel>Temettü (%)</FormLabel>
                       <FormControl>
                         <Input type="number" step="0.1" {...field} />
                       </FormControl>

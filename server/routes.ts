@@ -67,6 +67,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ success: true });
   });
 
+  // Admin dividend distribution endpoint
+  app.post('/api/admin/distribute-dividend/:companyId', async (req, res) => {
+    try {
+      const companyId = parseInt(req.params.companyId);
+      const company = await storage.getCompany(companyId);
+      
+      if (!company) {
+        return res.status(404).json({ message: 'Company not found' });
+      }
+      
+      const dividendRate = parseFloat(company.dividend) / 100; // Convert percentage to decimal
+      if (dividendRate <= 0) {
+        return res.status(400).json({ message: 'Company has no dividend' });
+      }
+      
+      const teams = await storage.getTeams();
+      let totalDistributed = 0;
+      let affectedTeams = 0;
+      
+      // Process dividend payments for each team
+      for (const team of teams) {
+        const teamStocks = await storage.getTeamStocks(team.id);
+        const companyStock = teamStocks.find(stock => stock.companyId === companyId);
+        
+        if (companyStock && companyStock.shares > 0) {
+          const stockValue = companyStock.shares * parseFloat(company.price);
+          const dividendAmount = stockValue * dividendRate;
+          
+          // Add dividend to team's cash balance
+          const currentBalance = parseFloat(team.cashBalance);
+          await storage.updateTeam(team.id, {
+            cashBalance: (currentBalance + dividendAmount).toFixed(2)
+          });
+          
+          totalDistributed += dividendAmount;
+          affectedTeams++;
+        }
+      }
+      
+      res.json({
+        success: true,
+        totalDistributed: totalDistributed.toFixed(2),
+        affectedTeams,
+        dividendRate: (dividendRate * 100).toFixed(1)
+      });
+    } catch (error) {
+      res.status(500).json({ message: 'Dividend distribution failed' });
+    }
+  });
+
   // Companies
   app.get('/api/companies', async (req, res) => {
     try {
