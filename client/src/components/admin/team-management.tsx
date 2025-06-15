@@ -69,7 +69,7 @@ export function TeamManagement() {
 
   const createStockMutation = useMutation({
     mutationFn: async (data: z.infer<typeof teamStockFormSchema>) => {
-      const response = await fetch("/api/team-stocks", {
+      const response = await fetch("/api/admin/assign-stock", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -90,7 +90,7 @@ export function TeamManagement() {
 
   const createCurrencyMutation = useMutation({
     mutationFn: async (data: z.infer<typeof teamCurrencyFormSchema>) => {
-      const response = await fetch("/api/team-currencies", {
+      const response = await fetch("/api/admin/assign-currency", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

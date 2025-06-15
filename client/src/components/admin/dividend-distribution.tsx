@@ -36,7 +36,7 @@ export function DividendDistribution() {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
       toast({ 
         title: "Temettü Dağıtıldı", 
-        description: `${data.totalDistributed} TL toplam temettü ${data.affectedTeams} takıma dağıtıldı.`
+        description: `${data.totalDistributed} adet hisse temettüsü ${data.affectedTeams} takıma dağıtıldı.`
       });
       setIsDialogOpen(false);
       setSelectedCompany(null);
@@ -121,8 +121,8 @@ export function DividendDistribution() {
                         </p>
                       </div>
                       <p className="text-sm">
-                        Bu şirkette hissesi olan tüm takımlara temettü ödemesi yapılacak. 
-                        Ödeme miktarı: (Hisse adedi × Hisse fiyatı × Temettü oranı)
+                        Bu şirkette hissesi olan tüm takımlara temettü hissesi verilecek. 
+                        Verilecek hisse: (Mevcut hisse adedi × Temettü oranı)
                       </p>
                       <div className="flex gap-2 justify-end">
                         <Button 

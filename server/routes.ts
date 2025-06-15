@@ -86,23 +86,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let totalDistributed = 0;
       let affectedTeams = 0;
       
-      // Process dividend payments for each team
+      // Process dividend payments for each team (give additional shares)
       for (const team of teams) {
         const teamStocks = await storage.getTeamStocks(team.id);
         const companyStock = teamStocks.find(stock => stock.companyId === companyId);
         
         if (companyStock && companyStock.shares > 0) {
-          const stockValue = companyStock.shares * parseFloat(company.price);
-          const dividendAmount = stockValue * dividendRate;
+          const dividendShares = Math.floor(companyStock.shares * dividendRate);
           
-          // Add dividend to team's cash balance
-          const currentBalance = parseFloat(team.cashBalance);
-          await storage.updateTeam(team.id, {
-            cashBalance: (currentBalance + dividendAmount).toFixed(2)
-          });
-          
-          totalDistributed += dividendAmount;
-          affectedTeams++;
+          if (dividendShares > 0) {
+            // Add dividend shares to the team's existing stock
+            await storage.createTeamStock({
+              teamId: team.id,
+              companyId,
+              shares: dividendShares
+            });
+            
+            totalDistributed += dividendShares;
+            affectedTeams++;
+          }
         }
       }
       
@@ -114,6 +116,159 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ message: 'Dividend distribution failed' });
+    }
+  });
+
+  // Admin salesman endpoints for managing team portfolios
+  app.post('/api/admin/assign-stock', async (req, res) => {
+    try {
+      const { teamId, companyId, shares } = req.body;
+      
+      const team = await storage.getTeam(teamId);
+      const company = await storage.getCompany(companyId);
+      
+      if (!team || !company) {
+        return res.status(404).json({ message: 'Team or company not found' });
+      }
+      
+      const totalCost = shares * parseFloat(company.price);
+      const currentBalance = parseFloat(team.cashBalance);
+      
+      if (currentBalance < totalCost) {
+        return res.status(400).json({ message: 'Yetersiz bakiye' });
+      }
+      
+      // Deduct cost from team balance
+      await storage.updateTeam(teamId, {
+        cashBalance: (currentBalance - totalCost).toFixed(2)
+      });
+      
+      // Assign shares
+      const teamStock = await storage.createTeamStock({
+        teamId,
+        companyId,
+        shares
+      });
+      
+      res.status(201).json(teamStock);
+    } catch (error) {
+      res.status(400).json({ message: 'Failed to assign stock' });
+    }
+  });
+
+  app.post('/api/admin/unassign-stock', async (req, res) => {
+    try {
+      const { teamId, companyId, shares } = req.body;
+      
+      const team = await storage.getTeam(teamId);
+      const company = await storage.getCompany(companyId);
+      
+      if (!team || !company) {
+        return res.status(404).json({ message: 'Team or company not found' });
+      }
+      
+      // Check if team has enough shares
+      const teamStocks = await storage.getTeamStocks(teamId);
+      const currentStock = teamStocks.find(s => s.companyId === companyId);
+      
+      if (!currentStock || currentStock.shares < shares) {
+        return res.status(400).json({ message: 'Yetersiz hisse' });
+      }
+      
+      const totalRevenue = shares * parseFloat(company.sellPrice);
+      const currentBalance = parseFloat(team.cashBalance);
+      
+      // Add revenue to team balance
+      await storage.updateTeam(teamId, {
+        cashBalance: (currentBalance + totalRevenue).toFixed(2)
+      });
+      
+      // Remove shares
+      await storage.createTeamStock({
+        teamId,
+        companyId,
+        shares: -shares
+      });
+      
+      res.status(200).json({ success: true });
+    } catch (error) {
+      res.status(400).json({ message: 'Failed to unassign stock' });
+    }
+  });
+
+  app.post('/api/admin/assign-currency', async (req, res) => {
+    try {
+      const { teamId, currencyId, amount } = req.body;
+      
+      const team = await storage.getTeam(teamId);
+      const currency = await storage.getCurrency(currencyId);
+      
+      if (!team || !currency) {
+        return res.status(404).json({ message: 'Team or currency not found' });
+      }
+      
+      const totalCost = parseFloat(amount) * parseFloat(currency.rate);
+      const currentBalance = parseFloat(team.cashBalance);
+      
+      if (currentBalance < totalCost) {
+        return res.status(400).json({ message: 'Yetersiz bakiye' });
+      }
+      
+      // Deduct cost from team balance
+      await storage.updateTeam(teamId, {
+        cashBalance: (currentBalance - totalCost).toFixed(2)
+      });
+      
+      // Assign currency
+      const teamCurrency = await storage.createTeamCurrency({
+        teamId,
+        currencyId,
+        amount: parseFloat(amount).toFixed(2)
+      });
+      
+      res.status(201).json(teamCurrency);
+    } catch (error) {
+      res.status(400).json({ message: 'Failed to assign currency' });
+    }
+  });
+
+  app.post('/api/admin/unassign-currency', async (req, res) => {
+    try {
+      const { teamId, currencyId, amount } = req.body;
+      
+      const team = await storage.getTeam(teamId);
+      const currency = await storage.getCurrency(currencyId);
+      
+      if (!team || !currency) {
+        return res.status(404).json({ message: 'Team or currency not found' });
+      }
+      
+      // Check if team has enough currency
+      const teamCurrencies = await storage.getTeamCurrencies(teamId);
+      const currentCurrency = teamCurrencies.find(c => c.currencyId === currencyId);
+      
+      if (!currentCurrency || parseFloat(currentCurrency.amount) < parseFloat(amount)) {
+        return res.status(400).json({ message: 'Yetersiz döviz' });
+      }
+      
+      const totalRevenue = parseFloat(amount) * parseFloat(currency.sellRate);
+      const currentBalance = parseFloat(team.cashBalance);
+      
+      // Add revenue to team balance
+      await storage.updateTeam(teamId, {
+        cashBalance: (currentBalance + totalRevenue).toFixed(2)
+      });
+      
+      // Remove currency
+      await storage.createTeamCurrency({
+        teamId,
+        currencyId,
+        amount: (-parseFloat(amount)).toFixed(2)
+      });
+      
+      res.status(200).json({ success: true });
+    } catch (error) {
+      res.status(400).json({ message: 'Failed to unassign currency' });
     }
   });
 
