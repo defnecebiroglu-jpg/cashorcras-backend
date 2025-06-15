@@ -35,6 +35,7 @@ export function CompanyManagement() {
       name: "",
       symbol: "",
       price: "",
+      sellPrice: "",
       dividend: "0",
       description: "",
     },
@@ -46,7 +47,8 @@ export function CompanyManagement() {
       formData.append("name", data.name);
       formData.append("symbol", data.symbol);
       formData.append("price", data.price);
-      formData.append("dividend", data.dividend);
+      formData.append("sellPrice", data.sellPrice || data.price);
+      formData.append("dividend", data.dividend || "0");
       formData.append("description", data.description);
       if (data.logo && data.logo.length > 0) {
         formData.append("logo", data.logo[0]);
@@ -134,6 +136,7 @@ export function CompanyManagement() {
       name: company.name,
       symbol: company.symbol,
       price: company.price,
+      sellPrice: company.sellPrice,
       dividend: company.dividend,
       description: company.description,
     });

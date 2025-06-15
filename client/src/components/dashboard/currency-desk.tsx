@@ -105,10 +105,14 @@ export function CurrencyDesk({ teamId }: CurrencyDeskProps) {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-slate-900">
-                        {currency.code === "JPY" ? `${(1 / parseFloat(currency.rate)).toFixed(2)} JPY` : `${parseFloat(currency.rate).toFixed(3)} USD`}
+                      <div className="space-y-1">
+                        <div className="text-sm">
+                          <span className="text-red-600">Alış: ₺{parseFloat(currency.rate).toFixed(2)}</span>
+                        </div>
+                        <div className="text-sm">
+                          <span className="text-green-600">Satış: ₺{parseFloat(currency.sellRate).toFixed(2)}</span>
+                        </div>
                       </div>
-                      <div className="text-sm text-slate-600">per USD</div>
                     </div>
                   </div>
                 </div>

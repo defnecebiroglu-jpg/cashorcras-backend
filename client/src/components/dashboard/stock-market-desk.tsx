@@ -102,11 +102,13 @@ export function StockMarketDesk({ teamId }: StockMarketDeskProps) {
                           <p className="text-sm text-slate-600 mt-1">{company.description}</p>
                         </div>
                         <div className="text-right ml-4">
-                          <div className="font-bold text-slate-900">
-                            ₺{parseFloat(company.price).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </div>
-                          <div className="text-sm text-green-600">
-                            {parseFloat(company.dividend) > 0 ? `%${company.dividend} temettü` : "Temettü yok"}
+                          <div className="space-y-1">
+                            <div className="text-sm">
+                              <span className="text-red-600">Alış: ₺{parseFloat(company.price).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            </div>
+                            <div className="text-sm">
+                              <span className="text-green-600">Satış: ₺{parseFloat(company.sellPrice).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            </div>
                           </div>
                         </div>
                       </div>

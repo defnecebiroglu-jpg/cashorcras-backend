@@ -341,7 +341,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Buy/Sell Currency endpoint
+  // Buy/Sell Currency endpoint with cash balance handling
   app.post('/api/teams/:teamId/currencies/trade', async (req, res) => {
     try {
       const { currencyId, amount, action } = req.body; // action: 'buy' or 'sell'
@@ -351,17 +351,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Invalid action' });
       }
       
-      const currencyAmount = action === 'sell' ? -Math.abs(parseFloat(amount)) : Math.abs(parseFloat(amount));
+      const team = await storage.getTeam(teamId);
+      const currency = await storage.getCurrency(currencyId);
       
-      const teamCurrency = await storage.createTeamCurrency({
-        teamId,
-        currencyId,
-        amount: currencyAmount.toFixed(2)
-      });
+      if (!team || !currency) {
+        return res.status(404).json({ message: 'Team or currency not found' });
+      }
       
-      res.status(201).json(teamCurrency);
+      const currentBalance = parseFloat(team.cashBalance);
+      const currencyAmount = Math.abs(parseFloat(amount));
+      
+      if (action === 'buy') {
+        const totalCost = currencyAmount * parseFloat(currency.rate);
+        
+        if (currentBalance < totalCost) {
+          return res.status(400).json({ message: 'Yetersiz bakiye' });
+        }
+        
+        // Deduct cost from team balance
+        await storage.updateTeam(teamId, {
+          cashBalance: (currentBalance - totalCost).toFixed(2)
+        });
+        
+        // Add currency to portfolio
+        await storage.createTeamCurrency({
+          teamId,
+          currencyId,
+          amount: currencyAmount.toFixed(2)
+        });
+        
+      } else { // sell
+        // Check if team has enough currency
+        const teamCurrencies = await storage.getTeamCurrencies(teamId);
+        const currentCurrency = teamCurrencies.find(c => c.currencyId === currencyId);
+        
+        if (!currentCurrency || parseFloat(currentCurrency.amount) < currencyAmount) {
+          return res.status(400).json({ message: 'Yetersiz döviz' });
+        }
+        
+        const totalRevenue = currencyAmount * parseFloat(currency.sellRate);
+        
+        // Add revenue to team balance
+        await storage.updateTeam(teamId, {
+          cashBalance: (currentBalance + totalRevenue).toFixed(2)
+        });
+        
+        // Remove currency from portfolio
+        await storage.createTeamCurrency({
+          teamId,
+          currencyId,
+          amount: (-currencyAmount).toFixed(2)
+        });
+      }
+      
+      res.status(201).json({ success: true, action, amount: currencyAmount });
     } catch (error) {
-      res.status(400).json({ message: 'Trade failed' });
+      res.status(400).json({ message: 'İşlem başarısız' });
     }
   });
 
