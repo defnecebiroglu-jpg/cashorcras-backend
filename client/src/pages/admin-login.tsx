@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Settings, ArrowLeft } from "lucide-react";
 
 export default function AdminLogin() {
@@ -49,16 +50,19 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="mx-auto w-12 h-12 bg-slate-800 rounded-lg flex items-center justify-center mb-4">
-            <Settings className="text-white h-6 w-6" />
+          <div className="mx-auto w-12 h-12 bg-slate-800 dark:bg-slate-200 rounded-lg flex items-center justify-center mb-4">
+            <Settings className="text-white dark:text-slate-800 h-6 w-6" />
           </div>
-          <CardTitle className="text-2xl font-bold text-slate-900">
+          <CardTitle className="text-2xl font-bold">
             Yönetici Girişi
           </CardTitle>
-          <p className="text-slate-600">Cash or Crash Admin Paneli</p>
+          <p className="text-muted-foreground">Cash or Crash Admin Paneli</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -84,7 +88,7 @@ export default function AdminLogin() {
           <div className="mt-6 text-center">
             <Button 
               variant="ghost" 
-              className="text-slate-600"
+              className="text-muted-foreground"
               onClick={() => setLocation("/")}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />

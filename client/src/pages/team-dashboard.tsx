@@ -6,6 +6,7 @@ import { NavigationTabs } from "@/components/dashboard/navigation-tabs";
 import { StockMarketDesk } from "@/components/dashboard/stock-market-desk";
 import { CurrencyDesk } from "@/components/dashboard/currency-desk";
 import { StartupDesk } from "@/components/dashboard/startup-desk";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { ChartLine, LogOut } from "lucide-react";
 import type { TeamPortfolio } from "@shared/schema";
 
@@ -48,19 +49,19 @@ export default function TeamDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-slate-600">Portföy bilgileri yükleniyor...</p>
+          <p className="text-muted-foreground">Portföy bilgileri yükleniyor...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-slate-200">
+      <header className="bg-card shadow-sm border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
@@ -68,10 +69,10 @@ export default function TeamDashboard() {
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <ChartLine className="text-primary-foreground h-4 w-4" />
                 </div>
-                <h1 className="text-xl font-bold text-slate-900">Cash or Crash</h1>
+                <h1 className="text-xl font-bold">Cash or Crash</h1>
               </div>
               <div className="hidden sm:block">
-                <span className="text-lg font-semibold text-slate-700">
+                <span className="text-lg font-semibold text-foreground">
                   {storedTeamName || portfolio?.team.name}
                 </span>
               </div>
@@ -79,17 +80,18 @@ export default function TeamDashboard() {
             
             <div className="flex items-center space-x-6">
               <div className="text-right">
-                <div className="text-sm text-slate-600">Nakit Bakiye</div>
-                <div className="text-lg font-bold text-slate-900">
+                <div className="text-sm text-muted-foreground">Nakit Bakiye</div>
+                <div className="text-lg font-bold">
                   ₺{portfolio ? parseFloat(portfolio.team.cashBalance).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00"}
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-sm text-slate-600">Toplam Portföy</div>
-                <div className="text-lg font-bold text-green-600">
+                <div className="text-sm text-muted-foreground">Toplam Portföy</div>
+                <div className="text-lg font-bold text-green-600 dark:text-green-400">
                   ₺{portfolio ? parseFloat(portfolio.totalPortfolioValue).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00"}
                 </div>
               </div>
+              <ThemeToggle />
               <Button variant="secondary" size="sm" onClick={handleLogout}>
                 <LogOut className="h-4 w-4 mr-2" />
                 Çıkış
