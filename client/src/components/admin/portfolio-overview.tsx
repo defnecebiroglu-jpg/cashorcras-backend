@@ -1,13 +1,56 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, DollarSign, Briefcase, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { TrendingUp, DollarSign, Briefcase, Users, Minus } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { queryClient } from "@/lib/queryClient";
 import { type Team, type TeamPortfolio } from "@shared/schema";
 
 export function PortfolioOverview() {
+  const { toast } = useToast();
+  
   const { data: teams, isLoading: teamsLoading } = useQuery<Team[]>({
     queryKey: ["/api/teams"],
+  });
+
+  const unassignStockMutation = useMutation({
+    mutationFn: async ({ teamId, companyId, shares }: { teamId: number; companyId: number; shares: number }) => {
+      const response = await fetch("/api/admin/unassign-stock", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ teamId, companyId, shares }),
+      });
+      if (!response.ok) throw new Error("Failed to unassign stock");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
+      toast({ title: "Hisse satışı başarılı" });
+    },
+    onError: () => {
+      toast({ title: "Hisse satışı başarısız", variant: "destructive" });
+    },
+  });
+
+  const unassignCurrencyMutation = useMutation({
+    mutationFn: async ({ teamId, currencyId, amount }: { teamId: number; currencyId: number; amount: string }) => {
+      const response = await fetch("/api/admin/unassign-currency", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ teamId, currencyId, amount }),
+      });
+      if (!response.ok) throw new Error("Failed to unassign currency");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
+      toast({ title: "Döviz satışı başarılı" });
+    },
+    onError: () => {
+      toast({ title: "Döviz satışı başarısız", variant: "destructive" });
+    },
   });
 
   const { data: portfolios, isLoading: portfoliosLoading } = useQuery<TeamPortfolio[]>({
@@ -146,11 +189,25 @@ export function PortfolioOverview() {
                               <p className="text-sm text-muted-foreground">{stock.company.symbol}</p>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <p className="font-medium">{stock.shares} adet</p>
-                            <p className="text-sm text-muted-foreground">
-                              ₺{(parseFloat(stock.company.price) * stock.shares).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-                            </p>
+                          <div className="flex items-center gap-3">
+                            <div className="text-right">
+                              <p className="font-medium">{stock.shares} adet</p>
+                              <p className="text-sm text-muted-foreground">
+                                ₺{(parseFloat(stock.company.sellPrice) * stock.shares).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} satış değeri
+                              </p>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => unassignStockMutation.mutate({
+                                teamId: portfolio.team.id,
+                                companyId: stock.companyId,
+                                shares: stock.shares
+                              })}
+                              disabled={unassignStockMutation.isPending}
+                            >
+                              <Minus className="h-4 w-4" />
+                            </Button>
                           </div>
                         </div>
                       ))}
@@ -176,11 +233,25 @@ export function PortfolioOverview() {
                               <p className="text-sm text-muted-foreground">{currency.currency.code}</p>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <p className="font-medium">{parseFloat(currency.amount).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</p>
-                            <p className="text-sm text-muted-foreground">
-                              ₺{(parseFloat(currency.amount) * parseFloat(currency.currency.rate)).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-                            </p>
+                          <div className="flex items-center gap-3">
+                            <div className="text-right">
+                              <p className="font-medium">{parseFloat(currency.amount).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</p>
+                              <p className="text-sm text-muted-foreground">
+                                ₺{(parseFloat(currency.amount) * parseFloat(currency.currency.sellRate)).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} satış değeri
+                              </p>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => unassignCurrencyMutation.mutate({
+                                teamId: portfolio.team.id,
+                                currencyId: currency.currencyId,
+                                amount: currency.amount
+                              })}
+                              disabled={unassignCurrencyMutation.isPending}
+                            >
+                              <Minus className="h-4 w-4" />
+                            </Button>
                           </div>
                         </div>
                       ))}
