@@ -9,6 +9,7 @@ import { CurrencyManagement } from "@/components/admin/currency-management";
 import { TeamManagement } from "@/components/admin/team-management";
 import { FinancialOverview } from "@/components/admin/financial-overview";
 import { PortfolioOverview } from "@/components/admin/portfolio-overview";
+import { DividendDistribution } from "@/components/admin/dividend-distribution";
 
 export default function Admin() {
   return (
@@ -36,9 +37,10 @@ export default function Admin() {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="portfolios" className="w-full">
-              <TabsList className="grid w-full grid-cols-5">
+              <TabsList className="grid w-full grid-cols-6">
                 <TabsTrigger value="portfolios">Portföyler</TabsTrigger>
                 <TabsTrigger value="financial">Mali Durum</TabsTrigger>
+                <TabsTrigger value="dividend">Temettü</TabsTrigger>
                 <TabsTrigger value="companies">Şirketler</TabsTrigger>
                 <TabsTrigger value="currencies">Dövizler</TabsTrigger>
                 <TabsTrigger value="teams">Takımlar</TabsTrigger>
@@ -50,6 +52,10 @@ export default function Admin() {
               
               <TabsContent value="financial" className="mt-6">
                 <FinancialOverview />
+              </TabsContent>
+              
+              <TabsContent value="dividend" className="mt-6">
+                <DividendDistribution />
               </TabsContent>
               
               <TabsContent value="companies" className="mt-6">

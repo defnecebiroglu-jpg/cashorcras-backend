@@ -34,6 +34,7 @@ export function CurrencyManagement() {
       name: "",
       code: "",
       rate: "",
+      sellRate: "",
     },
   });
 
