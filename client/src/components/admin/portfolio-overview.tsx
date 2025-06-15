@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { TrendingUp, DollarSign, Briefcase, Users, Minus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
@@ -10,6 +13,14 @@ import { type Team, type TeamPortfolio } from "@shared/schema";
 
 export function PortfolioOverview() {
   const { toast } = useToast();
+  const [sellDialog, setSellDialog] = useState<{
+    isOpen: boolean;
+    type: 'stock' | 'currency';
+    item: any;
+    teamId: number;
+    maxAmount: number;
+  } | null>(null);
+  const [sellAmount, setSellAmount] = useState("");
   
   const { data: teams, isLoading: teamsLoading } = useQuery<Team[]>({
     queryKey: ["/api/teams"],
@@ -28,6 +39,8 @@ export function PortfolioOverview() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
       toast({ title: "Hisse satışı başarılı" });
+      setSellDialog(null);
+      setSellAmount("");
     },
     onError: () => {
       toast({ title: "Hisse satışı başarısız", variant: "destructive" });
@@ -47,11 +60,59 @@ export function PortfolioOverview() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
       toast({ title: "Döviz satışı başarılı" });
+      setSellDialog(null);
+      setSellAmount("");
     },
     onError: () => {
       toast({ title: "Döviz satışı başarısız", variant: "destructive" });
     },
   });
+
+  const handleSellStock = (stock: any, teamId: number) => {
+    setSellDialog({
+      isOpen: true,
+      type: 'stock',
+      item: stock,
+      teamId,
+      maxAmount: stock.shares
+    });
+    setSellAmount(stock.shares.toString());
+  };
+
+  const handleSellCurrency = (currency: any, teamId: number) => {
+    setSellDialog({
+      isOpen: true,
+      type: 'currency',
+      item: currency,
+      teamId,
+      maxAmount: parseFloat(currency.amount)
+    });
+    setSellAmount(currency.amount);
+  };
+
+  const confirmSell = () => {
+    if (!sellDialog || !sellAmount) return;
+
+    const amount = parseFloat(sellAmount);
+    if (amount <= 0 || amount > sellDialog.maxAmount) {
+      toast({ title: "Geçersiz miktar", variant: "destructive" });
+      return;
+    }
+
+    if (sellDialog.type === 'stock') {
+      unassignStockMutation.mutate({
+        teamId: sellDialog.teamId,
+        companyId: sellDialog.item.companyId,
+        shares: Math.floor(amount)
+      });
+    } else {
+      unassignCurrencyMutation.mutate({
+        teamId: sellDialog.teamId,
+        currencyId: sellDialog.item.currencyId,
+        amount: amount.toFixed(2)
+      });
+    }
+  };
 
   const { data: portfolios, isLoading: portfoliosLoading } = useQuery<TeamPortfolio[]>({
     queryKey: ["/api/teams", "portfolios"],
@@ -199,12 +260,7 @@ export function PortfolioOverview() {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => unassignStockMutation.mutate({
-                                teamId: portfolio.team.id,
-                                companyId: stock.companyId,
-                                shares: stock.shares
-                              })}
-                              disabled={unassignStockMutation.isPending}
+                              onClick={() => handleSellStock(stock, portfolio.team.id)}
                             >
                               <Minus className="h-4 w-4" />
                             </Button>
@@ -243,12 +299,7 @@ export function PortfolioOverview() {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => unassignCurrencyMutation.mutate({
-                                teamId: portfolio.team.id,
-                                currencyId: currency.currencyId,
-                                amount: currency.amount
-                              })}
-                              disabled={unassignCurrencyMutation.isPending}
+                              onClick={() => handleSellCurrency(currency, portfolio.team.id)}
                             >
                               <Minus className="h-4 w-4" />
                             </Button>
@@ -303,6 +354,86 @@ export function PortfolioOverview() {
           </Card>
         ))}
       </div>
+
+      {/* Sell Confirmation Dialog */}
+      <Dialog open={sellDialog?.isOpen || false} onOpenChange={(open) => {
+        if (!open) {
+          setSellDialog(null);
+          setSellAmount("");
+        }
+      }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {sellDialog?.type === 'stock' ? 'Hisse Satışı' : 'Döviz Satışı'}
+            </DialogTitle>
+          </DialogHeader>
+          {sellDialog && (
+            <div className="space-y-4">
+              <div className="p-4 bg-slate-50 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <img 
+                    src={sellDialog.type === 'stock' ? 
+                      sellDialog.item.company.logoUrl : 
+                      sellDialog.item.currency.logoUrl} 
+                    alt=""
+                    className="w-10 h-10 rounded object-cover"
+                  />
+                  <div>
+                    <h4 className="font-medium">
+                      {sellDialog.type === 'stock' ? 
+                        sellDialog.item.company.name : 
+                        sellDialog.item.currency.name}
+                    </h4>
+                    <p className="text-sm text-muted-foreground">
+                      Mevcut: {sellDialog.maxAmount} {sellDialog.type === 'stock' ? 'adet' : sellDialog.item.currency.code}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <label className="text-sm font-medium">
+                  Satış Miktarı
+                </label>
+                <Input
+                  type="number"
+                  min="0"
+                  max={sellDialog.maxAmount}
+                  step={sellDialog.type === 'stock' ? '1' : '0.01'}
+                  value={sellAmount}
+                  onChange={(e) => setSellAmount(e.target.value)}
+                  placeholder={`Max ${sellDialog.maxAmount}`}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Satış değeri: ₺{sellDialog.type === 'stock' ? 
+                    (parseFloat(sellAmount || "0") * parseFloat(sellDialog.item.company.sellPrice)).toLocaleString('tr-TR', { minimumFractionDigits: 2 }) :
+                    (parseFloat(sellAmount || "0") * parseFloat(sellDialog.item.currency.sellRate)).toLocaleString('tr-TR', { minimumFractionDigits: 2 })
+                  }
+                </p>
+              </div>
+
+              <div className="flex gap-2 justify-end">
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    setSellDialog(null);
+                    setSellAmount("");
+                  }}
+                >
+                  İptal
+                </Button>
+                <Button 
+                  onClick={confirmSell}
+                  disabled={unassignStockMutation.isPending || unassignCurrencyMutation.isPending || !sellAmount || parseFloat(sellAmount) <= 0}
+                >
+                  {(unassignStockMutation.isPending || unassignCurrencyMutation.isPending) ? "Satılıyor..." : "Sat"}
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
