@@ -134,11 +134,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const totalCost = shares * parseFloat(company.price);
       const currentBalance = parseFloat(team.cashBalance);
       
-      if (currentBalance < totalCost) {
-        return res.status(400).json({ message: 'Yetersiz bakiye' });
-      }
-      
-      // Deduct cost from team balance
+      // Admin can assign without balance limits - deduct cost from team balance
       await storage.updateTeam(teamId, {
         cashBalance: (currentBalance - totalCost).toFixed(2)
       });
@@ -210,11 +206,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const totalCost = parseFloat(amount) * parseFloat(currency.rate);
       const currentBalance = parseFloat(team.cashBalance);
       
-      if (currentBalance < totalCost) {
-        return res.status(400).json({ message: 'Yetersiz bakiye' });
-      }
-      
-      // Deduct cost from team balance
+      // Admin can assign without balance limits - deduct cost from team balance
       await storage.updateTeam(teamId, {
         cashBalance: (currentBalance - totalCost).toFixed(2)
       });
