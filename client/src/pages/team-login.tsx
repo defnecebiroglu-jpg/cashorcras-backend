@@ -58,9 +58,9 @@ export default function TeamLogin() {
       <div className="w-full max-w-md">
         {/* Logo Frame */}
         <div className="rounded-t-lg p-6 text-center shadow-sm mt-[-23px] mb-[-23px] pt-[0px] pb-[0px] ml-[0px] mr-[0px] pl-[14px] pr-[14px] bg-[#fff5ad]">
-          <div className="mx-auto flex items-center justify-center relative w-48 h-32">
-            <TrendingUp className="w-20 h-20 text-[#c7a230]" />
-          </div>
+          {/* Replace this with your logo image: */}
+          {/* <img src={logoImage} alt="Company Logo" className="w-20 h-20 mx-auto object-contain" /> */}
+          <TrendingUp className="w-20 h-20 text-[#c7a230] mx-auto" />
         </div>
 
         <Card className="rounded-t-none rounded-b-lg border-none text-card-foreground shadow-sm bg-[#fbf7eb]">
