@@ -59,11 +59,11 @@ export default function TeamLogin() {
       <div className="w-full max-w-md">
         {/* Logo Frame */}
         <div className="bg-white rounded-t-lg border border-b-0 p-6 text-center shadow-sm">
-          <div className="mx-auto w-32 h-20 flex items-center justify-center">
+          <div className="mx-auto w-48 h-32 flex items-center justify-center">
             <img 
               src={logoImage} 
               alt="Cash or Crash Logo" 
-              className="max-w-full max-h-full object-contain ml-[12px] mr-[12px] pl-[12px] pr-[12px]"
+              className="max-w-full max-h-full object-contain"
             />
           </div>
         </div>
