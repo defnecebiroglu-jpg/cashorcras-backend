@@ -71,6 +71,9 @@ export function VisualDesigner({ onDesignChange }: VisualDesignerProps) {
     handle: null,
   });
   const [viewMode, setViewMode] = useState<'design' | 'preview' | 'code'>('design');
+  const [snapToGrid, setSnapToGrid] = useState(true);
+  const [gridSize, setGridSize] = useState(20);
+  const [showRulers, setShowRulers] = useState(true);
   
   const canvasRef = useRef<HTMLDivElement>(null);
 
@@ -152,17 +155,25 @@ export function VisualDesigner({ onDesignChange }: VisualDesignerProps) {
     });
   }, [elements]);
 
+  const snapToGridValue = useCallback((value: number) => {
+    if (!snapToGrid) return value;
+    return Math.round(value / gridSize) * gridSize;
+  }, [snapToGrid, gridSize]);
+
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (dragState.isDragging && dragState.elementId) {
       const deltaX = e.clientX - dragState.startX;
       const deltaY = e.clientY - dragState.startY;
       
+      const newX = Math.max(0, dragState.originalX + deltaX);
+      const newY = Math.max(0, dragState.originalY + deltaY);
+      
       updateElement(dragState.elementId, {
-        x: Math.max(0, dragState.originalX + deltaX),
-        y: Math.max(0, dragState.originalY + deltaY),
+        x: snapToGridValue(newX),
+        y: snapToGridValue(newY),
       });
     }
-  }, [dragState, updateElement]);
+  }, [dragState, updateElement, snapToGridValue]);
 
   const handleMouseUp = useCallback(() => {
     setDragState({
@@ -279,6 +290,45 @@ export function VisualDesigner({ onDesignChange }: VisualDesignerProps) {
 
         <Separator className="my-4" />
 
+        {/* Grid Controls */}
+        <div className="space-y-3 mb-6">
+          <h4 className="text-sm font-medium">Grid Settings</h4>
+          <div className="space-y-2">
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={snapToGrid}
+                onChange={(e) => setSnapToGrid(e.target.checked)}
+                className="rounded"
+              />
+              <span className="text-sm">Snap to Grid</span>
+            </label>
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={showRulers}
+                onChange={(e) => setShowRulers(e.target.checked)}
+                className="rounded"
+              />
+              <span className="text-sm">Show Rulers</span>
+            </label>
+            <div>
+              <Label htmlFor="gridSize" className="text-xs">Grid Size</Label>
+              <Input
+                id="gridSize"
+                type="number"
+                value={gridSize}
+                onChange={(e) => setGridSize(parseInt(e.target.value) || 20)}
+                className="h-8 text-xs"
+                min="10"
+                max="50"
+              />
+            </div>
+          </div>
+        </div>
+
+        <Separator className="my-4" />
+
         {/* Layer Panel */}
         <div className="space-y-2">
           <h4 className="text-sm font-medium flex items-center">
@@ -334,12 +384,65 @@ export function VisualDesigner({ onDesignChange }: VisualDesignerProps) {
           {viewMode === 'design' && (
             <div
               ref={canvasRef}
-              className="relative w-full h-full min-h-[500px] bg-gray-50"
+              className="relative w-full h-full min-h-[500px] bg-white"
+              style={{
+                backgroundImage: `
+                  linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px)
+                `,
+                backgroundSize: `${gridSize}px ${gridSize}px`
+              }}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
               onClick={() => setSelectedElement(null)}
             >
+              {/* Grid coordinates overlay */}
+              {showRulers && (
+                <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+                  {/* X-axis rulers */}
+                  {Array.from({ length: Math.floor(800 / 100) + 1 }, (_, i) => (
+                    <div
+                      key={`x-${i}`}
+                      className="absolute top-0 h-full border-l border-blue-200"
+                      style={{ left: `${i * 100}px` }}
+                    >
+                      <span className="absolute -top-4 left-1 text-xs text-blue-600 bg-white px-1 rounded">
+                        {i * 100}
+                      </span>
+                    </div>
+                  ))}
+                  {/* Y-axis rulers */}
+                  {Array.from({ length: Math.floor(500 / 100) + 1 }, (_, i) => (
+                    <div
+                      key={`y-${i}`}
+                      className="absolute left-0 w-full border-t border-blue-200"
+                      style={{ top: `${i * 100}px` }}
+                    >
+                      <span className="absolute -left-10 top-1 text-xs text-blue-600 bg-white px-1 rounded">
+                        {i * 100}
+                      </span>
+                    </div>
+                  ))}
+                  
+                  {/* Corner indicator */}
+                  <div className="absolute top-0 left-0 w-8 h-8 bg-blue-100 border border-blue-200 flex items-center justify-center">
+                    <span className="text-xs text-blue-600">0,0</span>
+                  </div>
+                </div>
+              )}
+              
+              {/* Snap indicators */}
+              {snapToGrid && dragState.isDragging && (
+                <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+                  <div className="absolute bg-blue-500 opacity-30 rounded-full w-2 h-2 transform -translate-x-1 -translate-y-1"
+                       style={{
+                         left: `${snapToGridValue(dragState.originalX + (dragState.startX - dragState.startX))}px`,
+                         top: `${snapToGridValue(dragState.originalY + (dragState.startY - dragState.startY))}px`
+                       }}
+                  />
+                </div>
+              )}
               {elements.map((element) => (
                 <div
                   key={element.id}
