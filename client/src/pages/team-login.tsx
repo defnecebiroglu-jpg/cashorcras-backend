@@ -6,15 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import logoImage from "@assets/cash-or-crash-logo.png";
+import { TrendingUp } from "lucide-react";
 
 export default function TeamLogin() {
   const [accessCode, setAccessCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const logoSize = { width: 400, height: 300 };
-  const logoPosition = { x: 0, y: -50 };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,32 +21,29 @@ export default function TeamLogin() {
     try {
       const response = await fetch("/api/auth/team", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ accessCode }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        const team = await response.json();
-        toast({
-          title: "Başarılı",
-          description: `Hoş geldiniz, ${team.name}!`,
-        });
-        setLocation("/team-dashboard");
+        localStorage.setItem("teamId", data.team.id.toString());
+        localStorage.setItem("teamName", data.team.name);
+        setLocation(`/team/${data.team.id}`);
+        toast({ title: `Hoşgeldiniz ${data.team.name}!` });
       } else {
-        const error = await response.json();
-        toast({
-          title: "Hata",
-          description: error.error || "Geçersiz erişim kodu",
-          variant: "destructive",
+        toast({ 
+          title: "Giriş Hatası", 
+          description: data.message || "Geçersiz erişim kodu",
+          variant: "destructive" 
         });
       }
     } catch (error) {
-      toast({
-        title: "Hata",
-        description: "Bağlantı hatası",
-        variant: "destructive",
+      toast({ 
+        title: "Bağlantı Hatası", 
+        description: "Sunucu ile bağlantı kurulamadı",
+        variant: "destructive" 
       });
     } finally {
       setIsLoading(false);
@@ -56,27 +51,15 @@ export default function TeamLogin() {
   };
 
   return (
-    <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-start justify-center pt-16 p-4 bg-[#fff5ad]">
+    <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 bg-[#fff5ad]">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
       <div className="w-full max-w-md">
         {/* Logo Frame */}
-        <div className="rounded-t-lg p-6 text-center shadow-sm mt-[-23px] mb-[-40px] pt-[0px] pb-[0px] ml-[0px] mr-[0px] pl-[14px] pr-[14px] bg-[#fff5ad] relative">
-          <div 
-            className="mx-auto flex items-center justify-center relative"
-            style={{ 
-              width: logoSize.width, 
-              height: logoSize.height,
-              transform: `translate(${logoPosition.x}px, ${logoPosition.y}px)`
-            }}
-          >
-            <img 
-              src={logoImage} 
-              alt="Cash or Crash Logo" 
-              className="w-full h-full object-contain drop-shadow-sm"
-              style={{ width: logoSize.width, height: logoSize.height }}
-            />
+        <div className="rounded-t-lg p-6 text-center shadow-sm mt-[-23px] mb-[-23px] pt-[0px] pb-[0px] ml-[0px] mr-[0px] pl-[14px] pr-[14px] bg-[#fff5ad]">
+          <div className="mx-auto flex items-center justify-center relative w-48 h-32">
+            <TrendingUp className="w-20 h-20 text-[#c7a230]" />
           </div>
         </div>
 
@@ -91,21 +74,32 @@ export default function TeamLogin() {
               <Input
                 id="accessCode"
                 type="text"
-                value={accessCode}
-                onChange={(e) => setAccessCode(e.target.value)}
                 placeholder="Takım erişim kodunuzu girin"
+                value={accessCode}
+                onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
                 required
-                className="bg-white"
               />
             </div>
             <Button
               type="submit"
-              className="w-full bg-[#c7a230] hover:bg-[#b8932a] text-white"
-              disabled={isLoading}
+              className="w-full"
+              disabled={isLoading || !accessCode.trim()}
             >
-              {isLoading ? "Giriş yapılıyor..." : "Giriş Yap"}
+              {isLoading ? "Giriş Yapılıyor..." : "Takıma Giriş Yap"}
             </Button>
           </form>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-muted-foreground">
+              Admin girişi için{" "}
+              <Button 
+                variant="link" 
+                className="p-0 h-auto font-normal text-primary"
+                onClick={() => setLocation("/admin-login")}
+              >
+                buraya tıklayın
+              </Button>
+            </p>
+          </div>
         </CardContent>
         </Card>
       </div>
