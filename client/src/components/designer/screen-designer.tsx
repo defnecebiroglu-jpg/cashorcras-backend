@@ -67,6 +67,33 @@ export function ScreenDesigner({ onDesignChange, initialElements = [], frameName
   const [showRulers, setShowRulers] = useState(true);
   const [selectedFrame, setSelectedFrame] = useState<string>(frameName || 'new');
   
+  // Color presets for quick selection
+  const colorPresets = {
+    backgrounds: [
+      '#ffffff', '#f8fafc', '#f1f5f9', '#e2e8f0', '#cbd5e1',
+      '#1e293b', '#0f172a', '#374151', '#1f2937', '#111827',
+      '#fef2f2', '#fee2e2', '#fecaca', '#f87171', '#dc2626',
+      '#f0fdf4', '#dcfce7', '#bbf7d0', '#4ade80', '#16a34a',
+      '#eff6ff', '#dbeafe', '#93c5fd', '#3b82f6', '#1d4ed8',
+      '#fefce8', '#fef3c7', '#fcd34d', '#f59e0b', '#d97706'
+    ],
+    text: [
+      '#000000', '#1f2937', '#374151', '#4b5563', '#6b7280',
+      '#ffffff', '#f9fafb', '#f3f4f6', '#e5e7eb', '#d1d5db',
+      '#dc2626', '#ef4444', '#f87171', '#fca5a5', '#fecaca',
+      '#059669', '#10b981', '#34d399', '#6ee7b7', '#a7f3d0',
+      '#1d4ed8', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe',
+      '#d97706', '#f59e0b', '#fbbf24', '#fcd34d', '#fde68a'
+    ],
+    borders: [
+      '#e5e7eb', '#d1d5db', '#9ca3af', '#6b7280', '#374151',
+      '#fee2e2', '#fecaca', '#f87171', '#ef4444', '#dc2626',
+      '#dcfce7', '#bbf7d0', '#4ade80', '#22c55e', '#16a34a',
+      '#dbeafe', '#93c5fd', '#3b82f6', '#2563eb', '#1d4ed8',
+      '#fef3c7', '#fcd34d', '#f59e0b', '#ea580c', '#d97706'
+    ]
+  };
+  
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const appFrames = {
@@ -517,6 +544,91 @@ export function ScreenDesigner({ onDesignChange, initialElements = [], frameName
 
         <Separator className="my-4" />
 
+        {/* Global Theme Colors */}
+        <div className="space-y-3 mb-6">
+          <h4 className="text-sm font-medium">Color Themes</h4>
+          <div className="grid grid-cols-1 gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                elements.forEach(el => {
+                  if (el.type === 'text') {
+                    updateElement(el.id, { textColor: '#1f2937', backgroundColor: 'transparent' });
+                  } else {
+                    updateElement(el.id, { backgroundColor: '#ffffff', borderColor: '#e5e7eb' });
+                  }
+                });
+              }}
+              className="text-xs justify-start"
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-white border border-gray-300 rounded"></div>
+                Light Theme
+              </div>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                elements.forEach(el => {
+                  if (el.type === 'text') {
+                    updateElement(el.id, { textColor: '#f9fafb', backgroundColor: 'transparent' });
+                  } else {
+                    updateElement(el.id, { backgroundColor: '#1f2937', borderColor: '#374151' });
+                  }
+                });
+              }}
+              className="text-xs justify-start"
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-gray-800 rounded"></div>
+                Dark Theme
+              </div>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                elements.forEach(el => {
+                  if (el.type === 'text') {
+                    updateElement(el.id, { textColor: '#1d4ed8', backgroundColor: 'transparent' });
+                  } else {
+                    updateElement(el.id, { backgroundColor: '#eff6ff', borderColor: '#3b82f6' });
+                  }
+                });
+              }}
+              className="text-xs justify-start"
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-100 border border-blue-500 rounded"></div>
+                Blue Theme
+              </div>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                elements.forEach(el => {
+                  if (el.type === 'text') {
+                    updateElement(el.id, { textColor: '#dc2626', backgroundColor: 'transparent' });
+                  } else {
+                    updateElement(el.id, { backgroundColor: '#fef2f2', borderColor: '#ef4444' });
+                  }
+                });
+              }}
+              className="text-xs justify-start"
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-red-100 border border-red-500 rounded"></div>
+                Cash or Crash Red
+              </div>
+            </Button>
+          </div>
+        </div>
+
+        <Separator className="my-4" />
+
         {/* Screen Size Controls */}
         <div className="space-y-3 mb-6">
           <h4 className="text-sm font-medium">Screen Size</h4>
@@ -888,23 +1000,153 @@ export function ScreenDesigner({ onDesignChange, initialElements = [], frameName
             </TabsContent>
 
             <TabsContent value="style" className="space-y-4">
+              {/* Background Color */}
               <div>
-                <Label htmlFor="backgroundColor">Background Color</Label>
-                <Input
-                  id="backgroundColor"
-                  type="color"
-                  value={selectedElementData.backgroundColor}
-                  onChange={(e) => updateElement(selectedElementData.id, { backgroundColor: e.target.value })}
-                />
+                <Label className="text-sm font-medium mb-2 block">Background Color</Label>
+                <div className="space-y-2">
+                  <div className="flex gap-2 items-center">
+                    <Input
+                      type="color"
+                      value={selectedElementData.backgroundColor}
+                      onChange={(e) => updateElement(selectedElementData.id, { backgroundColor: e.target.value })}
+                      className="w-12 h-8 p-0 border rounded cursor-pointer"
+                    />
+                    <Input
+                      type="text"
+                      value={selectedElementData.backgroundColor}
+                      onChange={(e) => updateElement(selectedElementData.id, { backgroundColor: e.target.value })}
+                      className="flex-1 text-xs font-mono"
+                      placeholder="#ffffff"
+                    />
+                  </div>
+                  <div className="grid grid-cols-6 gap-1">
+                    {colorPresets.backgrounds.map((color) => (
+                      <button
+                        key={color}
+                        className="w-6 h-6 rounded border border-gray-300 cursor-pointer hover:scale-110 transition-transform"
+                        style={{ backgroundColor: color }}
+                        onClick={() => updateElement(selectedElementData.id, { backgroundColor: color })}
+                        title={color}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
+
+              {/* Text Color */}
+              {selectedElementData.type === 'text' && (
+                <div>
+                  <Label className="text-sm font-medium mb-2 block">Text Color</Label>
+                  <div className="space-y-2">
+                    <div className="flex gap-2 items-center">
+                      <Input
+                        type="color"
+                        value={selectedElementData.textColor}
+                        onChange={(e) => updateElement(selectedElementData.id, { textColor: e.target.value })}
+                        className="w-12 h-8 p-0 border rounded cursor-pointer"
+                      />
+                      <Input
+                        type="text"
+                        value={selectedElementData.textColor}
+                        onChange={(e) => updateElement(selectedElementData.id, { textColor: e.target.value })}
+                        className="flex-1 text-xs font-mono"
+                        placeholder="#000000"
+                      />
+                    </div>
+                    <div className="grid grid-cols-6 gap-1">
+                      {colorPresets.text.map((color) => (
+                        <button
+                          key={color}
+                          className="w-6 h-6 rounded border border-gray-300 cursor-pointer hover:scale-110 transition-transform"
+                          style={{ backgroundColor: color }}
+                          onClick={() => updateElement(selectedElementData.id, { textColor: color })}
+                          title={color}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Border Color */}
               <div>
-                <Label htmlFor="borderColor">Border Color</Label>
-                <Input
-                  id="borderColor"
-                  type="color"
-                  value={selectedElementData.borderColor}
-                  onChange={(e) => updateElement(selectedElementData.id, { borderColor: e.target.value })}
-                />
+                <Label className="text-sm font-medium mb-2 block">Border Color</Label>
+                <div className="space-y-2">
+                  <div className="flex gap-2 items-center">
+                    <Input
+                      type="color"
+                      value={selectedElementData.borderColor}
+                      onChange={(e) => updateElement(selectedElementData.id, { borderColor: e.target.value })}
+                      className="w-12 h-8 p-0 border rounded cursor-pointer"
+                    />
+                    <Input
+                      type="text"
+                      value={selectedElementData.borderColor}
+                      onChange={(e) => updateElement(selectedElementData.id, { borderColor: e.target.value })}
+                      className="flex-1 text-xs font-mono"
+                      placeholder="#e5e7eb"
+                    />
+                  </div>
+                  <div className="grid grid-cols-6 gap-1">
+                    {colorPresets.borders.map((color) => (
+                      <button
+                        key={color}
+                        className="w-6 h-6 rounded border border-gray-300 cursor-pointer hover:scale-110 transition-transform"
+                        style={{ backgroundColor: color }}
+                        onClick={() => updateElement(selectedElementData.id, { borderColor: color })}
+                        title={color}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Border Width */}
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <Label htmlFor="borderWidth" className="text-xs">Border Width</Label>
+                  <Input
+                    id="borderWidth"
+                    type="number"
+                    value={selectedElementData.borderWidth}
+                    onChange={(e) => updateElement(selectedElementData.id, { borderWidth: parseInt(e.target.value) || 0 })}
+                    min="0"
+                    max="10"
+                    className="h-8"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="borderRadius" className="text-xs">Border Radius</Label>
+                  <Input
+                    id="borderRadius"
+                    type="number"
+                    value={selectedElementData.borderRadius}
+                    onChange={(e) => updateElement(selectedElementData.id, { borderRadius: parseInt(e.target.value) || 0 })}
+                    min="0"
+                    max="50"
+                    className="h-8"
+                  />
+                </div>
+              </div>
+
+              {/* Opacity */}
+              <div>
+                <Label htmlFor="opacity" className="text-xs">Opacity</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    id="opacity"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value={selectedElementData.opacity}
+                    onChange={(e) => updateElement(selectedElementData.id, { opacity: parseFloat(e.target.value) })}
+                    className="flex-1"
+                  />
+                  <span className="text-xs text-muted-foreground w-8">
+                    {Math.round((selectedElementData.opacity || 1) * 100)}%
+                  </span>
+                </div>
               </div>
             </TabsContent>
 
@@ -916,6 +1158,141 @@ export function ScreenDesigner({ onDesignChange, initialElements = [], frameName
                   value={selectedElementData.content}
                   onChange={(e) => updateElement(selectedElementData.id, { content: e.target.value })}
                   placeholder={selectedElementData.type === 'text' ? 'Enter text...' : 'Element label...'}
+                />
+              </div>
+
+              {/* Typography Controls for Text Elements */}
+              {selectedElementData.type === 'text' && (
+                <>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label htmlFor="fontSize" className="text-xs">Font Size</Label>
+                      <Input
+                        id="fontSize"
+                        type="number"
+                        value={selectedElementData.fontSize}
+                        onChange={(e) => updateElement(selectedElementData.id, { fontSize: parseInt(e.target.value) || 16 })}
+                        min="8"
+                        max="72"
+                        className="h-8"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="fontWeight" className="text-xs">Font Weight</Label>
+                      <Select
+                        value={selectedElementData.fontWeight}
+                        onValueChange={(value) => updateElement(selectedElementData.id, { fontWeight: value })}
+                      >
+                        <SelectTrigger className="h-8">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="normal">Normal</SelectItem>
+                          <SelectItem value="medium">Medium</SelectItem>
+                          <SelectItem value="semibold">Semibold</SelectItem>
+                          <SelectItem value="bold">Bold</SelectItem>
+                          <SelectItem value="light">Light</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Font Style Presets */}
+                  <div>
+                    <Label className="text-xs">Quick Styles</Label>
+                    <div className="grid grid-cols-2 gap-1 mt-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs"
+                        onClick={() => updateElement(selectedElementData.id, {
+                          fontSize: 32,
+                          fontWeight: 'bold',
+                          textColor: '#1f2937'
+                        })}
+                      >
+                        Heading
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs"
+                        onClick={() => updateElement(selectedElementData.id, {
+                          fontSize: 16,
+                          fontWeight: 'normal',
+                          textColor: '#374151'
+                        })}
+                      >
+                        Body Text
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs"
+                        onClick={() => updateElement(selectedElementData.id, {
+                          fontSize: 12,
+                          fontWeight: 'medium',
+                          textColor: '#6b7280'
+                        })}
+                      >
+                        Caption
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs"
+                        onClick={() => updateElement(selectedElementData.id, {
+                          fontSize: 14,
+                          fontWeight: 'semibold',
+                          textColor: '#1d4ed8'
+                        })}
+                      >
+                        Link
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Spacing Controls */}
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <Label htmlFor="padding" className="text-xs">Padding</Label>
+                  <Input
+                    id="padding"
+                    type="number"
+                    value={selectedElementData.padding}
+                    onChange={(e) => updateElement(selectedElementData.id, { padding: parseInt(e.target.value) || 0 })}
+                    min="0"
+                    max="50"
+                    className="h-8"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="margin" className="text-xs">Margin</Label>
+                  <Input
+                    id="margin"
+                    type="number"
+                    value={selectedElementData.margin}
+                    onChange={(e) => updateElement(selectedElementData.id, { margin: parseInt(e.target.value) || 0 })}
+                    min="0"
+                    max="50"
+                    className="h-8"
+                  />
+                </div>
+              </div>
+
+              {/* Z-Index Control */}
+              <div>
+                <Label htmlFor="zIndex" className="text-xs">Layer Order (Z-Index)</Label>
+                <Input
+                  id="zIndex"
+                  type="number"
+                  value={selectedElementData.zIndex}
+                  onChange={(e) => updateElement(selectedElementData.id, { zIndex: parseInt(e.target.value) || 1 })}
+                  min="1"
+                  max="100"
+                  className="h-8"
                 />
               </div>
             </TabsContent>
