@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { Settings, RotateCcw } from "lucide-react";
+import { Settings, RotateCcw, Move } from "lucide-react";
 import logoImage from "@assets/cash-or-crash-logo.png";
 
 export default function TeamLogin() {
@@ -15,7 +15,9 @@ export default function TeamLogin() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [logoSize, setLogoSize] = useState({ width: 192, height: 128 });
+  const [logoPosition, setLogoPosition] = useState({ x: 0, y: 0 });
   const [showSizeControls, setShowSizeControls] = useState(false);
+  const [showPositionControls, setShowPositionControls] = useState(false);
 
 
 
@@ -31,6 +33,20 @@ export default function TeamLogin() {
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const height = parseInt(e.target.value) || 60;
     setLogoSize(prev => ({ ...prev, height }));
+  };
+
+  const handleXPositionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const x = parseInt(e.target.value) || 0;
+    setLogoPosition(prev => ({ ...prev, x }));
+  };
+
+  const handleYPositionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const y = parseInt(e.target.value) || 0;
+    setLogoPosition(prev => ({ ...prev, y }));
+  };
+
+  const resetLogoPosition = () => {
+    setLogoPosition({ x: 0, y: 0 });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -83,14 +99,25 @@ export default function TeamLogin() {
               size="sm"
               onClick={() => setShowSizeControls(!showSizeControls)}
               className="h-8 w-8 p-0 bg-white/80 hover:bg-white"
+              title="Size Controls"
             >
               <Settings className="h-4 w-4" />
             </Button>
             <Button
               variant="ghost"
               size="sm"
+              onClick={() => setShowPositionControls(!showPositionControls)}
+              className="h-8 w-8 p-0 bg-white/80 hover:bg-white"
+              title="X/Y Position Controls"
+            >
+              <Move className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={resetLogoSize}
               className="h-8 w-8 p-0 bg-white/80 hover:bg-white"
+              title="Reset Size"
             >
               <RotateCcw className="h-4 w-4" />
             </Button>
@@ -126,10 +153,53 @@ export default function TeamLogin() {
               </div>
             </div>
           )}
+
+          {showPositionControls && (
+            <div className="absolute top-12 right-2 bg-white/95 p-3 rounded-lg shadow-lg border z-10">
+              <div className="flex flex-col gap-2 text-sm">
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="logoX" className="text-xs">X Position:</Label>
+                  <Input
+                    id="logoX"
+                    type="number"
+                    value={logoPosition.x}
+                    onChange={handleXPositionChange}
+                    className="w-16 h-6 text-xs"
+                    min="-100"
+                    max="100"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="logoY" className="text-xs">Y Position:</Label>
+                  <Input
+                    id="logoY"
+                    type="number"
+                    value={logoPosition.y}
+                    onChange={handleYPositionChange}
+                    className="w-16 h-6 text-xs"
+                    min="-100"
+                    max="100"
+                  />
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={resetLogoPosition}
+                  className="text-xs mt-1"
+                >
+                  Reset Position
+                </Button>
+              </div>
+            </div>
+          )}
           
           <div 
             className="mx-auto flex items-center justify-center relative"
-            style={{ width: logoSize.width, height: logoSize.height }}
+            style={{ 
+              width: logoSize.width, 
+              height: logoSize.height,
+              transform: `translate(${logoPosition.x}px, ${logoPosition.y}px)`
+            }}
           >
             <img 
               src={logoImage} 
