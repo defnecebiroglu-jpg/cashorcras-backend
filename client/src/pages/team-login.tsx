@@ -46,74 +46,52 @@ export default function TeamLogin() {
   };
 
   return (
-    <div style={{
-      width: "100vw",
-      height: "100vh",
-      background: "#FFF5AD",
-      position: "relative",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      overflow: "hidden"
-    }}>
-      <div style={{ position: "absolute", top: "16px", right: "16px", zIndex: 50 }}>
+    <>
+      {/* Background container */}
+      <div style={{ width: "1900px", height: "1066px", background: "#FFF5AD", position: "fixed", top: 0, left: 0, zIndex: -1 }}></div>
+      
+      {/* Theme toggle */}
+      <div style={{ position: "fixed", top: "16px", right: "16px", zIndex: 1000 }}>
         <ThemeToggle />
       </div>
-      
-      {/* Background decorative images */}
-      <div style={{ position: "absolute", top: "20px", left: "20px", width: "419.21px", height: "429.09px", transform: "rotate(-30deg)", transformOrigin: "top left", opacity: 0.3 }}>
-        <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #fde047, #facc15)", borderRadius: "50%" }}></div>
-      </div>
-      <div style={{ position: "absolute", top: "40px", right: "20px", width: "370.65px", height: "348.75px", transform: "rotate(100deg)", transformOrigin: "top left", opacity: 0.3 }}>
-        <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #fb923c, #f97316)", borderRadius: "50%" }}></div>
-      </div>
-      <div style={{ position: "absolute", bottom: "40px", left: "40px", width: "545.19px", height: "523.53px", transform: "rotate(110deg)", transformOrigin: "top left", opacity: 0.3 }}>
-        <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #eab308, #ca8a04)", borderRadius: "50%" }}></div>
-      </div>
-      <div style={{ position: "absolute", bottom: "20px", right: "40px", width: "589.60px", height: "589.60px", transform: "rotate(-45deg)", transformOrigin: "top left", opacity: 0.3 }}>
-        <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #fbbf24, #f59e0b)", borderRadius: "50%" }}></div>
-      </div>
-      <div style={{ position: "absolute", top: "60px", left: "60px", width: "333.41px", height: "354.34px", transform: "rotate(-10deg)", transformOrigin: "top left", opacity: 0.3 }}>
-        <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #fde047, #facc15)", borderRadius: "50%" }}></div>
-      </div>
-      <div style={{ position: "absolute", bottom: "60px", right: "60px", width: "388.18px", height: "372.75px", transform: "rotate(70deg)", transformOrigin: "top left", opacity: 0.3 }}>
-        <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #fb923c, #f97316)", borderRadius: "50%" }}></div>
+
+      {/* Background decorative image */}
+      <div style={{ 
+        position: "absolute", 
+        top: "100px", 
+        right: "100px",
+        width: "333.41px", 
+        height: "354.34px", 
+        transform: "rotate(-10deg)", 
+        transformOrigin: "top left",
+        zIndex: 1
+      }}>
+        <div style={{ 
+          width: "100%", 
+          height: "100%", 
+          background: "linear-gradient(135deg, #fde047, #facc15)", 
+          borderRadius: "50%",
+          opacity: 0.4
+        }}></div>
       </div>
 
-      {/* Main content */}
-      <div style={{ 
-        zIndex: 10, 
-        display: "flex", 
-        flexDirection: "column", 
-        alignItems: "center", 
-        gap: "32px"
+      {/* Main content container */}
+      <div style={{
+        minHeight: "100vh",
+        background: "#FFF5AD",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "40px",
+        gap: "40px",
+        position: "relative",
+        zIndex: 10
       }}>
         
         {/* Main image */}
-        <div style={{
-          width: "679px",
-          height: "581px",
-          background: "linear-gradient(135deg, #eab308, #ca8a04)",
-          borderRadius: "16px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
-        }}>
-          <div style={{
-            width: "182px",
-            height: "182px",
-            position: "relative",
-            boxShadow: "inset 0px 4px 4px #B18F13",
-            borderRadius: "8px",
-            background: "linear-gradient(135deg, #facc15, #eab308)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-          }}>
-            <div style={{ fontSize: "72px", fontWeight: "bold", color: "white" }}>₺</div>
-          </div>
+        <div style={{ width: "679px", height: "581px", background: "linear-gradient(135deg, #eab308, #ca8a04)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ fontSize: "120px", color: "white", fontWeight: "bold" }}>₺</div>
         </div>
 
         {/* Title */}
@@ -121,20 +99,24 @@ export default function TeamLogin() {
           textAlign: "center", 
           color: "#E4B300", 
           fontSize: "53.45px", 
-          fontFamily: "Jockey One, system-ui, sans-serif", 
+          fontFamily: "Jockey One", 
           fontWeight: 400, 
-          lineHeight: "70.55px"
+          lineHeight: "70.55px", 
+          wordWrap: "break-word" 
         }}>
           TAKIM GİRİŞİ
         </div>
 
-        {/* Access code label */}
+        {/* Access code prompt */}
         <div style={{ 
+          width: "600px", 
           color: "#BD9E2C", 
           fontSize: "36px", 
-          fontFamily: "Mukta, system-ui, sans-serif", 
+          fontFamily: "Mukta", 
           fontWeight: 400, 
-          lineHeight: "47.52px"
+          lineHeight: "47.52px", 
+          wordWrap: "break-word",
+          textAlign: "center"
         }}>
           Erişim kodunu giriniz.
         </div>
@@ -147,14 +129,15 @@ export default function TeamLogin() {
             onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
             required
             style={{
-              width: "400px",
+              width: "500px",
               height: "60px",
-              fontSize: "24px",
-              padding: "0 16px",
-              border: "2px solid #BD9E2C",
+              fontSize: "28px",
+              padding: "0 20px",
+              border: "3px solid #BD9E2C",
               borderRadius: "8px",
               background: "white",
-              outline: "none"
+              outline: "none",
+              textAlign: "center"
             }}
           />
 
@@ -163,16 +146,17 @@ export default function TeamLogin() {
             type="submit"
             disabled={isLoading || !accessCode.trim()}
             style={{ 
-              width: "400px",
-              height: "60px",
+              width: "500px",
+              height: "70px",
               textAlign: "center", 
               color: "#927201", 
               fontSize: "36px", 
-              fontFamily: "Mukta, system-ui, sans-serif", 
+              fontFamily: "Mukta", 
               fontWeight: 400, 
-              lineHeight: "47.52px",
+              lineHeight: "47.52px", 
+              wordWrap: "break-word",
               background: "white",
-              border: "2px solid #BD9E2C",
+              border: "3px solid #BD9E2C",
               borderRadius: "8px",
               cursor: isLoading || !accessCode.trim() ? "not-allowed" : "pointer"
             }}
@@ -183,22 +167,30 @@ export default function TeamLogin() {
 
         {/* Admin login link */}
         <div style={{ 
-          textAlign: "center",
-          fontSize: "36px", 
-          fontFamily: "Sulphur Point, system-ui, sans-serif", 
-          fontWeight: 700, 
-          lineHeight: "47.52px"
+          width: "800px", 
+          textAlign: "center"
         }}>
-          <span style={{ color: "#BF9E27" }}>Admin girişi için </span>
+          <span style={{ 
+            color: "#BF9E27", 
+            fontSize: "36px", 
+            fontFamily: "Sulphur Point", 
+            fontWeight: 700, 
+            lineHeight: "47.52px", 
+            wordWrap: "break-word" 
+          }}>
+            Admin girişi için 
+          </span>
           <button 
             onClick={() => setLocation("/admin-login")}
             style={{ 
               color: "#927201", 
-              background: "none", 
-              border: "none", 
-              fontSize: "inherit",
-              fontFamily: "inherit",
-              fontWeight: "inherit",
+              fontSize: "36px", 
+              fontFamily: "Sulphur Point", 
+              fontWeight: 700, 
+              lineHeight: "47.52px", 
+              wordWrap: "break-word",
+              background: "none",
+              border: "none",
               cursor: "pointer",
               textDecoration: "underline"
             }}
@@ -207,6 +199,6 @@ export default function TeamLogin() {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
