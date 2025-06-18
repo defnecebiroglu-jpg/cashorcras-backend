@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AppDesigner } from "@/components/designer/app-designer";
+import { ScreenDesigner } from "@/components/designer/screen-designer";
 import { FrameInspector } from "@/components/designer/frame-inspector";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -8,7 +8,7 @@ import { useLocation } from "wouter";
 
 export default function Designer() {
   const [, setLocation] = useLocation();
-  const [mode, setMode] = useState<'inspect' | 'design'>('inspect');
+  const [mode, setMode] = useState<'inspect' | 'design'>('design');
 
   return (
     <div className="h-screen flex flex-col bg-background">
@@ -48,7 +48,7 @@ export default function Designer() {
 
       {/* Content */}
       <div className="flex-1">
-        {mode === 'inspect' ? <FrameInspector /> : <AppDesigner />}
+        {mode === 'inspect' ? <FrameInspector /> : <ScreenDesigner />}
       </div>
     </div>
   );
