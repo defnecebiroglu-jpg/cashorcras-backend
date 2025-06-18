@@ -60,7 +60,7 @@ export function ScreenDesigner({ onDesignChange, initialElements = [], frameName
     originalX: 0,
     originalY: 0,
   });
-  const [viewMode, setViewMode] = useState<'design' | 'preview' | 'code'>('design');
+
   const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop' | 'full'>('desktop');
   const [snapToGrid, setSnapToGrid] = useState(true);
   const [gridSize, setGridSize] = useState(20);
@@ -408,33 +408,7 @@ export function ScreenDesigner({ onDesignChange, initialElements = [], frameName
 
   const selectedElementData = selectedElement ? elements.find(el => el.id === selectedElement) : null;
 
-  const generateCode = () => {
-    const code = elements.map(el => {
-      const styles = {
-        position: 'absolute',
-        left: `${el.x}px`,
-        top: `${el.y}px`,
-        width: `${el.width}px`,
-        height: `${el.height}px`,
-        backgroundColor: el.backgroundColor,
-        border: `${el.borderWidth}px solid ${el.borderColor}`,
-        borderRadius: `${el.borderRadius}px`,
-        padding: `${el.padding}px`,
-        margin: `${el.margin}px`,
-        opacity: el.opacity,
-        zIndex: el.zIndex,
-        ...(el.type === 'text' && {
-          fontSize: `${el.fontSize}px`,
-          fontWeight: el.fontWeight,
-          color: el.textColor,
-        }),
-      };
 
-      return `<div style={${JSON.stringify(styles, null, 2)}}>${el.content || ''}</div>`;
-    }).join('\n');
-
-    return `<div style={{ position: 'relative', width: '100%', height: '100%' }}>\n${code}\n</div>`;
-  };
 
   const saveFrameDesign = async () => {
     if (selectedFrame === 'new') {
@@ -712,182 +686,89 @@ export function ScreenDesigner({ onDesignChange, initialElements = [], frameName
 
         <Separator className="my-4" />
 
-        {/* View Mode Toggle */}
-        <div className="space-y-2 mb-6">
-          <h4 className="text-sm font-medium">View Mode</h4>
-          <div className="flex gap-1">
-            <Button
-              variant={viewMode === 'design' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('design')}
-            >
-              <Move className="w-4 h-4" />
-            </Button>
-            <Button
-              variant={viewMode === 'preview' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('preview')}
-            >
-              <Eye className="w-4 h-4" />
-            </Button>
-            <Button
-              variant={viewMode === 'code' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('code')}
-            >
-              <Code className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
+
       </div>
 
       {/* Main Canvas Area */}
       <div className="flex-1 flex flex-col">
         {/* Canvas */}
         <div className="flex-1 overflow-auto bg-gray-100 p-8">
-          {viewMode === 'design' && (
-            <div className="flex items-center justify-center min-h-full">
-              <div
-                className="relative bg-white shadow-2xl border border-gray-300"
-                style={{
-                  width: `${getScreenDimensions().width}px`,
-                  height: `${getScreenDimensions().height}px`,
-                }}
-              >
-                {/* Device Frame Header */}
-                <div className="absolute -top-8 left-0 flex items-center gap-4">
-                  <div className="bg-gray-800 text-white px-3 py-1 rounded text-sm font-medium">
-                    {screenSize.charAt(0).toUpperCase() + screenSize.slice(1)} Preview
-                  </div>
-                  <div className="text-gray-600 text-sm">
-                    {getScreenDimensions().width} × {getScreenDimensions().height}px
-                  </div>
+          <div className="flex items-center justify-center min-h-full">
+            <div
+              className="relative bg-white shadow-2xl border border-gray-300"
+              style={{
+                width: `${getScreenDimensions().width}px`,
+                height: `${getScreenDimensions().height}px`,
+              }}
+            >
+              {/* Device Frame Header */}
+              <div className="absolute -top-8 left-0 flex items-center gap-4">
+                <div className="bg-gray-800 text-white px-3 py-1 rounded text-sm font-medium">
+                  {screenSize.charAt(0).toUpperCase() + screenSize.slice(1)} Preview
                 </div>
-                
-                {/* Canvas Area */}
-                <div
-                  ref={canvasRef}
-                  className="relative w-full h-full bg-white overflow-hidden"
-                  style={{
-                    backgroundImage: `
-                      linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)
-                    `,
-                    backgroundSize: `${gridSize}px ${gridSize}px`
-                  }}
-                  onMouseMove={handleMouseMove}
-                  onMouseUp={handleMouseUp}
-                  onMouseLeave={handleMouseUp}
-                  onClick={() => setSelectedElement(null)}
-                >
-                  {/* Grid coordinates overlay */}
-                  {showRulers && (
-                    <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-                      {/* X-axis rulers */}
-                      {Array.from({ length: Math.floor(getScreenDimensions().width / 100) + 1 }, (_, i) => (
-                        <div
-                          key={`x-${i}`}
-                          className="absolute top-0 h-full border-l border-blue-200"
-                          style={{ left: `${i * 100}px` }}
-                        >
-                          <span className="absolute -top-4 left-1 text-xs text-blue-600 bg-white px-1 rounded">
-                            {i * 100}
-                          </span>
-                        </div>
-                      ))}
-                      {/* Y-axis rulers */}
-                      {Array.from({ length: Math.floor(getScreenDimensions().height / 100) + 1 }, (_, i) => (
-                        <div
-                          key={`y-${i}`}
-                          className="absolute left-0 w-full border-t border-blue-200"
-                          style={{ top: `${i * 100}px` }}
-                        >
-                          <span className="absolute -left-10 top-1 text-xs text-blue-600 bg-white px-1 rounded">
-                            {i * 100}
-                          </span>
-                        </div>
-                      ))}
-                      
-                      {/* Corner indicator */}
-                      <div className="absolute top-0 left-0 w-8 h-8 bg-blue-100 border border-blue-200 flex items-center justify-center">
-                        <span className="text-xs text-blue-600">0,0</span>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Elements */}
-                  {elements.map((element) => (
-                    <div
-                      key={element.id}
-                      className={`absolute cursor-move select-none ${
-                        selectedElement === element.id ? 'ring-2 ring-blue-500' : ''
-                      }`}
-                      style={{
-                        left: element.x,
-                        top: element.y,
-                        width: element.width,
-                        height: element.height,
-                        backgroundColor: element.backgroundColor,
-                        border: `${element.borderWidth}px solid ${element.borderColor}`,
-                        borderRadius: element.borderRadius,
-                        padding: element.padding,
-                        margin: element.margin,
-                        opacity: element.opacity,
-                        zIndex: element.zIndex,
-                        ...(element.type === 'text' && {
-                          fontSize: element.fontSize,
-                          fontWeight: element.fontWeight,
-                          color: element.textColor,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }),
-                      }}
-                      onMouseDown={(e) => handleMouseDown(e, element.id)}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedElement(element.id);
-                      }}
-                    >
-                      {element.type === 'text' && element.content}
-                      {element.type === 'image' && (
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
-                          {element.content}
-                        </div>
-                      )}
-                      {element.type === 'box' && element.content && (
-                        <div className="p-2 text-sm">{element.content}</div>
-                      )}
-                      
-                      {/* Resize Handles */}
-                      {selectedElement === element.id && (
-                        <>
-                          <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-blue-500 cursor-se-resize" />
-                          <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-blue-500 cursor-sw-resize" />
-                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 cursor-ne-resize" />
-                          <div className="absolute -top-1 -left-1 w-3 h-3 bg-blue-500 cursor-nw-resize" />
-                        </>
-                      )}
-                    </div>
-                  ))}
+                <div className="text-gray-600 text-sm">
+                  {getScreenDimensions().width} × {getScreenDimensions().height}px
                 </div>
               </div>
-            </div>
-          )}
-
-          {viewMode === 'preview' && (
-            <div className="flex items-center justify-center min-h-full">
+              
+              {/* Canvas Area */}
               <div
-                className="relative bg-white shadow-2xl border border-gray-300"
+                ref={canvasRef}
+                className="relative w-full h-full bg-white overflow-hidden"
                 style={{
-                  width: `${getScreenDimensions().width}px`,
-                  height: `${getScreenDimensions().height}px`,
+                  backgroundImage: `
+                    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)
+                  `,
+                  backgroundSize: `${gridSize}px ${gridSize}px`
                 }}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                onClick={() => setSelectedElement(null)}
               >
+                {/* Grid coordinates overlay */}
+                {showRulers && (
+                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+                    {/* X-axis rulers */}
+                    {Array.from({ length: Math.floor(getScreenDimensions().width / 100) + 1 }, (_, i) => (
+                      <div
+                        key={`x-${i}`}
+                        className="absolute top-0 h-full border-l border-blue-200"
+                        style={{ left: `${i * 100}px` }}
+                      >
+                        <span className="absolute -top-4 left-1 text-xs text-blue-600 bg-white px-1 rounded">
+                          {i * 100}
+                        </span>
+                      </div>
+                    ))}
+                    {/* Y-axis rulers */}
+                    {Array.from({ length: Math.floor(getScreenDimensions().height / 100) + 1 }, (_, i) => (
+                      <div
+                        key={`y-${i}`}
+                        className="absolute left-0 w-full border-t border-blue-200"
+                        style={{ top: `${i * 100}px` }}
+                      >
+                        <span className="absolute -left-10 top-1 text-xs text-blue-600 bg-white px-1 rounded">
+                          {i * 100}
+                        </span>
+                      </div>
+                    ))}
+                    
+                    {/* Corner indicator */}
+                    <div className="absolute top-0 left-0 w-8 h-8 bg-blue-100 border border-blue-200 flex items-center justify-center">
+                      <span className="text-xs text-blue-600">0,0</span>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Elements */}
                 {elements.map((element) => (
                   <div
                     key={element.id}
-                    className="absolute"
+                    className={`absolute cursor-move select-none ${
+                      selectedElement === element.id ? 'ring-2 ring-blue-500' : ''
+                    }`}
                     style={{
                       left: element.x,
                       top: element.y,
@@ -909,6 +790,11 @@ export function ScreenDesigner({ onDesignChange, initialElements = [], frameName
                         justifyContent: 'center',
                       }),
                     }}
+                    onMouseDown={(e) => handleMouseDown(e, element.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedElement(element.id);
+                    }}
                   >
                     {element.type === 'text' && element.content}
                     {element.type === 'image' && (
@@ -919,19 +805,56 @@ export function ScreenDesigner({ onDesignChange, initialElements = [], frameName
                     {element.type === 'box' && element.content && (
                       <div className="p-2 text-sm">{element.content}</div>
                     )}
+                    
+                    {/* On-screen X/Y Position Controls */}
+                    {selectedElement === element.id && (
+                      <>
+                        {/* X Position Control */}
+                        <div className="absolute -top-8 left-0 flex items-center gap-1 bg-white border border-gray-300 rounded px-2 py-1 shadow-sm">
+                          <span className="text-xs text-gray-600">X:</span>
+                          <button
+                            className="px-1 py-0.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const newX = prompt("Enter X position:", element.x.toString());
+                              if (newX !== null) {
+                                updateElement(element.id, { x: parseInt(newX) || 0 });
+                              }
+                            }}
+                          >
+                            {element.x}
+                          </button>
+                        </div>
+                        
+                        {/* Y Position Control */}
+                        <div className="absolute -left-12 top-0 flex items-center gap-1 bg-white border border-gray-300 rounded px-2 py-1 shadow-sm">
+                          <span className="text-xs text-gray-600">Y:</span>
+                          <button
+                            className="px-1 py-0.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const newY = prompt("Enter Y position:", element.y.toString());
+                              if (newY !== null) {
+                                updateElement(element.id, { y: parseInt(newY) || 0 });
+                              }
+                            }}
+                          >
+                            {element.y}
+                          </button>
+                        </div>
+                        
+                        {/* Resize Handles */}
+                        <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-blue-500 cursor-se-resize" />
+                        <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-blue-500 cursor-sw-resize" />
+                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 cursor-ne-resize" />
+                        <div className="absolute -top-1 -left-1 w-3 h-3 bg-blue-500 cursor-nw-resize" />
+                      </>
+                    )}
                   </div>
                 ))}
               </div>
             </div>
-          )}
-
-          {viewMode === 'code' && (
-            <div className="p-4">
-              <pre className="bg-gray-900 text-green-400 p-4 rounded overflow-auto text-sm">
-                {generateCode()}
-              </pre>
-            </div>
-          )}
+          </div>
         </div>
       </div>
 
