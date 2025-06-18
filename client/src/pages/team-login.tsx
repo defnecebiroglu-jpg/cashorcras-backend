@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { ChartLine } from "lucide-react";
+import { ChartLine, Move } from "lucide-react";
 import logoImage from "@assets/Adsız tasarım (6)_1750263227259.png";
 
 export default function TeamLogin() {
@@ -14,6 +14,28 @@ export default function TeamLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const [logoSize, setLogoSize] = useState({ width: 192, height: 128 }); // w-48 h-32 in pixels
+  const [isDragging, setIsDragging] = useState(false);
+  const logoRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    e.preventDefault();
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !logoRef.current) return;
+    
+    const rect = logoRef.current.getBoundingClientRect();
+    const newWidth = Math.max(100, e.clientX - rect.left);
+    const newHeight = Math.max(60, e.clientY - rect.top);
+    
+    setLogoSize({ width: newWidth, height: newHeight });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,12 +81,30 @@ export default function TeamLogin() {
       <div className="w-full max-w-md">
         {/* Logo Frame */}
         <div className="bg-white rounded-t-lg border border-b-0 p-6 text-center shadow-sm">
-          <div className="mx-auto w-48 h-32 flex items-center justify-center">
+          <div 
+            ref={logoRef}
+            className="mx-auto flex items-center justify-center relative border-2 border-dashed border-gray-300 hover:border-blue-400 transition-colors"
+            style={{ width: logoSize.width, height: logoSize.height }}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+          >
             <img 
               src={logoImage} 
               alt="Cash or Crash Logo" 
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain pointer-events-none"
             />
+            {/* Resize Handle */}
+            <div 
+              className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 hover:bg-blue-600 cursor-se-resize opacity-70 hover:opacity-100 transition-opacity"
+              onMouseDown={handleMouseDown}
+            >
+              <Move className="w-3 h-3 text-white m-0.5" />
+            </div>
+            {/* Size Display */}
+            <div className="absolute top-1 left-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">
+              {Math.round(logoSize.width)}×{Math.round(logoSize.height)}
+            </div>
           </div>
         </div>
 
