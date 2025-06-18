@@ -63,7 +63,7 @@ export default function TeamLogin() {
             <img 
               src={logoImage} 
               alt="Cash or Crash Logo" 
-              className="max-w-full max-h-full object-contain"
+              className="w-56 h-36 object-contain"
             />
           </div>
         </div>
