@@ -1,43 +1,18 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { ChartLine, Move } from "lucide-react";
-import logoImage from "@assets/Adsız tasarım (6)_1750263227259.png";
-
-import sadasdasd from "@assets/sadasdasd.PNG";
+import { TrendingUp } from "lucide-react";
 
 export default function TeamLogin() {
   const [accessCode, setAccessCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const [logoSize, setLogoSize] = useState({ width: 192, height: 128 }); // w-48 h-32 in pixels
-  const [isDragging, setIsDragging] = useState(false);
-  const logoRef = useRef<HTMLDivElement>(null);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    e.preventDefault();
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !logoRef.current) return;
-    
-    const rect = logoRef.current.getBoundingClientRect();
-    const newWidth = Math.max(100, e.clientX - rect.left);
-    const newHeight = Math.max(60, e.clientY - rect.top);
-    
-    setLogoSize({ width: newWidth, height: newHeight });
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,19 +58,8 @@ export default function TeamLogin() {
       <div className="w-full max-w-md">
         {/* Logo Frame */}
         <div className="rounded-t-lg p-6 text-center shadow-sm mt-[-23px] mb-[-23px] pt-[0px] pb-[0px] ml-[0px] mr-[0px] pl-[14px] pr-[14px] bg-[#fff5ad]">
-          <div 
-            ref={logoRef}
-            className="mx-auto flex items-center justify-center relative"
-            style={{ width: logoSize.width, height: logoSize.height }}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-          >
-            <img 
-              src={sadasdasd} 
-              alt="Cash or Crash Logo" 
-              className="w-full h-full object-contain"
-            />
+          <div className="mx-auto flex items-center justify-center relative w-48 h-32">
+            <TrendingUp className="w-20 h-20 text-[#c7a230]" />
           </div>
         </div>
 
