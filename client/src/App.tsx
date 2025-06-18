@@ -8,6 +8,7 @@ import TeamLogin from "@/pages/team-login";
 import AdminLogin from "@/pages/admin-login";
 import TeamDashboard from "@/pages/team-dashboard";
 import Admin from "@/pages/admin";
+import Designer from "@/pages/designer";
 
 function Router() {
   return (
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/admin-login" component={AdminLogin} />
       <Route path="/team/:id" component={TeamDashboard} />
       <Route path="/admin" component={Admin} />
+      <Route path="/designer" component={Designer} />
     </Switch>
   );
 }
