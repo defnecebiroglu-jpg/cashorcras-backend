@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { ChartLine } from "lucide-react";
+import logoImage from "@assets/Adsız tasarım (6)_1750263227259.png";
 
 export default function TeamLogin() {
   const [accessCode, setAccessCode] = useState("");
@@ -58,11 +59,12 @@ export default function TeamLogin() {
       <div className="w-full max-w-md">
         {/* Logo Frame */}
         <div className="bg-white rounded-t-lg border border-b-0 p-6 text-center shadow-sm">
-          <div className="mx-auto w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
-            <div className="text-center">
-              <ChartLine className="mx-auto h-8 w-8 text-gray-400 mb-2" />
-              <p className="text-xs text-gray-500">Logo Area</p>
-            </div>
+          <div className="mx-auto w-32 h-20 flex items-center justify-center">
+            <img 
+              src={logoImage} 
+              alt="Cash or Crash Logo" 
+              className="max-w-full max-h-full object-contain"
+            />
           </div>
         </div>
 
