@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Square, 
   Type, 
@@ -37,10 +38,12 @@ export interface DesignElement {
 
 interface ScreenDesignerProps {
   onDesignChange?: (elements: DesignElement[]) => void;
+  initialElements?: DesignElement[];
+  frameName?: string;
 }
 
-export function ScreenDesigner({ onDesignChange }: ScreenDesignerProps) {
-  const [elements, setElements] = useState<DesignElement[]>([]);
+export function ScreenDesigner({ onDesignChange, initialElements = [], frameName }: ScreenDesignerProps) {
+  const [elements, setElements] = useState<DesignElement[]>(initialElements);
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
   const [dragState, setDragState] = useState<{
     isDragging: boolean;
@@ -62,8 +65,207 @@ export function ScreenDesigner({ onDesignChange }: ScreenDesignerProps) {
   const [snapToGrid, setSnapToGrid] = useState(true);
   const [gridSize, setGridSize] = useState(20);
   const [showRulers, setShowRulers] = useState(true);
+  const [selectedFrame, setSelectedFrame] = useState<string>(frameName || 'new');
   
   const canvasRef = useRef<HTMLDivElement>(null);
+
+  const appFrames = {
+    'team-login': {
+      name: 'Team Login Page',
+      elements: [
+        {
+          id: 'logo-element',
+          type: 'image' as const,
+          x: 120,
+          y: 60,
+          width: 200,
+          height: 120,
+          content: 'Cash or Crash Logo',
+          backgroundColor: 'transparent',
+          borderColor: '#d1d5db',
+          borderWidth: 0,
+          padding: 10,
+          margin: 0,
+          fontSize: 16,
+          fontWeight: 'normal',
+          textColor: '#374151',
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 1,
+        },
+        {
+          id: 'title-element',
+          type: 'text' as const,
+          x: 80,
+          y: 200,
+          width: 280,
+          height: 50,
+          content: 'Team Login',
+          backgroundColor: 'transparent',
+          borderColor: '#d1d5db',
+          borderWidth: 0,
+          padding: 10,
+          margin: 0,
+          fontSize: 32,
+          fontWeight: 'bold',
+          textColor: '#1f2937',
+          borderRadius: 4,
+          opacity: 1,
+          zIndex: 2,
+        },
+        {
+          id: 'form-box',
+          type: 'box' as const,
+          x: 60,
+          y: 280,
+          width: 320,
+          height: 200,
+          content: 'Login Form Area',
+          backgroundColor: '#ffffff',
+          borderColor: '#e5e7eb',
+          borderWidth: 1,
+          padding: 20,
+          margin: 0,
+          fontSize: 14,
+          fontWeight: 'normal',
+          textColor: '#6b7280',
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 3,
+        }
+      ]
+    },
+    'dashboard': {
+      name: 'Team Dashboard',
+      elements: [
+        {
+          id: 'header-bar',
+          type: 'box' as const,
+          x: 0,
+          y: 0,
+          width: 400,
+          height: 60,
+          content: 'Dashboard Header',
+          backgroundColor: '#1f2937',
+          borderColor: '#374151',
+          borderWidth: 0,
+          padding: 15,
+          margin: 0,
+          fontSize: 16,
+          fontWeight: 'bold',
+          textColor: '#ffffff',
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        {
+          id: 'nav-tabs',
+          type: 'box' as const,
+          x: 0,
+          y: 60,
+          width: 400,
+          height: 50,
+          content: 'Stocks | Currency | Startup',
+          backgroundColor: '#f9fafb',
+          borderColor: '#e5e7eb',
+          borderWidth: 1,
+          padding: 10,
+          margin: 0,
+          fontSize: 14,
+          fontWeight: 'medium',
+          textColor: '#374151',
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 9,
+        },
+        {
+          id: 'main-content',
+          type: 'box' as const,
+          x: 20,
+          y: 130,
+          width: 360,
+          height: 300,
+          content: 'Trading Desk Content Area',
+          backgroundColor: '#ffffff',
+          borderColor: '#e5e7eb',
+          borderWidth: 1,
+          padding: 20,
+          margin: 0,
+          fontSize: 14,
+          fontWeight: 'normal',
+          textColor: '#6b7280',
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 5,
+        }
+      ]
+    },
+    'admin': {
+      name: 'Admin Panel',
+      elements: [
+        {
+          id: 'admin-header',
+          type: 'box' as const,
+          x: 0,
+          y: 0,
+          width: 400,
+          height: 70,
+          content: 'Admin Control Panel',
+          backgroundColor: '#dc2626',
+          borderColor: '#b91c1c',
+          borderWidth: 0,
+          padding: 20,
+          margin: 0,
+          fontSize: 18,
+          fontWeight: 'bold',
+          textColor: '#ffffff',
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 10,
+        },
+        {
+          id: 'admin-sidebar',
+          type: 'box' as const,
+          x: 0,
+          y: 70,
+          width: 120,
+          height: 350,
+          content: 'Admin Menu',
+          backgroundColor: '#f3f4f6',
+          borderColor: '#d1d5db',
+          borderWidth: 1,
+          padding: 15,
+          margin: 0,
+          fontSize: 12,
+          fontWeight: 'medium',
+          textColor: '#374151',
+          borderRadius: 0,
+          opacity: 1,
+          zIndex: 8,
+        },
+        {
+          id: 'admin-content',
+          type: 'box' as const,
+          x: 140,
+          y: 90,
+          width: 240,
+          height: 310,
+          content: 'Management Tools',
+          backgroundColor: '#ffffff',
+          borderColor: '#e5e7eb',
+          borderWidth: 1,
+          padding: 20,
+          margin: 0,
+          fontSize: 14,
+          fontWeight: 'normal',
+          textColor: '#6b7280',
+          borderRadius: 8,
+          opacity: 1,
+          zIndex: 6,
+        }
+      ]
+    }
+  };
 
   const getScreenDimensions = useCallback(() => {
     switch (screenSize) {
@@ -79,6 +281,16 @@ export function ScreenDesigner({ onDesignChange }: ScreenDesignerProps) {
     if (!snapToGrid) return value;
     return Math.round(value / gridSize) * gridSize;
   }, [snapToGrid, gridSize]);
+
+  // Load frame elements when frame selection changes
+  const loadFrame = useCallback((frameKey: string) => {
+    if (frameKey === 'new') {
+      setElements([]);
+    } else if (appFrames[frameKey as keyof typeof appFrames]) {
+      setElements(appFrames[frameKey as keyof typeof appFrames].elements);
+    }
+    setSelectedElement(null);
+  }, [appFrames]);
 
   const addElement = useCallback((type: DesignElement['type']) => {
     const newElement: DesignElement = {
@@ -197,11 +409,80 @@ export function ScreenDesigner({ onDesignChange }: ScreenDesignerProps) {
     return `<div style={{ position: 'relative', width: '100%', height: '100%' }}>\n${code}\n</div>`;
   };
 
+  const saveFrameDesign = async () => {
+    if (selectedFrame === 'new') {
+      alert('Please select an existing frame to save changes to.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/save-frame-design', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          frameId: selectedFrame,
+          elements: elements,
+          frameName: appFrames[selectedFrame as keyof typeof appFrames]?.name
+        }),
+      });
+
+      if (response.ok) {
+        alert(`Successfully saved changes to ${appFrames[selectedFrame as keyof typeof appFrames]?.name}!`);
+      } else {
+        alert('Failed to save frame design. Please try again.');
+      }
+    } catch (error) {
+      console.error('Save error:', error);
+      alert('Error saving frame design. Changes are preserved in this session.');
+    }
+  };
+
   return (
     <div className="h-screen flex bg-gray-50">
       {/* Toolbar */}
       <div className="w-64 bg-white border-r border-gray-200 p-4 overflow-y-auto">
         <h3 className="font-semibold mb-4">Design Tools</h3>
+        
+        {/* Frame Selector */}
+        <div className="space-y-2 mb-6">
+          <Label htmlFor="frame-select" className="text-sm font-medium">Edit Existing Frame</Label>
+          <Select value={selectedFrame} onValueChange={(value) => {
+            setSelectedFrame(value);
+            loadFrame(value);
+          }}>
+            <SelectTrigger id="frame-select">
+              <SelectValue placeholder="Choose frame to edit" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="new">New Design</SelectItem>
+              <SelectItem value="team-login">Team Login Page</SelectItem>
+              <SelectItem value="dashboard">Team Dashboard</SelectItem>
+              <SelectItem value="admin">Admin Panel</SelectItem>
+            </SelectContent>
+          </Select>
+          {selectedFrame !== 'new' && (
+            <div className="text-xs text-muted-foreground">
+              Editing: {appFrames[selectedFrame as keyof typeof appFrames]?.name}
+            </div>
+          )}
+        </div>
+
+        {/* Save Button */}
+        {selectedFrame !== 'new' && (
+          <div className="mb-4">
+            <Button
+              onClick={saveFrameDesign}
+              className="w-full"
+              variant="default"
+            >
+              Save Frame Changes
+            </Button>
+          </div>
+        )}
+
+        <Separator className="my-4" />
         
         {/* Element Tools */}
         <div className="space-y-2 mb-6">
