@@ -92,15 +92,8 @@ export default function TeamLogin() {
             <img 
               src={logoImage} 
               alt="Cash or Crash Logo" 
-              className="w-full h-full object-contain pointer-events-none"
+              className="w-full h-full object-contain"
             />
-            {/* Resize Handle */}
-            <div 
-              className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 hover:bg-blue-600 cursor-se-resize opacity-70 hover:opacity-100 transition-opacity"
-              onMouseDown={handleMouseDown}
-            >
-              <Move className="w-3 h-3 text-white m-0.5" />
-            </div>
           </div>
         </div>
 
