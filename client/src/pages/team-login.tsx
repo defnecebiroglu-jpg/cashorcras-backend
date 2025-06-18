@@ -127,9 +127,6 @@ export default function TeamLogin() {
 
         <Card className="rounded-t-none rounded-b-lg border text-card-foreground shadow-sm bg-[#fbf7eb]">
           <CardHeader className="text-center pt-4">
-            <CardTitle className="text-2xl font-bold">
-              Cash or Crash
-            </CardTitle>
             <p className="text-muted-foreground">Takım Girişi</p>
           </CardHeader>
         <CardContent>
