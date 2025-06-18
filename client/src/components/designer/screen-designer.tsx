@@ -957,44 +957,229 @@ export function ScreenDesigner({ onDesignChange, initialElements = [], frameName
             </TabsList>
 
             <TabsContent value="layout" className="space-y-4">
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <Label htmlFor="x">X Position</Label>
-                  <Input
-                    id="x"
-                    type="number"
-                    value={selectedElementData.x}
-                    onChange={(e) => updateElement(selectedElementData.id, { x: parseInt(e.target.value) || 0 })}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="y">Y Position</Label>
-                  <Input
-                    id="y"
-                    type="number"
-                    value={selectedElementData.y}
-                    onChange={(e) => updateElement(selectedElementData.id, { y: parseInt(e.target.value) || 0 })}
-                  />
+              {/* Position Controls */}
+              <div>
+                <Label className="text-sm font-medium mb-2 block">Position</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Label htmlFor="x" className="text-xs">X Position</Label>
+                    <div className="flex gap-1">
+                      <Input
+                        id="x"
+                        type="number"
+                        value={selectedElementData.x}
+                        onChange={(e) => updateElement(selectedElementData.id, { x: parseInt(e.target.value) || 0 })}
+                        className="h-8"
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newX = prompt("Enter X position:", selectedElementData.x.toString());
+                          if (newX !== null) {
+                            updateElement(selectedElementData.id, { x: parseInt(newX) || 0 });
+                          }
+                        }}
+                        className="h-8 px-2"
+                        title="Manual X entry"
+                      >
+                        X
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="y" className="text-xs">Y Position</Label>
+                    <div className="flex gap-1">
+                      <Input
+                        id="y"
+                        type="number"
+                        value={selectedElementData.y}
+                        onChange={(e) => updateElement(selectedElementData.id, { y: parseInt(e.target.value) || 0 })}
+                        className="h-8"
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newY = prompt("Enter Y position:", selectedElementData.y.toString());
+                          if (newY !== null) {
+                            updateElement(selectedElementData.id, { y: parseInt(newY) || 0 });
+                          }
+                        }}
+                        className="h-8 px-2"
+                        title="Manual Y entry"
+                      >
+                        Y
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <Label htmlFor="width">Width</Label>
-                  <Input
-                    id="width"
-                    type="number"
-                    value={selectedElementData.width}
-                    onChange={(e) => updateElement(selectedElementData.id, { width: parseInt(e.target.value) || 1 })}
-                  />
+
+              {/* Quick Position Presets */}
+              <div>
+                <Label className="text-xs">Quick Position</Label>
+                <div className="grid grid-cols-3 gap-1 mt-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => updateElement(selectedElementData.id, { x: 0, y: 0 })}
+                  >
+                    Top Left
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => updateElement(selectedElementData.id, { 
+                      x: Math.floor(getScreenDimensions().width / 2 - selectedElementData.width / 2), 
+                      y: 0 
+                    })}
+                  >
+                    Top Center
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => updateElement(selectedElementData.id, { 
+                      x: getScreenDimensions().width - selectedElementData.width, 
+                      y: 0 
+                    })}
+                  >
+                    Top Right
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => updateElement(selectedElementData.id, { 
+                      x: Math.floor(getScreenDimensions().width / 2 - selectedElementData.width / 2), 
+                      y: Math.floor(getScreenDimensions().height / 2 - selectedElementData.height / 2) 
+                    })}
+                  >
+                    Center
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => updateElement(selectedElementData.id, { 
+                      x: 0, 
+                      y: getScreenDimensions().height - selectedElementData.height 
+                    })}
+                  >
+                    Bottom Left
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => updateElement(selectedElementData.id, { 
+                      x: Math.floor(getScreenDimensions().width / 2 - selectedElementData.width / 2), 
+                      y: getScreenDimensions().height - selectedElementData.height 
+                    })}
+                  >
+                    Bottom Center
+                  </Button>
                 </div>
-                <div>
-                  <Label htmlFor="height">Height</Label>
-                  <Input
-                    id="height"
-                    type="number"
-                    value={selectedElementData.height}
-                    onChange={(e) => updateElement(selectedElementData.id, { height: parseInt(e.target.value) || 1 })}
-                  />
+              </div>
+              {/* Size Controls */}
+              <div>
+                <Label className="text-sm font-medium mb-2 block">Size</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Label htmlFor="width" className="text-xs">Width</Label>
+                    <div className="flex gap-1">
+                      <Input
+                        id="width"
+                        type="number"
+                        value={selectedElementData.width}
+                        onChange={(e) => updateElement(selectedElementData.id, { width: parseInt(e.target.value) || 1 })}
+                        className="h-8"
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newWidth = prompt("Enter width:", selectedElementData.width.toString());
+                          if (newWidth !== null) {
+                            updateElement(selectedElementData.id, { width: parseInt(newWidth) || 1 });
+                          }
+                        }}
+                        className="h-8 px-2"
+                        title="Manual width entry"
+                      >
+                        W
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="height" className="text-xs">Height</Label>
+                    <div className="flex gap-1">
+                      <Input
+                        id="height"
+                        type="number"
+                        value={selectedElementData.height}
+                        onChange={(e) => updateElement(selectedElementData.id, { height: parseInt(e.target.value) || 1 })}
+                        className="h-8"
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newHeight = prompt("Enter height:", selectedElementData.height.toString());
+                          if (newHeight !== null) {
+                            updateElement(selectedElementData.id, { height: parseInt(newHeight) || 1 });
+                          }
+                        }}
+                        className="h-8 px-2"
+                        title="Manual height entry"
+                      >
+                        H
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Size Presets */}
+              <div>
+                <Label className="text-xs">Quick Sizes</Label>
+                <div className="grid grid-cols-2 gap-1 mt-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => updateElement(selectedElementData.id, { width: 100, height: 50 })}
+                  >
+                    Small
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => updateElement(selectedElementData.id, { width: 200, height: 100 })}
+                  >
+                    Medium
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => updateElement(selectedElementData.id, { width: 400, height: 200 })}
+                  >
+                    Large
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => updateElement(selectedElementData.id, { width: 600, height: 400 })}
+                  >
+                    X-Large
+                  </Button>
                 </div>
               </div>
             </TabsContent>
