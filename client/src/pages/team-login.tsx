@@ -9,6 +9,8 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { ChartLine, Move } from "lucide-react";
 import logoImage from "@assets/Adsız tasarım (6)_1750263227259.png";
 
+import sadasdasd from "@assets/sadasdasd.PNG";
+
 export default function TeamLogin() {
   const [accessCode, setAccessCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -90,7 +92,7 @@ export default function TeamLogin() {
             onMouseLeave={handleMouseUp}
           >
             <img 
-              src={logoImage} 
+              src={sadasdasd} 
               alt="Cash or Crash Logo" 
               className="w-full h-full object-contain"
             />
