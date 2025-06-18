@@ -99,7 +99,7 @@ export default function TeamLogin() {
 
         <Card className="rounded-t-none rounded-b-lg border text-card-foreground shadow-sm bg-[#fbf7eb]">
           <CardHeader className="text-center pt-4">
-            <p className="text-muted-foreground">Takım Girişi</p>
+            <p className="text-[#c7a230] text-[20px] font-bold ml-[6px] mr-[6px] mt-[-1px] mb-[-1px] pt-[-5px] pb-[-5px] pl-[0px] pr-[0px]">TAKIM GİRİŞİ</p>
           </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
