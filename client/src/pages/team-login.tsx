@@ -48,110 +48,111 @@ export default function TeamLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF5AD] flex items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-[#FFF5AD] flex flex-col items-center justify-center relative overflow-hidden p-4">
       <div className="absolute top-4 right-4 z-50">
         <ThemeToggle />
       </div>
       
-      {/* Background decorative shapes */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-20 w-[419px] h-[429px] transform -rotate-30 opacity-20">
-          <div className="w-full h-full bg-gradient-to-br from-yellow-200 to-yellow-400 rounded-full"></div>
+      {/* Background decorative images */}
+      <div className="absolute inset-0 pointer-events-none opacity-30">
+        <div className="absolute top-20 left-20 w-[419px] h-[429px] transform -rotate-30 origin-top-left">
+          <div className="w-full h-full bg-gradient-to-br from-yellow-200 to-yellow-400 rounded-full blur-sm"></div>
         </div>
-        <div className="absolute top-40 right-20 w-[371px] h-[349px] transform rotate-[100deg] opacity-20">
-          <div className="w-full h-full bg-gradient-to-br from-orange-200 to-orange-400 rounded-full"></div>
+        <div className="absolute top-40 right-20 w-[371px] h-[349px] transform rotate-[100deg] origin-top-left">
+          <div className="w-full h-full bg-gradient-to-br from-orange-200 to-orange-400 rounded-full blur-sm"></div>
         </div>
-        <div className="absolute bottom-40 left-40 w-[545px] h-[524px] transform rotate-[110deg] opacity-20">
-          <div className="w-full h-full bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-full"></div>
+        <div className="absolute bottom-40 left-40 w-[545px] h-[524px] transform rotate-[110deg] origin-top-left">
+          <div className="w-full h-full bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-full blur-sm"></div>
         </div>
-        <div className="absolute bottom-20 right-40 w-[590px] h-[590px] transform -rotate-45 opacity-20">
-          <div className="w-full h-full bg-gradient-to-br from-amber-200 to-amber-400 rounded-full"></div>
+        <div className="absolute bottom-20 right-40 w-[590px] h-[590px] transform -rotate-45 origin-top-left">
+          <div className="w-full h-full bg-gradient-to-br from-amber-200 to-amber-400 rounded-full blur-sm"></div>
         </div>
-        <div className="absolute top-60 left-60 w-[333px] h-[354px] transform -rotate-[10deg] opacity-20">
-          <div className="w-full h-full bg-gradient-to-br from-yellow-200 to-yellow-400 rounded-full"></div>
+        <div className="absolute top-60 left-60 w-[333px] h-[354px] transform -rotate-[10deg] origin-top-left">
+          <div className="w-full h-full bg-gradient-to-br from-yellow-200 to-yellow-400 rounded-full blur-sm"></div>
         </div>
-        <div className="absolute bottom-60 right-60 w-[388px] h-[373px] transform rotate-[70deg] opacity-20">
-          <div className="w-full h-full bg-gradient-to-br from-orange-300 to-orange-500 rounded-full"></div>
+        <div className="absolute bottom-60 right-60 w-[388px] h-[373px] transform rotate-[70deg] origin-top-left">
+          <div className="w-full h-full bg-gradient-to-br from-orange-300 to-orange-500 rounded-full blur-sm"></div>
         </div>
       </div>
 
-      <div className="w-full max-w-2xl mx-auto px-8 z-10">
-        {/* Main logo/image */}
-        <div className="flex justify-center mb-8">
-          <div className="w-[679px] h-[581px] max-w-full max-h-[400px] bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-2xl shadow-lg flex items-center justify-center">
-            <div className="w-[182px] h-[182px] relative shadow-[inset_0_4px_4px_#B18F13] rounded-lg">
-              <div className="w-full h-full bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-                <div className="text-6xl font-bold text-white">₺</div>
-              </div>
+      {/* Main content container */}
+      <div className="flex flex-col items-center justify-center space-y-8 z-10 max-w-4xl w-full">
+        
+        {/* Main image placeholder */}
+        <div className="w-[679px] h-[581px] max-w-[90vw] max-h-[40vh] bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-lg shadow-lg flex items-center justify-center relative">
+          <div className="w-[182px] h-[182px] relative">
+            <div className="w-full h-full bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg shadow-[inset_0_4px_4px_#B18F13] flex items-center justify-center">
+              <div className="text-6xl font-bold text-white">₺</div>
             </div>
           </div>
         </div>
 
         {/* Title */}
-        <div className="text-center mb-8">
+        <div className="text-center">
           <h1 
-            className="text-[#E4B300] font-bold leading-tight mb-4"
+            className="text-[#E4B300] font-normal"
             style={{ 
-              fontSize: 'clamp(32px, 5vw, 53.45px)',
+              fontSize: '53.45px',
               fontFamily: 'Jockey One, system-ui, -apple-system, sans-serif',
-              lineHeight: '70.55px'
+              lineHeight: '70.55px',
+              fontWeight: 400
             }}
           >
             TAKIM GİRİŞİ
           </h1>
         </div>
 
-        {/* Form */}
-        <div className="max-w-md mx-auto">
+        {/* Form section */}
+        <div className="w-full max-w-md space-y-6">
+          <div 
+            className="text-[#BD9E2C]"
+            style={{ 
+              fontSize: '36px',
+              fontFamily: 'Mukta, system-ui, -apple-system, sans-serif',
+              lineHeight: '47.52px',
+              fontWeight: 400
+            }}
+          >
+            Erişim kodunu giriniz.
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <div 
-                className="text-[#BD9E2C] mb-4"
-                style={{ 
-                  fontSize: 'clamp(20px, 3vw, 36px)',
-                  fontFamily: 'Mukti, system-ui, -apple-system, sans-serif',
-                  lineHeight: '47.52px'
-                }}
-              >
-                Erişim kodunu giriniz.
-              </div>
-              <Input
-                id="accessCode"
-                type="text"
-                placeholder="Erişim kodunuzu girin"
-                value={accessCode}
-                onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
-                required
-                className="h-12 text-lg bg-white/80 border-2 border-[#BD9E2C] focus:border-[#E4B300] rounded-lg"
-              />
-            </div>
+            <Input
+              id="accessCode"
+              type="text"
+              placeholder=""
+              value={accessCode}
+              onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
+              required
+              className="h-16 text-2xl bg-white border-2 border-[#BD9E2C] focus:border-[#E4B300] rounded-lg px-4"
+            />
             
             <Button
               type="submit"
-              className="w-full h-12 text-[#927201] bg-gradient-to-r from-yellow-200 to-yellow-300 hover:from-yellow-300 hover:to-yellow-400 border-2 border-[#BD9E2C] rounded-lg font-semibold"
+              className="w-full h-16 text-[#927201] bg-white hover:bg-gray-50 border-2 border-[#BD9E2C] rounded-lg"
               style={{ 
-                fontSize: 'clamp(18px, 2.5vw, 36px)',
-                fontFamily: 'Mukti, system-ui, -apple-system, sans-serif',
-                lineHeight: '47.52px'
+                fontSize: '36px',
+                fontFamily: 'Mukta, system-ui, -apple-system, sans-serif',
+                lineHeight: '47.52px',
+                fontWeight: 400
               }}
               disabled={isLoading || !accessCode.trim()}
+              variant="outline"
             >
               {isLoading ? "Giriş Yapılıyor..." : "Giriş Yap"}
             </Button>
           </form>
 
-          <div className="mt-8 text-center">
-            <div 
-              className="inline"
-              style={{ 
-                fontSize: 'clamp(16px, 2.5vw, 36px)',
-                fontFamily: 'Sulphur Point, system-ui, -apple-system, sans-serif',
-                lineHeight: '47.52px'
-              }}
-            >
-              <span className="text-[#BF9E27] font-bold">Admin girişi için </span>
+          <div className="text-center">
+            <div style={{ 
+              fontSize: '36px',
+              fontFamily: 'Sulphur Point, system-ui, -apple-system, sans-serif',
+              lineHeight: '47.52px',
+              fontWeight: 700
+            }}>
+              <span className="text-[#BF9E27]">Admin girişi için </span>
               <button 
-                className="text-[#927201] font-bold hover:underline"
+                className="text-[#927201] hover:underline"
                 onClick={() => setLocation("/admin-login")}
               >
                 buraya tıklayınız.
