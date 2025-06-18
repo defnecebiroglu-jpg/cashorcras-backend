@@ -80,7 +80,7 @@ export default function TeamLogin() {
       </div>
       <div className="w-full max-w-md">
         {/* Logo Frame */}
-        <div className="bg-white rounded-t-lg border border-b-0 p-6 text-center shadow-sm">
+        <div className="rounded-t-lg border border-b-0 p-6 text-center shadow-sm bg-[#fbf7eb] mt-[-23px] mb-[-23px] pt-[0px] pb-[0px] ml-[0px] mr-[0px] pl-[14px] pr-[14px]">
           <div 
             ref={logoRef}
             className="mx-auto flex items-center justify-center relative border-2 border-dashed border-gray-300 hover:border-blue-400 transition-colors"
