@@ -80,7 +80,7 @@ export default function TeamLogin() {
       </div>
       <div className="w-full max-w-md">
         {/* Logo Frame */}
-        <div className="rounded-t-lg p-6 text-center shadow-sm bg-[#fbf7eb] mt-[-23px] mb-[-23px] pt-[0px] pb-[0px] ml-[0px] mr-[0px] pl-[14px] pr-[14px]">
+        <div className="rounded-t-lg p-6 text-center shadow-sm mt-[-23px] mb-[-23px] pt-[0px] pb-[0px] ml-[0px] mr-[0px] pl-[14px] pr-[14px] bg-[#fff5ad]">
           <div 
             ref={logoRef}
             className="mx-auto flex items-center justify-center relative"
