@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { Settings, RotateCcw, Move } from "lucide-react";
 import logoImage from "@assets/cash-or-crash-logo.png";
 
 export default function TeamLogin() {
@@ -14,40 +13,8 @@ export default function TeamLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const [logoSize, setLogoSize] = useState({ width: 192, height: 128 });
-  const [logoPosition, setLogoPosition] = useState({ x: 0, y: 0 });
-  const [showSizeControls, setShowSizeControls] = useState(false);
-  const [showPositionControls, setShowPositionControls] = useState(false);
-
-
-
-  const resetLogoSize = () => {
-    setLogoSize({ width: 192, height: 128 });
-  };
-
-  const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const width = parseInt(e.target.value) || 100;
-    setLogoSize(prev => ({ ...prev, width }));
-  };
-
-  const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const height = parseInt(e.target.value) || 60;
-    setLogoSize(prev => ({ ...prev, height }));
-  };
-
-  const handleXPositionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const x = parseInt(e.target.value) || 0;
-    setLogoPosition(prev => ({ ...prev, x }));
-  };
-
-  const handleYPositionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const y = parseInt(e.target.value) || 0;
-    setLogoPosition(prev => ({ ...prev, y }));
-  };
-
-  const resetLogoPosition = () => {
-    setLogoPosition({ x: 0, y: 0 });
-  };
+  const logoSize = { width: 400, height: 300 };
+  const logoPosition = { x: 0, y: -50 };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,29 +23,32 @@ export default function TeamLogin() {
     try {
       const response = await fetch("/api/auth/team", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ accessCode }),
       });
 
-      const data = await response.json();
-
       if (response.ok) {
-        localStorage.setItem("teamId", data.team.id.toString());
-        localStorage.setItem("teamName", data.team.name);
-        setLocation(`/team/${data.team.id}`);
-        toast({ title: `Hoşgeldiniz ${data.team.name}!` });
+        const team = await response.json();
+        toast({
+          title: "Başarılı",
+          description: `Hoş geldiniz, ${team.name}!`,
+        });
+        setLocation("/team-dashboard");
       } else {
-        toast({ 
-          title: "Giriş Hatası", 
-          description: data.message || "Geçersiz erişim kodu",
-          variant: "destructive" 
+        const error = await response.json();
+        toast({
+          title: "Hata",
+          description: error.error || "Geçersiz erişim kodu",
+          variant: "destructive",
         });
       }
     } catch (error) {
-      toast({ 
-        title: "Bağlantı Hatası", 
-        description: "Sunucu ile bağlantı kurulamadı",
-        variant: "destructive" 
+      toast({
+        title: "Hata",
+        description: "Bağlantı hatası",
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -93,106 +63,6 @@ export default function TeamLogin() {
       <div className="w-full max-w-md">
         {/* Logo Frame */}
         <div className="rounded-t-lg p-6 text-center shadow-sm mt-[-23px] mb-[-23px] pt-[0px] pb-[0px] ml-[0px] mr-[0px] pl-[14px] pr-[14px] bg-[#fff5ad] relative">
-          <div className="absolute top-2 right-2 flex gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowSizeControls(!showSizeControls)}
-              className="h-8 w-8 p-0 bg-white/80 hover:bg-white"
-              title="Size Controls"
-            >
-              <Settings className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowPositionControls(!showPositionControls)}
-              className="h-8 w-8 p-0 bg-white/80 hover:bg-white"
-              title="X/Y Position Controls"
-            >
-              <Move className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={resetLogoSize}
-              className="h-8 w-8 p-0 bg-white/80 hover:bg-white"
-              title="Reset Size"
-            >
-              <RotateCcw className="h-4 w-4" />
-            </Button>
-          </div>
-          
-          {showSizeControls && (
-            <div className="absolute top-12 right-2 bg-white/95 p-3 rounded-lg shadow-lg border z-10">
-              <div className="flex flex-col gap-2 text-sm">
-                <div className="flex items-center gap-2">
-                  <Label htmlFor="logoWidth" className="text-xs">Width:</Label>
-                  <Input
-                    id="logoWidth"
-                    type="number"
-                    value={logoSize.width}
-                    onChange={handleWidthChange}
-                    className="w-16 h-6 text-xs"
-                    min="100"
-                    max="400"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <Label htmlFor="logoHeight" className="text-xs">Height:</Label>
-                  <Input
-                    id="logoHeight"
-                    type="number"
-                    value={logoSize.height}
-                    onChange={handleHeightChange}
-                    className="w-16 h-6 text-xs"
-                    min="60"
-                    max="300"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {showPositionControls && (
-            <div className="absolute top-12 right-2 bg-white/95 p-3 rounded-lg shadow-lg border z-10">
-              <div className="flex flex-col gap-2 text-sm">
-                <div className="flex items-center gap-2">
-                  <Label htmlFor="logoX" className="text-xs">X Position:</Label>
-                  <Input
-                    id="logoX"
-                    type="number"
-                    value={logoPosition.x}
-                    onChange={handleXPositionChange}
-                    className="w-16 h-6 text-xs"
-                    min="-100"
-                    max="100"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <Label htmlFor="logoY" className="text-xs">Y Position:</Label>
-                  <Input
-                    id="logoY"
-                    type="number"
-                    value={logoPosition.y}
-                    onChange={handleYPositionChange}
-                    className="w-16 h-6 text-xs"
-                    min="-100"
-                    max="100"
-                  />
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={resetLogoPosition}
-                  className="text-xs mt-1"
-                >
-                  Reset Position
-                </Button>
-              </div>
-            </div>
-          )}
-          
           <div 
             className="mx-auto flex items-center justify-center relative"
             style={{ 
@@ -221,33 +91,21 @@ export default function TeamLogin() {
               <Input
                 id="accessCode"
                 type="text"
-                placeholder="Takım erişim kodunuzu girin"
                 value={accessCode}
-                onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
+                onChange={(e) => setAccessCode(e.target.value)}
+                placeholder="Takım erişim kodunuzu girin"
                 required
+                className="bg-white"
               />
             </div>
             <Button
               type="submit"
-              className="w-full"
-              disabled={isLoading || !accessCode.trim()}
+              className="w-full bg-[#c7a230] hover:bg-[#b8932a] text-white"
+              disabled={isLoading}
             >
-              {isLoading ? "Giriş Yapılıyor..." : "Takıma Giriş Yap"}
+              {isLoading ? "Giriş yapılıyor..." : "Giriş Yap"}
             </Button>
           </form>
-          <div className="mt-6 text-center space-y-2">
-            <p className="text-sm text-muted-foreground">
-              Admin girişi için{" "}
-              <Button 
-                variant="link" 
-                className="p-0 h-auto font-normal text-primary"
-                onClick={() => setLocation("/admin-login")}
-              >
-                buraya tıklayın
-              </Button>
-            </p>
-
-          </div>
         </CardContent>
         </Card>
       </div>
