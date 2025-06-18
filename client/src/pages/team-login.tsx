@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,8 +14,9 @@ export default function TeamLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const [logoScale, setLogoScale] = useState(1);
+  const [logoSize, setLogoSize] = useState({ width: 192, height: 128 }); // w-48 h-32 in pixels
   const [isDragging, setIsDragging] = useState(false);
+  const logoRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
@@ -23,20 +24,13 @@ export default function TeamLogin() {
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
+    if (!isDragging || !logoRef.current) return;
     
-    const containerRect = e.currentTarget.getBoundingClientRect();
-    const relativeX = e.clientX - containerRect.left;
-    const relativeY = e.clientY - containerRect.top;
+    const rect = logoRef.current.getBoundingClientRect();
+    const newWidth = Math.max(100, e.clientX - rect.left);
+    const newHeight = Math.max(60, e.clientY - rect.top);
     
-    // Calculate scale based on distance from center
-    const centerX = containerRect.width / 2;
-    const centerY = containerRect.height / 2;
-    const distance = Math.sqrt(Math.pow(relativeX - centerX, 2) + Math.pow(relativeY - centerY, 2));
-    const maxDistance = Math.sqrt(Math.pow(centerX, 2) + Math.pow(centerY, 2));
-    
-    const newScale = Math.max(0.5, Math.min(3, 0.5 + (distance / maxDistance) * 2.5));
-    setLogoScale(newScale);
+    setLogoSize({ width: newWidth, height: newHeight });
   };
 
   const handleMouseUp = () => {
@@ -88,8 +82,9 @@ export default function TeamLogin() {
         {/* Logo Frame */}
         <div className="bg-white rounded-t-lg border border-b-0 p-6 text-center shadow-sm">
           <div 
-            className="mx-auto w-48 h-32 flex items-center justify-center relative border-2 border-dashed border-gray-300 hover:border-blue-400 transition-colors cursor-grab active:cursor-grabbing"
-            onMouseDown={handleMouseDown}
+            ref={logoRef}
+            className="mx-auto flex items-center justify-center relative border-2 border-dashed border-gray-300 hover:border-blue-400 transition-colors"
+            style={{ width: logoSize.width, height: logoSize.height }}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
@@ -97,19 +92,18 @@ export default function TeamLogin() {
             <img 
               src={logoImage} 
               alt="Cash or Crash Logo" 
-              className="object-contain pointer-events-none transition-transform duration-200"
-              style={{ 
-                transform: `scale(${logoScale})`,
-                maxWidth: 'none',
-                maxHeight: 'none'
-              }}
+              className="w-full h-full object-contain pointer-events-none"
             />
-            {/* Scale Display */}
-            <div className="absolute top-1 left-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">
-              {Math.round(logoScale * 100)}%
+            {/* Resize Handle */}
+            <div 
+              className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 hover:bg-blue-600 cursor-se-resize opacity-70 hover:opacity-100 transition-opacity"
+              onMouseDown={handleMouseDown}
+            >
+              <Move className="w-3 h-3 text-white m-0.5" />
             </div>
-            <div className="absolute bottom-1 right-1 text-xs text-gray-500">
-              Drag to resize
+            {/* Size Display */}
+            <div className="absolute top-1 left-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">
+              {Math.round(logoSize.width)}×{Math.round(logoSize.height)}
             </div>
           </div>
         </div>
