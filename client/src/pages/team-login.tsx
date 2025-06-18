@@ -80,10 +80,10 @@ export default function TeamLogin() {
       </div>
       <div className="w-full max-w-md">
         {/* Logo Frame */}
-        <div className="rounded-t-lg border border-b-0 p-6 text-center shadow-sm bg-[#fbf7eb] mt-[-23px] mb-[-23px] pt-[0px] pb-[0px] ml-[0px] mr-[0px] pl-[14px] pr-[14px]">
+        <div className="rounded-t-lg p-6 text-center shadow-sm bg-[#fbf7eb] mt-[-23px] mb-[-23px] pt-[0px] pb-[0px] ml-[0px] mr-[0px] pl-[14px] pr-[14px]">
           <div 
             ref={logoRef}
-            className="mx-auto flex items-center justify-center relative border-2 border-dashed border-gray-300 hover:border-blue-400 transition-colors"
+            className="mx-auto flex items-center justify-center relative"
             style={{ width: logoSize.width, height: logoSize.height }}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -97,7 +97,7 @@ export default function TeamLogin() {
           </div>
         </div>
 
-        <Card className="rounded-t-none rounded-b-lg border text-card-foreground shadow-sm bg-[#fbf7eb]">
+        <Card className="rounded-t-none rounded-b-lg border-none text-card-foreground shadow-sm bg-[#fbf7eb]">
           <CardHeader className="text-center pt-4">
             <p className="text-[#c7a230] text-[20px] font-bold ml-[6px] mr-[6px] mt-[-1px] mb-[-1px] pt-[-5px] pb-[-5px] pl-[0px] pr-[0px]">TAKIM GİRİŞİ</p>
           </CardHeader>
