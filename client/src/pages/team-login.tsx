@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
@@ -48,117 +46,165 @@ export default function TeamLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF5AD] flex flex-col items-center justify-center relative overflow-hidden p-4">
-      <div className="absolute top-4 right-4 z-50">
+    <div style={{
+      width: "100vw",
+      height: "100vh",
+      background: "#FFF5AD",
+      position: "relative",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      overflow: "hidden"
+    }}>
+      <div style={{ position: "absolute", top: "16px", right: "16px", zIndex: 50 }}>
         <ThemeToggle />
       </div>
       
       {/* Background decorative images */}
-      <div className="absolute inset-0 pointer-events-none opacity-30">
-        <div className="absolute top-20 left-20 w-[419px] h-[429px] transform -rotate-30 origin-top-left">
-          <div className="w-full h-full bg-gradient-to-br from-yellow-200 to-yellow-400 rounded-full blur-sm"></div>
-        </div>
-        <div className="absolute top-40 right-20 w-[371px] h-[349px] transform rotate-[100deg] origin-top-left">
-          <div className="w-full h-full bg-gradient-to-br from-orange-200 to-orange-400 rounded-full blur-sm"></div>
-        </div>
-        <div className="absolute bottom-40 left-40 w-[545px] h-[524px] transform rotate-[110deg] origin-top-left">
-          <div className="w-full h-full bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-full blur-sm"></div>
-        </div>
-        <div className="absolute bottom-20 right-40 w-[590px] h-[590px] transform -rotate-45 origin-top-left">
-          <div className="w-full h-full bg-gradient-to-br from-amber-200 to-amber-400 rounded-full blur-sm"></div>
-        </div>
-        <div className="absolute top-60 left-60 w-[333px] h-[354px] transform -rotate-[10deg] origin-top-left">
-          <div className="w-full h-full bg-gradient-to-br from-yellow-200 to-yellow-400 rounded-full blur-sm"></div>
-        </div>
-        <div className="absolute bottom-60 right-60 w-[388px] h-[373px] transform rotate-[70deg] origin-top-left">
-          <div className="w-full h-full bg-gradient-to-br from-orange-300 to-orange-500 rounded-full blur-sm"></div>
-        </div>
+      <div style={{ position: "absolute", top: "20px", left: "20px", width: "419.21px", height: "429.09px", transform: "rotate(-30deg)", transformOrigin: "top left", opacity: 0.3 }}>
+        <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #fde047, #facc15)", borderRadius: "50%" }}></div>
+      </div>
+      <div style={{ position: "absolute", top: "40px", right: "20px", width: "370.65px", height: "348.75px", transform: "rotate(100deg)", transformOrigin: "top left", opacity: 0.3 }}>
+        <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #fb923c, #f97316)", borderRadius: "50%" }}></div>
+      </div>
+      <div style={{ position: "absolute", bottom: "40px", left: "40px", width: "545.19px", height: "523.53px", transform: "rotate(110deg)", transformOrigin: "top left", opacity: 0.3 }}>
+        <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #eab308, #ca8a04)", borderRadius: "50%" }}></div>
+      </div>
+      <div style={{ position: "absolute", bottom: "20px", right: "40px", width: "589.60px", height: "589.60px", transform: "rotate(-45deg)", transformOrigin: "top left", opacity: 0.3 }}>
+        <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #fbbf24, #f59e0b)", borderRadius: "50%" }}></div>
+      </div>
+      <div style={{ position: "absolute", top: "60px", left: "60px", width: "333.41px", height: "354.34px", transform: "rotate(-10deg)", transformOrigin: "top left", opacity: 0.3 }}>
+        <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #fde047, #facc15)", borderRadius: "50%" }}></div>
+      </div>
+      <div style={{ position: "absolute", bottom: "60px", right: "60px", width: "388.18px", height: "372.75px", transform: "rotate(70deg)", transformOrigin: "top left", opacity: 0.3 }}>
+        <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #fb923c, #f97316)", borderRadius: "50%" }}></div>
       </div>
 
-      {/* Main content container */}
-      <div className="flex flex-col items-center justify-center space-y-8 z-10 max-w-4xl w-full">
+      {/* Main content */}
+      <div style={{ 
+        zIndex: 10, 
+        display: "flex", 
+        flexDirection: "column", 
+        alignItems: "center", 
+        gap: "32px"
+      }}>
         
-        {/* Main image placeholder */}
-        <div className="w-[679px] h-[581px] max-w-[90vw] max-h-[40vh] bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-lg shadow-lg flex items-center justify-center relative">
-          <div className="w-[182px] h-[182px] relative">
-            <div className="w-full h-full bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg shadow-[inset_0_4px_4px_#B18F13] flex items-center justify-center">
-              <div className="text-6xl font-bold text-white">₺</div>
-            </div>
+        {/* Main image */}
+        <div style={{
+          width: "679px",
+          height: "581px",
+          background: "linear-gradient(135deg, #eab308, #ca8a04)",
+          borderRadius: "16px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+        }}>
+          <div style={{
+            width: "182px",
+            height: "182px",
+            position: "relative",
+            boxShadow: "inset 0px 4px 4px #B18F13",
+            borderRadius: "8px",
+            background: "linear-gradient(135deg, #facc15, #eab308)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }}>
+            <div style={{ fontSize: "72px", fontWeight: "bold", color: "white" }}>₺</div>
           </div>
         </div>
 
         {/* Title */}
-        <div className="text-center">
-          <h1 
-            className="text-[#E4B300] font-normal"
-            style={{ 
-              fontSize: '53.45px',
-              fontFamily: 'Jockey One, system-ui, -apple-system, sans-serif',
-              lineHeight: '70.55px',
-              fontWeight: 400
-            }}
-          >
-            TAKIM GİRİŞİ
-          </h1>
+        <div style={{ 
+          textAlign: "center", 
+          color: "#E4B300", 
+          fontSize: "53.45px", 
+          fontFamily: "Jockey One, system-ui, sans-serif", 
+          fontWeight: 400, 
+          lineHeight: "70.55px"
+        }}>
+          TAKIM GİRİŞİ
         </div>
 
-        {/* Form section */}
-        <div className="w-full max-w-md space-y-6">
-          <div 
-            className="text-[#BD9E2C]"
+        {/* Access code label */}
+        <div style={{ 
+          color: "#BD9E2C", 
+          fontSize: "36px", 
+          fontFamily: "Mukta, system-ui, sans-serif", 
+          fontWeight: 400, 
+          lineHeight: "47.52px"
+        }}>
+          Erişim kodunu giriniz.
+        </div>
+
+        {/* Input field */}
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "24px" }}>
+          <input
+            type="text"
+            value={accessCode}
+            onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
+            required
+            style={{
+              width: "400px",
+              height: "60px",
+              fontSize: "24px",
+              padding: "0 16px",
+              border: "2px solid #BD9E2C",
+              borderRadius: "8px",
+              background: "white",
+              outline: "none"
+            }}
+          />
+
+          {/* Login button */}
+          <button
+            type="submit"
+            disabled={isLoading || !accessCode.trim()}
             style={{ 
-              fontSize: '36px',
-              fontFamily: 'Mukta, system-ui, -apple-system, sans-serif',
-              lineHeight: '47.52px',
-              fontWeight: 400
+              width: "400px",
+              height: "60px",
+              textAlign: "center", 
+              color: "#927201", 
+              fontSize: "36px", 
+              fontFamily: "Mukta, system-ui, sans-serif", 
+              fontWeight: 400, 
+              lineHeight: "47.52px",
+              background: "white",
+              border: "2px solid #BD9E2C",
+              borderRadius: "8px",
+              cursor: isLoading || !accessCode.trim() ? "not-allowed" : "pointer"
             }}
           >
-            Erişim kodunu giriniz.
-          </div>
+            {isLoading ? "Giriş Yapılıyor..." : "Giriş Yap"}
+          </button>
+        </form>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <Input
-              id="accessCode"
-              type="text"
-              placeholder=""
-              value={accessCode}
-              onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
-              required
-              className="h-16 text-2xl bg-white border-2 border-[#BD9E2C] focus:border-[#E4B300] rounded-lg px-4"
-            />
-            
-            <Button
-              type="submit"
-              className="w-full h-16 text-[#927201] bg-white hover:bg-gray-50 border-2 border-[#BD9E2C] rounded-lg"
-              style={{ 
-                fontSize: '36px',
-                fontFamily: 'Mukta, system-ui, -apple-system, sans-serif',
-                lineHeight: '47.52px',
-                fontWeight: 400
-              }}
-              disabled={isLoading || !accessCode.trim()}
-              variant="outline"
-            >
-              {isLoading ? "Giriş Yapılıyor..." : "Giriş Yap"}
-            </Button>
-          </form>
-
-          <div className="text-center">
-            <div style={{ 
-              fontSize: '36px',
-              fontFamily: 'Sulphur Point, system-ui, -apple-system, sans-serif',
-              lineHeight: '47.52px',
-              fontWeight: 700
-            }}>
-              <span className="text-[#BF9E27]">Admin girişi için </span>
-              <button 
-                className="text-[#927201] hover:underline"
-                onClick={() => setLocation("/admin-login")}
-              >
-                buraya tıklayınız.
-              </button>
-            </div>
-          </div>
+        {/* Admin login link */}
+        <div style={{ 
+          textAlign: "center",
+          fontSize: "36px", 
+          fontFamily: "Sulphur Point, system-ui, sans-serif", 
+          fontWeight: 700, 
+          lineHeight: "47.52px"
+        }}>
+          <span style={{ color: "#BF9E27" }}>Admin girişi için </span>
+          <button 
+            onClick={() => setLocation("/admin-login")}
+            style={{ 
+              color: "#927201", 
+              background: "none", 
+              border: "none", 
+              fontSize: "inherit",
+              fontFamily: "inherit",
+              fontWeight: "inherit",
+              cursor: "pointer",
+              textDecoration: "underline"
+            }}
+          >
+            buraya tıklayınız.
+          </button>
         </div>
       </div>
     </div>
