@@ -1,4 +1,4 @@
-import { VisualDesigner } from "@/components/designer/visual-designer";
+import { AppDesigner } from "@/components/designer/app-designer";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { ArrowLeft } from "lucide-react";
@@ -9,25 +9,22 @@ export default function Designer() {
 
   return (
     <div className="h-screen flex flex-col bg-background">
-      {/* Header */}
-      <header className="bg-card shadow-sm border-b border-border px-4 py-2 flex justify-between items-center">
-        <div className="flex items-center space-x-4">
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={() => setLocation("/")}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Login
-          </Button>
-          <h1 className="text-lg font-semibold">Visual UI Designer</h1>
-        </div>
+      {/* Quick Navigation */}
+      <div className="bg-card border-b border-border px-4 py-2 flex justify-between items-center">
+        <Button 
+          variant="ghost" 
+          size="sm"
+          onClick={() => setLocation("/")}
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Login
+        </Button>
         <ThemeToggle />
-      </header>
+      </div>
 
-      {/* Designer Content */}
+      {/* App Designer Content */}
       <div className="flex-1">
-        <VisualDesigner />
+        <AppDesigner />
       </div>
     </div>
   );
