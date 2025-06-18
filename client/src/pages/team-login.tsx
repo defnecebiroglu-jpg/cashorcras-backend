@@ -101,38 +101,6 @@ export default function TeamLogin() {
             >
               <Move className="w-3 h-3 text-white m-0.5" />
             </div>
-            {/* Size Display */}
-            <div className="absolute top-1 left-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">
-              {Math.round(logoSize.width)}×{Math.round(logoSize.height)}
-            </div>
-          </div>
-          
-          {/* Manual Size Controls */}
-          <div className="mt-4 flex gap-2 justify-center">
-            <div className="flex items-center gap-1">
-              <Label htmlFor="logoWidth" className="text-xs">W:</Label>
-              <Input
-                id="logoWidth"
-                type="number"
-                min="100"
-                max="400"
-                value={Math.round(logoSize.width)}
-                onChange={(e) => setLogoSize(prev => ({ ...prev, width: parseInt(e.target.value) || 100 }))}
-                className="w-16 h-6 text-xs"
-              />
-            </div>
-            <div className="flex items-center gap-1">
-              <Label htmlFor="logoHeight" className="text-xs">H:</Label>
-              <Input
-                id="logoHeight"
-                type="number"
-                min="60"
-                max="300"
-                value={Math.round(logoSize.height)}
-                onChange={(e) => setLogoSize(prev => ({ ...prev, height: parseInt(e.target.value) || 60 }))}
-                className="w-16 h-6 text-xs"
-              />
-            </div>
           </div>
         </div>
 
