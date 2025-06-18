@@ -176,18 +176,7 @@ export default function TeamLogin() {
                 buraya tıklayın
               </Button>
             </p>
-            <div className="border-t pt-4">
-              <Button 
-                variant="outline" 
-                className="w-full"
-                onClick={() => setLocation("/designer")}
-              >
-                🎨 Visual UI Designer
-              </Button>
-              <p className="text-xs text-muted-foreground mt-2">
-                Design layouts visually like Figma
-              </p>
-            </div>
+
           </div>
         </CardContent>
         </Card>
