@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { ChartLine } from "lucide-react";
 
 export default function TeamLogin() {
   const [accessCode, setAccessCode] = useState("");
@@ -46,159 +51,55 @@ export default function TeamLogin() {
   };
 
   return (
-    <>
-      {/* Background container */}
-      <div style={{ width: "1900px", height: "1066px", background: "#FFF5AD", position: "fixed", top: 0, left: 0, zIndex: -1 }}></div>
-      
-      {/* Theme toggle */}
-      <div style={{ position: "fixed", top: "16px", right: "16px", zIndex: 1000 }}>
+    <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 bg-[#fff5ad]">
+      <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-
-      {/* Background decorative image */}
-      <div style={{ 
-        position: "absolute", 
-        top: "100px", 
-        right: "100px",
-        width: "333.41px", 
-        height: "354.34px", 
-        transform: "rotate(-10deg)", 
-        transformOrigin: "top left",
-        zIndex: 1
-      }}>
-        <div style={{ 
-          width: "100%", 
-          height: "100%", 
-          background: "linear-gradient(135deg, #fde047, #facc15)", 
-          borderRadius: "50%",
-          opacity: 0.4
-        }}></div>
-      </div>
-
-      {/* Main content container */}
-      <div style={{
-        minHeight: "100vh",
-        background: "#FFF5AD",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "40px",
-        gap: "40px",
-        position: "relative",
-        zIndex: 10
-      }}>
-        
-        {/* Main image */}
-        <div style={{ width: "679px", height: "581px", background: "linear-gradient(135deg, #eab308, #ca8a04)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ fontSize: "120px", color: "white", fontWeight: "bold" }}>₺</div>
-        </div>
-
-        {/* Title */}
-        <div style={{ 
-          textAlign: "center", 
-          color: "#E4B300", 
-          fontSize: "53.45px", 
-          fontFamily: "Jockey One", 
-          fontWeight: 400, 
-          lineHeight: "70.55px", 
-          wordWrap: "break-word" 
-        }}>
-          TAKIM GİRİŞİ
-        </div>
-
-        {/* Access code prompt */}
-        <div style={{ 
-          width: "600px", 
-          color: "#BD9E2C", 
-          fontSize: "36px", 
-          fontFamily: "Mukta", 
-          fontWeight: 400, 
-          lineHeight: "47.52px", 
-          wordWrap: "break-word",
-          textAlign: "center"
-        }}>
-          Erişim kodunu giriniz.
-        </div>
-
-        {/* Input field */}
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "24px" }}>
-          <input
-            type="text"
-            value={accessCode}
-            onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
-            required
-            style={{
-              width: "500px",
-              height: "60px",
-              fontSize: "28px",
-              padding: "0 20px",
-              border: "3px solid #BD9E2C",
-              borderRadius: "8px",
-              background: "white",
-              outline: "none",
-              textAlign: "center"
-            }}
-          />
-
-          {/* Login button */}
-          <button
-            type="submit"
-            disabled={isLoading || !accessCode.trim()}
-            style={{ 
-              width: "500px",
-              height: "70px",
-              textAlign: "center", 
-              color: "#927201", 
-              fontSize: "36px", 
-              fontFamily: "Mukta", 
-              fontWeight: 400, 
-              lineHeight: "47.52px", 
-              wordWrap: "break-word",
-              background: "white",
-              border: "3px solid #BD9E2C",
-              borderRadius: "8px",
-              cursor: isLoading || !accessCode.trim() ? "not-allowed" : "pointer"
-            }}
-          >
-            {isLoading ? "Giriş Yapılıyor..." : "Giriş Yap"}
-          </button>
-        </form>
-
-        {/* Admin login link */}
-        <div style={{ 
-          width: "800px", 
-          textAlign: "center"
-        }}>
-          <span style={{ 
-            color: "#BF9E27", 
-            fontSize: "36px", 
-            fontFamily: "Sulphur Point", 
-            fontWeight: 700, 
-            lineHeight: "47.52px", 
-            wordWrap: "break-word" 
-          }}>
-            Admin girişi için 
-          </span>
-          <button 
-            onClick={() => setLocation("/admin-login")}
-            style={{ 
-              color: "#927201", 
-              fontSize: "36px", 
-              fontFamily: "Sulphur Point", 
-              fontWeight: 700, 
-              lineHeight: "47.52px", 
-              wordWrap: "break-word",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              textDecoration: "underline"
-            }}
-          >
-            buraya tıklayınız.
-          </button>
-        </div>
-      </div>
-    </>
+      <Card className="w-full max-w-md bg-[#fbf7eb]">
+        <CardHeader className="text-center">
+          <div className="mx-auto w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
+            <ChartLine className="text-primary-foreground h-6 w-6" />
+          </div>
+          <CardTitle className="text-2xl font-bold">
+            Cash or Crash
+          </CardTitle>
+          <p className="text-muted-foreground">Takım Girişi</p>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="accessCode">Erişim Kodu</Label>
+              <Input
+                id="accessCode"
+                type="text"
+                placeholder="Takım erişim kodunuzu girin"
+                value={accessCode}
+                onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
+                required
+              />
+            </div>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isLoading || !accessCode.trim()}
+            >
+              {isLoading ? "Giriş Yapılıyor..." : "Takıma Giriş Yap"}
+            </Button>
+          </form>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-muted-foreground">
+              Admin girişi için{" "}
+              <Button 
+                variant="link" 
+                className="p-0 h-auto font-normal text-primary"
+                onClick={() => setLocation("/admin-login")}
+              >
+                buraya tıklayın
+              </Button>
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
