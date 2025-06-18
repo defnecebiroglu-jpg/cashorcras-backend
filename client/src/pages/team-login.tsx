@@ -53,7 +53,7 @@ export default function TeamLogin() {
         <ThemeToggle />
       </div>
       
-      {/* Background decorative images */}
+      {/* Background decorative shapes */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-20 w-[419px] h-[429px] transform -rotate-30 opacity-20">
           <div className="w-full h-full bg-gradient-to-br from-yellow-200 to-yellow-400 rounded-full"></div>
@@ -93,8 +93,8 @@ export default function TeamLogin() {
             className="text-[#E4B300] font-bold leading-tight mb-4"
             style={{ 
               fontSize: 'clamp(32px, 5vw, 53.45px)',
-              fontFamily: 'system-ui, -apple-system, sans-serif',
-              lineHeight: '1.3'
+              fontFamily: 'Jockey One, system-ui, -apple-system, sans-serif',
+              lineHeight: '70.55px'
             }}
           >
             TAKIM GİRİŞİ
@@ -109,8 +109,8 @@ export default function TeamLogin() {
                 className="text-[#BD9E2C] mb-4"
                 style={{ 
                   fontSize: 'clamp(20px, 3vw, 36px)',
-                  fontFamily: 'system-ui, -apple-system, sans-serif',
-                  lineHeight: '1.3'
+                  fontFamily: 'Mukti, system-ui, -apple-system, sans-serif',
+                  lineHeight: '47.52px'
                 }}
               >
                 Erişim kodunu giriniz.
@@ -131,7 +131,8 @@ export default function TeamLogin() {
               className="w-full h-12 text-[#927201] bg-gradient-to-r from-yellow-200 to-yellow-300 hover:from-yellow-300 hover:to-yellow-400 border-2 border-[#BD9E2C] rounded-lg font-semibold"
               style={{ 
                 fontSize: 'clamp(18px, 2.5vw, 36px)',
-                fontFamily: 'system-ui, -apple-system, sans-serif'
+                fontFamily: 'Mukti, system-ui, -apple-system, sans-serif',
+                lineHeight: '47.52px'
               }}
               disabled={isLoading || !accessCode.trim()}
             >
@@ -144,8 +145,8 @@ export default function TeamLogin() {
               className="inline"
               style={{ 
                 fontSize: 'clamp(16px, 2.5vw, 36px)',
-                fontFamily: 'system-ui, -apple-system, sans-serif',
-                lineHeight: '1.3'
+                fontFamily: 'Sulphur Point, system-ui, -apple-system, sans-serif',
+                lineHeight: '47.52px'
               }}
             >
               <span className="text-[#BF9E27] font-bold">Admin girişi için </span>
