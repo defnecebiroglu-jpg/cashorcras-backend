@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { Move, RotateCcw } from "lucide-react";
+import { Settings, RotateCcw } from "lucide-react";
 import logoImage from "@assets/cash-or-crash-logo.png";
 
 export default function TeamLogin() {
@@ -15,28 +15,9 @@ export default function TeamLogin() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [logoSize, setLogoSize] = useState({ width: 192, height: 128 });
-  const [isDragging, setIsDragging] = useState(false);
   const [showSizeControls, setShowSizeControls] = useState(false);
-  const logoRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    e.preventDefault();
-  };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !logoRef.current) return;
-    
-    const rect = logoRef.current.getBoundingClientRect();
-    const newWidth = Math.max(100, e.clientX - rect.left);
-    const newHeight = Math.max(60, e.clientY - rect.top);
-    
-    setLogoSize({ width: newWidth, height: newHeight });
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
 
   const resetLogoSize = () => {
     setLogoSize({ width: 192, height: 128 });
@@ -103,7 +84,7 @@ export default function TeamLogin() {
               onClick={() => setShowSizeControls(!showSizeControls)}
               className="h-8 w-8 p-0 bg-white/80 hover:bg-white"
             >
-              <Move className="h-4 w-4" />
+              <Settings className="h-4 w-4" />
             </Button>
             <Button
               variant="ghost"
@@ -147,13 +128,8 @@ export default function TeamLogin() {
           )}
           
           <div 
-            ref={logoRef}
-            className="mx-auto flex items-center justify-center relative cursor-pointer"
+            className="mx-auto flex items-center justify-center relative"
             style={{ width: logoSize.width, height: logoSize.height }}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
           >
             <img 
               src={logoImage} 
@@ -161,9 +137,6 @@ export default function TeamLogin() {
               className="w-full h-full object-contain drop-shadow-sm"
               style={{ width: logoSize.width, height: logoSize.height }}
             />
-            
-            {/* Resize handle */}
-            <div className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 rounded-full opacity-50 cursor-se-resize hover:opacity-100 transition-opacity" />
           </div>
         </div>
 
