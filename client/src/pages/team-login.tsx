@@ -80,11 +80,14 @@ export default function TeamLogin() {
       </div>
       <div className="w-full max-w-md">
         {/* Logo Frame */}
-        <div className="bg-white rounded-lg border p-6 text-center shadow-sm mb-4">
+        <div className="bg-white rounded-t-lg border border-b-0 p-6 text-center shadow-sm">
           <div 
             ref={logoRef}
-            className="mx-auto flex items-center justify-center"
+            className="mx-auto flex items-center justify-center relative border-2 border-dashed border-gray-300 hover:border-blue-400 transition-colors"
             style={{ width: logoSize.width, height: logoSize.height }}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
           >
             <img 
               src={logoImage} 
@@ -94,7 +97,7 @@ export default function TeamLogin() {
           </div>
         </div>
 
-        <Card className="rounded-lg border text-card-foreground shadow-sm bg-[#fbf7eb]">
+        <Card className="rounded-t-none rounded-b-lg border text-card-foreground shadow-sm bg-[#fbf7eb]">
           <CardHeader className="text-center pt-4">
             <CardTitle className="text-2xl font-bold">
               Cash or Crash
