@@ -26,19 +26,9 @@ export default function TeamLogin() {
 
   // Mouse event handlers for dragging
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.target === logoRef.current?.querySelector('img')) {
-      setIsDragging(true);
-      setDragStart({ x: e.clientX - logoPosition.x, y: e.clientY - logoPosition.y });
-    }
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (isDragging) {
-      setLogoPosition({
-        x: e.clientX - dragStart.x,
-        y: e.clientY - dragStart.y
-      });
-    }
+    e.preventDefault();
+    setIsDragging(true);
+    setDragStart({ x: e.clientX - logoPosition.x, y: e.clientY - logoPosition.y });
   };
 
   const handleMouseUp = () => {
@@ -71,10 +61,8 @@ export default function TeamLogin() {
       setIsDragging(false);
     };
 
-    if (isDragging) {
-      document.addEventListener('mousemove', handleGlobalMouseMove);
-      document.addEventListener('mouseup', handleGlobalMouseUp);
-    }
+    document.addEventListener('mousemove', handleGlobalMouseMove);
+    document.addEventListener('mouseup', handleGlobalMouseUp);
 
     return () => {
       document.removeEventListener('mousemove', handleGlobalMouseMove);
@@ -121,8 +109,6 @@ export default function TeamLogin() {
   return (
     <div 
       className="min-h-screen bg-gray-100 flex items-center justify-center relative overflow-hidden"
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
       onWheel={handleWheel}
     >
       {/* Draggable Logo */}
@@ -144,7 +130,7 @@ export default function TeamLogin() {
           draggable={false}
         />
         <div className="absolute bottom-0 right-0 text-xs bg-black bg-opacity-50 text-white px-1 rounded opacity-50">
-          Drag to move • Ctrl+Scroll to resize
+          Drag to move • Ctrl+Scroll to resize {isDragging ? '(DRAGGING)' : ''}
         </div>
       </div>
 
