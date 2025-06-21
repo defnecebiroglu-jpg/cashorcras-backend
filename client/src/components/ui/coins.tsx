@@ -49,7 +49,7 @@ export function Coins() {
   };
 
   const handleCoinWheel = (e: React.WheelEvent, coinId: number) => {
-    if (e.ctrlKey) {
+    if (e.shiftKey) {
       e.preventDefault();
       const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1;
       setCoins(prevCoins =>
@@ -94,6 +94,18 @@ export function Coins() {
               coin.selected ? { ...coin, rotation: (coin.rotation - 15 + 360) % 360 } : coin
             )
           );
+        } else if (e.key === '+' || e.key === '=') {
+          setCoins(prevCoins =>
+            prevCoins.map(coin =>
+              coin.selected ? { ...coin, size: Math.min(200, coin.size + 5) } : coin
+            )
+          );
+        } else if (e.key === '-') {
+          setCoins(prevCoins =>
+            prevCoins.map(coin =>
+              coin.selected ? { ...coin, size: Math.max(20, coin.size - 5) } : coin
+            )
+          );
         }
       }
     };
@@ -126,7 +138,7 @@ export function Coins() {
           }}
           onMouseDown={(e) => handleCoinMouseDown(e, coin.id)}
           onWheel={(e) => handleCoinWheel(e, coin.id)}
-          title={`Coin ${coin.id} - Drag to move, Ctrl+scroll to resize, R/E to rotate`}
+          title={`Coin ${coin.id} - Drag to move, Shift+scroll or +/- keys to resize, R/E to rotate`}
         >
           <img
             src={coinImage}
