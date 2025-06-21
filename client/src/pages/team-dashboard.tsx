@@ -85,7 +85,7 @@ export default function TeamDashboard() {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-sm text-muted-foreground">Toplam Portföy</div>
+                <div className="text-sm text-[#7f7952]">Toplam Portföy</div>
                 <div className="text-lg font-bold dark:text-green-400 text-[#71c886]">
                   ₺{portfolio ? parseFloat(portfolio.totalPortfolioValue).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00"}
                 </div>
