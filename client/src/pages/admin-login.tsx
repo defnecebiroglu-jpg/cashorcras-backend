@@ -52,7 +52,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 bg-[#403702]">
+    <div className="min-h-screen from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 bg-[#7a6005]">
       <LogoManager />
       <div className="absolute top-4 right-4">
         <ThemeToggle />
