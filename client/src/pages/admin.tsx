@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { LogoManager } from "@/components/ui/logo-manager";
 import { ArrowLeft } from "lucide-react";
 import { CompanyManagement } from "@/components/admin/company-management";
 import { CurrencyManagement } from "@/components/admin/currency-management";
@@ -15,6 +16,7 @@ import { DividendDistribution } from "@/components/admin/dividend-distribution";
 export default function Admin() {
   return (
     <div className="min-h-screen bg-background">
+      <LogoManager />
       <header className="bg-card shadow-sm border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
