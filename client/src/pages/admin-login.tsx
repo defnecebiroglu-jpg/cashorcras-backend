@@ -62,7 +62,7 @@ export default function AdminLogin() {
           <CardTitle className="text-2xl font-bold">
             Yönetici Girişi
           </CardTitle>
-          <p className="text-muted-foreground">Cash or Crash Admin Paneli</p>
+          <p className="text-[#2b250c] font-semibold">Cash or Crash Admin Paneli</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
