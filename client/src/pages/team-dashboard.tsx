@@ -68,7 +68,7 @@ export default function TeamDashboard() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <h1 className="text-xl font-bold">Cash or Crash</h1>
+                <h1 className="text-xl font-bold text-[#666147]">Cash or Crash</h1>
               </div>
               <div className="hidden sm:block">
                 <span className="text-lg font-semibold text-[#666147]">
