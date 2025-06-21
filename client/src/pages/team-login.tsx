@@ -61,7 +61,7 @@ export default function TeamLogin() {
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-      <Card className="w-full max-w-lg bg-[#fbf7eb] relative z-20">
+      <Card className="w-full max-w-lg bg-[#fbf7eb] relative z-40">
         <CardHeader className="text-center py-8">
           <p className="text-muted-foreground text-lg">Takım Girişi</p>
         </CardHeader>
