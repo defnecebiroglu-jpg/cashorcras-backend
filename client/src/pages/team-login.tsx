@@ -151,7 +151,7 @@ export default function TeamLogin() {
           <button
             type="submit"
             disabled={isLoading || !accessCode.trim()}
-            className="p-2.5 bg-[#E4B300] border-none w-full text-white cursor-pointer rounded hover:bg-[#d4a300] disabled:opacity-50 disabled:cursor-not-allowed mt-18"
+            className="p-2.5 bg-[#E4B300] border-none w-full text-white cursor-pointer rounded hover:bg-[#d4a300] disabled:opacity-50 disabled:cursor-not-allowed mt-24"
           >
             {isLoading ? "Giriş Yapılıyor..." : "Takıma Giriş Yap"}
           </button>
