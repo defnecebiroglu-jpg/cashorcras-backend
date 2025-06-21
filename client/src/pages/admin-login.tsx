@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LogoManager } from "@/components/ui/logo-manager";
-import { Coins } from "@/components/ui/coins";
+
 import { Settings, ArrowLeft } from "lucide-react";
 
 export default function AdminLogin() {
