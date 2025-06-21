@@ -1,19 +1,86 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { TrendingUp } from "lucide-react";
 import coinImage from "@assets/Adsız tasarım (6)_1750263227259.png";
+import newLogoImage from "@assets/Adsız tasarım (7)_1750525965730.png";
 
 export default function TeamLogin() {
   const [accessCode, setAccessCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  
+  // Draggable logo state
+  const [logoPosition, setLogoPosition] = useState({ x: 200, y: 50 });
+  const [logoSize, setLogoSize] = useState({ width: 300, height: 200 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const logoRef = useRef<HTMLDivElement>(null);
+
+  // Mouse event handlers for dragging
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.target === logoRef.current?.querySelector('img')) {
+      setIsDragging(true);
+      setDragStart({ x: e.clientX - logoPosition.x, y: e.clientY - logoPosition.y });
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isDragging) {
+      setLogoPosition({
+        x: e.clientX - dragStart.x,
+        y: e.clientY - dragStart.y
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Mouse wheel for resizing
+  const handleWheel = (e: React.WheelEvent) => {
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+      const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1;
+      setLogoSize(prev => ({
+        width: Math.max(50, Math.min(800, prev.width * scaleFactor)),
+        height: Math.max(33, Math.min(533, prev.height * scaleFactor))
+      }));
+    }
+  };
+
+  useEffect(() => {
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (isDragging) {
+        setLogoPosition({
+          x: e.clientX - dragStart.x,
+          y: e.clientY - dragStart.y
+        });
+      }
+    };
+
+    const handleGlobalMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleGlobalMouseMove);
+      document.addEventListener('mouseup', handleGlobalMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleGlobalMouseMove);
+      document.removeEventListener('mouseup', handleGlobalMouseUp);
+    };
+  }, [isDragging, dragStart]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,20 +119,40 @@ export default function TeamLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center relative overflow-hidden">
-      
-
-      
-      
-      <div className="bg-[#FFFAE2] p-10 rounded-xl text-center w-80 shadow-lg font-sans relative z-10 pt-20">
-        {/* Logo */}
-        <div className="absolute -top-16 left-1/2 transform -translate-x-1/2">
-          <img 
-            src={coinImage} 
-            alt="Cash or Crash Logo" 
-            className="w-80 h-60"
-          />
+    <div 
+      className="min-h-screen bg-gray-100 flex items-center justify-center relative overflow-hidden"
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onWheel={handleWheel}
+    >
+      {/* Draggable Logo */}
+      <div
+        ref={logoRef}
+        className={`absolute z-20 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+        style={{
+          left: logoPosition.x,
+          top: logoPosition.y,
+          width: logoSize.width,
+          height: logoSize.height,
+        }}
+        onMouseDown={handleMouseDown}
+      >
+        <img 
+          src={newLogoImage} 
+          alt="Cash or Crash Logo" 
+          className="w-full h-full object-contain pointer-events-none"
+          draggable={false}
+        />
+        <div className="absolute bottom-0 right-0 text-xs bg-black bg-opacity-50 text-white px-1 rounded opacity-50">
+          Drag to move • Ctrl+Scroll to resize
         </div>
+      </div>
+
+      <div className="absolute top-4 right-4 z-10">
+        <ThemeToggle />
+      </div>
+      
+      <div className="bg-[#FFFAE2] p-10 rounded-xl text-center w-80 shadow-lg font-sans relative z-10">
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <input
