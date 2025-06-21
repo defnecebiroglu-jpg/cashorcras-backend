@@ -157,7 +157,7 @@ export default function TeamLogin() {
           </button>
         </form>
         
-        <div className="mt-12">
+        <div className="mt-20">
           <p className="text-sm text-gray-600">
             Admin girişi için{" "}
             <button 
