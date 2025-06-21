@@ -70,9 +70,6 @@ export default function TeamDashboard() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <ChartLine className="text-primary-foreground h-4 w-4" />
-                </div>
                 <h1 className="text-xl font-bold">Cash or Crash</h1>
               </div>
               <div className="hidden sm:block">
