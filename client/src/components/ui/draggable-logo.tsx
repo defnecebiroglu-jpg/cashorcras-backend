@@ -39,46 +39,18 @@ export function DraggableLogo({
       setIsDragging(false);
     };
 
-    const handleWheel = (e: WheelEvent) => {
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault();
-        const rect = logoRef.current?.getBoundingClientRect();
-        if (rect) {
-          const mouseX = e.clientX;
-          const mouseY = e.clientY;
-          const logoX = rect.left;
-          const logoY = rect.top;
-          const logoRight = rect.right;
-          const logoBottom = rect.bottom;
-          
-          // Check if mouse is over the logo
-          if (mouseX >= logoX && mouseX <= logoRight && mouseY >= logoY && mouseY <= logoBottom) {
-            const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1;
-            const newSize = {
-              width: Math.max(50, Math.min(800, size.width * scaleFactor)),
-              height: Math.max(33, Math.min(533, size.height * scaleFactor)),
-            };
-            setSize(newSize);
-            onSizeChange?.(newSize);
-          }
-        }
-      }
-    };
+
 
     if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
     }
 
-    // Add wheel listener to the document
-    document.addEventListener("wheel", handleWheel, { passive: false });
-
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
-      document.removeEventListener("wheel", handleWheel);
     };
-  }, [isDragging, dragStart, onPositionChange, onSizeChange, size]);
+  }, [isDragging, dragStart, onPositionChange]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (e.target === logoRef.current || (e.target as HTMLElement).closest('.logo-image')) {
@@ -94,7 +66,7 @@ export function DraggableLogo({
 
   const resetPosition = () => {
     const newPosition = { x: 50, y: 50 };
-    const newSize = { width: 150, height: 100 };
+    const newSize = { width: 800, height: 533 };
     setPosition(newPosition);
     setSize(newSize);
     onPositionChange?.(newPosition);
@@ -130,7 +102,7 @@ export function DraggableLogo({
       {showControls && (
         <div className="absolute -bottom-8 left-0 text-xs bg-black bg-opacity-75 text-white px-2 py-1 rounded whitespace-nowrap">
           {Math.round(position.x)}, {Math.round(position.y)} | {Math.round(size.width)}×{Math.round(size.height)}
-          <div className="text-[10px] opacity-75 mt-1">Ctrl+scroll to resize</div>
+          <div className="text-[10px] opacity-75 mt-1">Fixed size</div>
         </div>
       )}
     </div>

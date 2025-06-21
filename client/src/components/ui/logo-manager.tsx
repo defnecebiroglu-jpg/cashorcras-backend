@@ -21,7 +21,7 @@ export function LogoManager() {
     return saved ? JSON.parse(saved) : {
       visible: true,
       position: { x: 50, y: 50 },
-      size: { width: 150, height: 100 },
+      size: { width: 800, height: 533 },
       opacity: 100,
     };
   });
@@ -51,7 +51,7 @@ export function LogoManager() {
     const defaultSettings = {
       visible: true,
       position: { x: 50, y: 50 },
-      size: { width: 150, height: 100 },
+      size: { width: 800, height: 533 },
       opacity: 100,
     };
     setSettings(defaultSettings);
@@ -131,7 +131,7 @@ export function LogoManager() {
               <strong>How to use:</strong>
               <ul className="mt-2 space-y-1">
                 <li>• Drag logo to move it anywhere</li>
-                <li>• Hold Ctrl + scroll to resize logo</li>
+                <li>• Logo size is fixed at 800×533 pixels</li>
                 <li>• Position saves automatically</li>
                 <li>• Toggle visibility on/off above</li>
               </ul>
