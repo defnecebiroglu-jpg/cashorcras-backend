@@ -67,7 +67,7 @@ export default function TeamLogin() {
         <CardContent className="px-8 pb-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-3">
-              <Label htmlFor="accessCode" className="text-base text-[#635a3b]">Erişim Kodu</Label>
+              <Label htmlFor="accessCode" className="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-base text-[#635a3b]">Erişim Kodu</Label>
               <Input
                 id="accessCode"
                 type="text"
@@ -80,7 +80,7 @@ export default function TeamLogin() {
             </div>
             <Button
               type="submit"
-              className="w-full bg-[#fff7c9] text-[#635a3b] hover:bg-[#fff7c9]/90 h-12 text-base font-semibold"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 px-4 py-2 w-full hover:bg-[#f5d456]/90 h-12 text-base font-semibold bg-[#fff7c9] text-[#635a3b]"
               disabled={isLoading || !accessCode.trim()}
             >
               {isLoading ? "Giriş Yapılıyor..." : "Takıma Giriş Yap"}
@@ -91,7 +91,7 @@ export default function TeamLogin() {
               Admin girişi için{" "}
               <Button 
                 variant="link" 
-                className="p-0 h-auto font-normal text-[#fffcf2] text-base"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 underline-offset-4 hover:underline p-0 h-auto font-normal text-base text-[#fffcf2]"
                 onClick={() => setLocation("/admin-login")}
               >
                 buraya tıklayın
