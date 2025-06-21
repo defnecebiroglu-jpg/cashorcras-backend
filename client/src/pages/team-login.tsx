@@ -139,14 +139,14 @@ export default function TeamLogin() {
       </div>
       <div className="bg-[#FFFAE2] p-12 rounded-xl text-center w-96 min-h-[320px] shadow-lg font-sans relative z-10">
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Takım erişim kodunuzu girin"
             value={accessCode}
             onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
             required
-            className="p-2.5 w-full mb-2.5 border border-gray-300 rounded text-black"
+            className="p-2.5 w-full border border-gray-300 rounded text-black"
           />
           <button
             type="submit"
