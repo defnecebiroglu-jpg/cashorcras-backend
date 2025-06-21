@@ -80,7 +80,7 @@ export default function TeamLogin() {
             </div>
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-[#f5d456] text-[#000000] hover:bg-[#f5d456]/90"
               disabled={isLoading || !accessCode.trim()}
             >
               {isLoading ? "Giriş Yapılıyor..." : "Takıma Giriş Yap"}
@@ -91,7 +91,7 @@ export default function TeamLogin() {
               Admin girişi için{" "}
               <Button 
                 variant="link" 
-                className="p-0 h-auto font-normal text-primary"
+                className="p-0 h-auto font-normal text-[#c79d0a]"
                 onClick={() => setLocation("/admin-login")}
               >
                 buraya tıklayın
