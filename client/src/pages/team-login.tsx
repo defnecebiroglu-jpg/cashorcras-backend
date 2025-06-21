@@ -54,11 +54,7 @@ export default function TeamLogin() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center relative overflow-hidden">
       {/* Background Coins */}
-      <img 
-        src={coinImage} 
-        alt="Coin" 
-        className="absolute top-10 left-10 w-16 h-16 opacity-20 animate-pulse"
-      />
+      
       <img 
         src={coinImage} 
         alt="Coin" 
@@ -71,18 +67,8 @@ export default function TeamLogin() {
         className="absolute bottom-32 left-20 w-14 h-14 opacity-25 animate-pulse"
         style={{ animationDelay: '1s' }}
       />
-      <img 
-        src={coinImage} 
-        alt="Coin" 
-        className="absolute bottom-20 right-12 w-18 h-18 opacity-20 animate-bounce"
-        style={{ animationDelay: '1.5s' }}
-      />
-      <img 
-        src={coinImage} 
-        alt="Coin" 
-        className="absolute top-1/2 left-8 w-12 h-12 opacity-15 animate-pulse"
-        style={{ animationDelay: '2s' }}
-      />
+      
+      
       <img 
         src={coinImage} 
         alt="Coin" 
