@@ -50,12 +50,7 @@ export function Coins() {
 
   const handleCoinMouseDown = (e: React.MouseEvent, coinId: number) => {
     e.preventDefault();
-    setDraggedCoin(coinId);
-    setDragOffset({
-      x: e.clientX - coins.find(c => c.id === coinId)!.x,
-      y: e.clientY - coins.find(c => c.id === coinId)!.y,
-    });
-    
+    // Only allow selection, no dragging
     setCoins(prevCoins => 
       prevCoins.map(coin => ({ ...coin, selected: coin.id === coinId }))
     );
@@ -76,72 +71,17 @@ export function Coins() {
   };
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (draggedCoin !== null) {
-        setCoins(prevCoins =>
-          prevCoins.map(coin =>
-            coin.id === draggedCoin
-              ? { ...coin, x: e.clientX - dragOffset.x, y: e.clientY - dragOffset.y }
-              : coin
-          )
-        );
-      }
-    };
+    // Coins are now fixed - no dragging functionality
 
-    const handleMouseUp = () => {
-      setDraggedCoin(null);
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const selectedCoin = coins.find(c => c.selected);
-      if (selectedCoin) {
-        if (e.key.toLowerCase() === 'r') {
-          setCoins(prevCoins =>
-            prevCoins.map(coin =>
-              coin.selected ? { ...coin, rotation: (coin.rotation + 15) % 360 } : coin
-            )
-          );
-        } else if (e.key.toLowerCase() === 'e') {
-          setCoins(prevCoins =>
-            prevCoins.map(coin =>
-              coin.selected ? { ...coin, rotation: (coin.rotation - 15 + 360) % 360 } : coin
-            )
-          );
-        } else if (e.key === '+' || e.key === '=') {
-          setCoins(prevCoins =>
-            prevCoins.map(coin =>
-              coin.selected ? { ...coin, size: Math.min(200, coin.size + 5) } : coin
-            )
-          );
-        } else if (e.key === '-') {
-          setCoins(prevCoins =>
-            prevCoins.map(coin =>
-              coin.selected ? { ...coin, size: Math.max(20, coin.size - 5) } : coin
-            )
-          );
-        }
-      }
-    };
-
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [draggedCoin, dragOffset, coins]);
+    // Coins are now fixed in place - no keyboard controls needed
+  }, []);
 
   return (
     <>
       {coins.map((coin) => (
         <div
           key={coin.id}
-          className={`fixed z-40 cursor-grab select-none ${
-            coin.selected ? 'ring-2 ring-yellow-400 ring-opacity-70' : ''
-          } hover:scale-105 transition-transform`}
+          className="fixed z-40 select-none pointer-events-none"
           style={{
             left: `${coin.x}px`,
             top: `${coin.y}px`,
@@ -149,9 +89,6 @@ export function Coins() {
             height: `${coin.size}px`,
             transform: `rotate(${coin.rotation}deg)`,
           }}
-          onMouseDown={(e) => handleCoinMouseDown(e, coin.id)}
-          onWheel={(e) => handleCoinWheel(e, coin.id)}
-          title={`Coin ${coin.id} - Drag to move, Shift+scroll or +/- keys to resize, R/E to rotate`}
         >
           <img
             src={coinImage}
