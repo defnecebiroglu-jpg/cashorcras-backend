@@ -5,7 +5,7 @@ import { StockMarketDesk } from "@/components/dashboard/stock-market-desk";
 import { CurrencyDesk } from "@/components/dashboard/currency-desk";
 import { StartupDesk } from "@/components/dashboard/startup-desk";
 import { LogoManager } from "@/components/ui/logo-manager";
-import { DraggableCoins } from "@/components/ui/draggable-coins";
+import { WorkingCoins } from "@/components/ui/working-coins";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<"stocks" | "currency" | "startup">("stocks");
@@ -14,7 +14,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-slate-50">
       <LogoManager />
-      <DraggableCoins />
+      <WorkingCoins />
       <Header selectedTeamId={selectedTeamId} onTeamChange={setSelectedTeamId} />
       <NavigationTabs activeTab={activeTab} onTabChange={setActiveTab} />
       

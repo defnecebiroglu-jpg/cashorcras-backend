@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LogoManager } from "@/components/ui/logo-manager";
-import { DraggableCoins } from "@/components/ui/draggable-coins";
+import { WorkingCoins } from "@/components/ui/working-coins";
 import { ArrowLeft } from "lucide-react";
 import { CompanyManagement } from "@/components/admin/company-management";
 import { CurrencyManagement } from "@/components/admin/currency-management";

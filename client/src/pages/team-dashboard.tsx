@@ -8,7 +8,7 @@ import { CurrencyDesk } from "@/components/dashboard/currency-desk";
 import { StartupDesk } from "@/components/dashboard/startup-desk";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LogoManager } from "@/components/ui/logo-manager";
-import { DraggableCoins } from "@/components/ui/draggable-coins";
+import { WorkingCoins } from "@/components/ui/working-coins";
 import { ChartLine, LogOut } from "lucide-react";
 import type { TeamPortfolio } from "@shared/schema";
 
@@ -63,7 +63,7 @@ export default function TeamDashboard() {
   return (
     <div className="min-h-screen bg-background">
       <LogoManager />
-      <DraggableCoins />
+      <WorkingCoins />
       {/* Header */}
       <header className="bg-card shadow-sm border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
