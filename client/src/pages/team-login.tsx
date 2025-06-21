@@ -59,11 +59,11 @@ export default function TeamLogin() {
       
       <div className="bg-[#FFFAE2] p-10 rounded-xl text-center w-80 shadow-lg font-sans relative z-10 pt-20">
         {/* Logo */}
-        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
+        <div className="absolute -top-16 left-1/2 transform -translate-x-1/2">
           <img 
             src={coinImage} 
             alt="Cash or Crash Logo" 
-            className="w-40 h-40"
+            className="w-80 h-60"
           />
         </div>
 
