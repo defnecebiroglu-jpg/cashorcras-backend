@@ -24,11 +24,7 @@ export function NavigationTabs({ activeTab, onTabChange }: NavigationTabsProps) 
               <button
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  isActive
-                    ? "border-primary text-primary"
-                    : "border-transparent text-slate-500 hover:text-slate-700"
-                }`}
+                className="py-4 px-1 border-b-2 font-medium text-sm transition-colors border-primary text-[#7f7952]"
               >
                 <Icon className="h-4 w-4 mr-2 inline" />
                 {tab.label}
