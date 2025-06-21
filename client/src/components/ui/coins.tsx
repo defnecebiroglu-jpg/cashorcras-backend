@@ -12,33 +12,19 @@ interface Coin {
 
 export function Coins() {
   const getDefaultCoins = () => [
-    { id: 1, x: 50, y: 350, size: 60, rotation: 0, selected: false },
-    { id: 2, x: 150, y: 370, size: 60, rotation: 0, selected: false },
-    { id: 3, x: 250, y: 390, size: 60, rotation: 0, selected: false },
-    { id: 4, x: 50, y: 450, size: 60, rotation: 0, selected: false },
-    { id: 5, x: 150, y: 470, size: 60, rotation: 0, selected: false },
-    { id: 6, x: 250, y: 490, size: 60, rotation: 0, selected: false },
+    { id: 1, x: 1100, y: 100, size: 60, rotation: 0, selected: false },
+    { id: 2, x: 1200, y: 100, size: 60, rotation: 0, selected: false },
+    { id: 3, x: 1300, y: 100, size: 60, rotation: 0, selected: false },
+    { id: 4, x: 1100, y: 200, size: 60, rotation: 0, selected: false },
+    { id: 5, x: 1200, y: 200, size: 60, rotation: 0, selected: false },
+    { id: 6, x: 1300, y: 200, size: 60, rotation: 0, selected: false },
   ];
 
   const [coins, setCoins] = useState<Coin[]>(() => {
-    // Load saved positions or use defaults
-    const savedCoins = localStorage.getItem('coins-data');
-    if (savedCoins) {
-      const parsed = JSON.parse(savedCoins);
-      // Check if any coins are in the logo area (x: 229-1029, y: -70-463)
-      const hasCoinsUnderLogo = parsed.some((coin: Coin) => 
-        coin.x >= 229 && coin.x <= 1029 && coin.y >= -70 && coin.y <= 463
-      );
-      
-      if (hasCoinsUnderLogo) {
-        // Reset to new positions if coins are under logo
-        localStorage.setItem('coins-data', JSON.stringify(getDefaultCoins()));
-        return getDefaultCoins();
-      }
-      
-      return parsed;
-    }
-    return getDefaultCoins();
+    // Force reset to new safe positions
+    const defaultCoins = getDefaultCoins();
+    localStorage.setItem('coins-data', JSON.stringify(defaultCoins));
+    return defaultCoins;
   });
   
   const [draggedCoin, setDraggedCoin] = useState<number | null>(null);
