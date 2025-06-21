@@ -10,7 +10,7 @@ interface DraggableLogoProps {
 
 export function DraggableLogo({
   initialPosition = { x: 50, y: 50 },
-  initialSize = { width: 150, height: 100 },
+  initialSize = { width: 800, height: 533 },
   onPositionChange,
   onSizeChange,
 }: DraggableLogoProps) {
