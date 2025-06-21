@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import coinImage from "@assets/C (2) 5 (2)_1750528826418.png";
+import logoImage from "@assets/Adsız tasarım (7)_1750526968764.png";
 
 interface CoinInstance {
   id: string;
@@ -7,6 +8,9 @@ interface CoinInstance {
   size: { width: number; height: number };
   isDragging: boolean;
   dragStart: { x: number; y: number };
+  type: 'coin' | 'logo';
+  image: string;
+  alt: string;
 }
 
 interface DraggableCoinsProps {
@@ -15,8 +19,8 @@ interface DraggableCoinsProps {
 
 export function DraggableCoins({ onCoinsChange }: DraggableCoinsProps) {
   const [coins, setCoins] = useState<CoinInstance[]>(() => {
-    // Initialize 6 coins with different positions
-    return Array.from({ length: 6 }, (_, i) => ({
+    // Initialize 6 coins plus the original logo
+    const coinInstances: CoinInstance[] = Array.from({ length: 6 }, (_, i) => ({
       id: `coin-${i}`,
       position: { 
         x: 100 + (i % 3) * 150, 
@@ -24,8 +28,25 @@ export function DraggableCoins({ onCoinsChange }: DraggableCoinsProps) {
       },
       size: { width: 80, height: 80 },
       isDragging: false,
-      dragStart: { x: 0, y: 0 }
+      dragStart: { x: 0, y: 0 },
+      type: 'coin' as const,
+      image: coinImage,
+      alt: `Coin ${i}`
     }));
+    
+    // Add the original logo
+    coinInstances.push({
+      id: 'logo',
+      position: { x: 229, y: -70 },
+      size: { width: 800, height: 533 },
+      isDragging: false,
+      dragStart: { x: 0, y: 0 },
+      type: 'logo' as const,
+      image: logoImage,
+      alt: 'Cash or Crash Logo'
+    });
+    
+    return coinInstances;
   });
 
   const coinsRef = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -134,8 +155,8 @@ export function DraggableCoins({ onCoinsChange }: DraggableCoinsProps) {
           onWheel={(e) => handleWheel(coin.id, e)}
         >
           <img
-            src={coinImage}
-            alt={`Coin ${coin.id}`}
+            src={coin.image}
+            alt={coin.alt}
             className="w-full h-full object-contain pointer-events-none"
             draggable={false}
           />
