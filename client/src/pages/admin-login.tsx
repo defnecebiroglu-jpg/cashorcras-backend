@@ -52,16 +52,13 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
-
+    <div className="min-h-screen from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 bg-[#73673f]">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="mx-auto w-12 h-12 bg-slate-800 dark:bg-slate-200 rounded-lg flex items-center justify-center mb-4">
-            <Settings className="text-white dark:text-slate-800 h-6 w-6" />
-          </div>
+          
           <CardTitle className="text-2xl font-bold">
             Yönetici Girişi
           </CardTitle>
