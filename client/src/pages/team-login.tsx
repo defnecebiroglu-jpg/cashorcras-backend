@@ -133,12 +133,10 @@ export default function TeamLogin() {
           Drag to move • Ctrl+Scroll to resize {isDragging ? '(DRAGGING)' : ''}
         </div>
       </div>
-
       <div className="absolute top-4 right-4 z-10">
         <ThemeToggle />
       </div>
-      
-      <div className="bg-[#FFFAE2] p-10 rounded-xl text-center w-80 shadow-lg font-sans relative z-10">
+      <div className="bg-[#FFFAE2] p-10 rounded-xl text-center w-80 shadow-lg font-sans relative z-10 ml-[3px] mr-[3px]">
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <input
