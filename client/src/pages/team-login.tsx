@@ -51,57 +51,46 @@ export default function TeamLogin() {
   };
 
   return (
-    <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 bg-[#fff5ad]">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-      <div className="w-full max-w-md">
-        {/* Logo Frame */}
-        <div className="rounded-t-lg p-6 text-center shadow-sm mt-[-23px] mb-[-23px] pt-[0px] pb-[0px] ml-[0px] mr-[0px] pl-[14px] pr-[14px] bg-[#fff5ad]">
-          <div className="mx-auto flex items-center justify-center relative w-48 h-32">
-            <TrendingUp className="w-20 h-20 text-[#c7a230]" />
-          </div>
+      
+      <div className="bg-[#FFFAE2] p-10 rounded-xl text-center w-80 shadow-lg font-sans">
+        {/* Logo */}
+        <div className="mb-5">
+          <TrendingUp className="w-36 h-36 mx-auto text-[#E4B300]" />
         </div>
 
-        <Card className="rounded-t-none rounded-b-lg border-none text-card-foreground shadow-sm bg-[#fbf7eb]">
-          <CardHeader className="text-center pt-4">
-            <p className="text-[#c7a230] text-[20px] font-bold ml-[6px] mr-[6px] mt-[-1px] mb-[-1px] pt-[-5px] pb-[-5px] pl-[0px] pr-[0px]">TAKIM GİRİŞİ</p>
-          </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="accessCode">Erişim Kodu</Label>
-              <Input
-                id="accessCode"
-                type="text"
-                placeholder="Takım erişim kodunuzu girin"
-                value={accessCode}
-                onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
-                required
-              />
-            </div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading || !accessCode.trim()}
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <input
+            type="text"
+            placeholder="Takım erişim kodunuzu girin"
+            value={accessCode}
+            onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
+            required
+            className="p-2.5 w-full mb-2.5 border border-gray-300 rounded text-black"
+          />
+          <button
+            type="submit"
+            disabled={isLoading || !accessCode.trim()}
+            className="p-2.5 bg-[#E4B300] border-none w-full text-white cursor-pointer rounded hover:bg-[#d4a300] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? "Giriş Yapılıyor..." : "Takıma Giriş Yap"}
+          </button>
+        </form>
+        
+        <div className="mt-6">
+          <p className="text-sm text-gray-600">
+            Admin girişi için{" "}
+            <button 
+              className="text-[#E4B300] underline bg-transparent border-none cursor-pointer"
+              onClick={() => setLocation("/admin-login")}
             >
-              {isLoading ? "Giriş Yapılıyor..." : "Takıma Giriş Yap"}
-            </Button>
-          </form>
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              Admin girişi için{" "}
-              <Button 
-                variant="link" 
-                className="p-0 h-auto font-normal text-primary"
-                onClick={() => setLocation("/admin-login")}
-              >
-                buraya tıklayın
-              </Button>
-            </p>
-          </div>
-        </CardContent>
-        </Card>
+              buraya tıklayın
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );
