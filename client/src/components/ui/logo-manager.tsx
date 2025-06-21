@@ -115,25 +115,14 @@ export function LogoManager() {
               />
             </div>
 
-            {/* Reset Button */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={resetToDefaults}
-              className="w-full flex items-center gap-2"
-            >
-              <RotateCcw className="h-4 w-4" />
-              Reset Position & Size
-            </Button>
-
-            {/* Instructions */}
+            {/* Status */}
             <div className="text-xs text-muted-foreground bg-muted p-3 rounded">
-              <strong>How to use:</strong>
+              <strong>Logo Status:</strong>
               <ul className="mt-2 space-y-1">
-                <li>• Drag logo to move it anywhere</li>
-                <li>• Logo size is fixed at 800×533 pixels</li>
-                <li>• Position saves automatically</li>
-                <li>• Toggle visibility on/off above</li>
+                <li>• Fixed at position 229, -70</li>
+                <li>• Fixed size: 800×533 pixels</li>
+                <li>• Cannot be moved or resized</li>
+                <li>• Use visibility toggle above to show/hide</li>
               </ul>
             </div>
           </CardContent>

@@ -52,15 +52,7 @@ export function DraggableLogo({
     };
   }, [isDragging, dragStart, onPositionChange]);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.target === logoRef.current || (e.target as HTMLElement).closest('.logo-image')) {
-      setIsDragging(true);
-      setDragStart({
-        x: e.clientX - position.x,
-        y: e.clientY - position.y,
-      });
-    }
-  };
+  // Logo is now fixed in position - no dragging allowed
 
 
 
@@ -84,27 +76,16 @@ export function DraggableLogo({
         top: `${position.y}px`,
         width: `${size.width}px`,
         height: `${size.height}px`,
-        cursor: isDragging ? 'grabbing' : 'grab',
+        cursor: 'default',
       }}
-      onMouseDown={handleMouseDown}
-      onMouseEnter={() => setShowControls(true)}
-      onMouseLeave={() => !isDragging && setShowControls(false)}
     >
-      {/* Logo Image */}
+      {/* Logo Image - Fixed Position */}
       <img
         src={logoImage}
         alt="Cash or Crash Logo"
         className="logo-image w-full h-full object-contain pointer-events-none"
         draggable={false}
       />
-      
-      {/* Size and Position Info - shows when hovering */}
-      {showControls && (
-        <div className="absolute -bottom-8 left-0 text-xs bg-black bg-opacity-75 text-white px-2 py-1 rounded whitespace-nowrap">
-          {Math.round(position.x)}, {Math.round(position.y)} | {Math.round(size.width)}×{Math.round(size.height)}
-          <div className="text-[10px] opacity-75 mt-1">Fixed size</div>
-        </div>
-      )}
     </div>
   );
 }
