@@ -62,8 +62,6 @@ export default function TeamDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-
-
       {/* Header */}
       <header className="bg-card shadow-sm border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -73,7 +71,7 @@ export default function TeamDashboard() {
                 <h1 className="text-xl font-bold">Cash or Crash</h1>
               </div>
               <div className="hidden sm:block">
-                <span className="text-lg font-semibold text-foreground">
+                <span className="text-lg font-semibold text-[#666147]">
                   {storedTeamName || portfolio?.team.name}
                 </span>
               </div>
@@ -101,10 +99,8 @@ export default function TeamDashboard() {
           </div>
         </div>
       </header>
-
       {/* Navigation Tabs */}
       <NavigationTabs activeTab={activeTab} onTabChange={setActiveTab} />
-      
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === "stocks" && <StockMarketDesk teamId={teamId} />}
