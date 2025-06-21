@@ -52,25 +52,19 @@ export default function TeamLogin() {
   };
 
   return (
-    <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 bg-[#fff5ad]">
+    <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-end justify-center p-4 bg-[#fff5ad] pb-32">
       <LogoManager />
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-      <Card className="w-full max-w-md bg-[#fbf7eb]">
-        <CardHeader className="text-center">
-          <div className="mx-auto w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
-            <ChartLine className="text-primary-foreground h-6 w-6" />
-          </div>
-          <CardTitle className="text-2xl font-bold">
-            Cash or Crash
-          </CardTitle>
-          <p className="text-muted-foreground">Takım Girişi</p>
+      <Card className="w-full max-w-lg bg-[#fbf7eb]">
+        <CardHeader className="text-center py-8">
+          <p className="text-muted-foreground text-lg">Takım Girişi</p>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="accessCode">Erişim Kodu</Label>
+        <CardContent className="px-8 pb-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-3">
+              <Label htmlFor="accessCode" className="text-base">Erişim Kodu</Label>
               <Input
                 id="accessCode"
                 type="text"
@@ -78,22 +72,23 @@ export default function TeamLogin() {
                 value={accessCode}
                 onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
                 required
+                className="h-12 text-base"
               />
             </div>
             <Button
               type="submit"
-              className="w-full bg-[#f5d456] text-[#000000] hover:bg-[#f5d456]/90"
+              className="w-full bg-[#f5d456] text-[#000000] hover:bg-[#f5d456]/90 h-12 text-base font-semibold"
               disabled={isLoading || !accessCode.trim()}
             >
               {isLoading ? "Giriş Yapılıyor..." : "Takıma Giriş Yap"}
             </Button>
           </form>
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
+          <div className="mt-8 text-center">
+            <p className="text-base text-muted-foreground">
               Admin girişi için{" "}
               <Button 
                 variant="link" 
-                className="p-0 h-auto font-normal text-[#c79d0a]"
+                className="p-0 h-auto font-normal text-[#c79d0a] text-base"
                 onClick={() => setLocation("/admin-login")}
               >
                 buraya tıklayın
