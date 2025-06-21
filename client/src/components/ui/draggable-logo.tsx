@@ -1,6 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { Grip, Move, RotateCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import logoImage from "@assets/Adsız tasarım (7)_1750526968764.png";
 
 interface DraggableLogoProps {
@@ -19,14 +17,12 @@ export function DraggableLogo({
   const [position, setPosition] = useState(initialPosition);
   const [size, setSize] = useState(initialSize);
   const [isDragging, setIsDragging] = useState(false);
-  const [isResizing, setIsResizing] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const [showControls, setShowControls] = useState(false);
   
   const logoRef = useRef<HTMLDivElement>(null);
 
-  // Handle mouse move for dragging
+  // Handle mouse move for dragging and wheel for resizing
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {
@@ -37,34 +33,52 @@ export function DraggableLogo({
         setPosition(newPosition);
         onPositionChange?.(newPosition);
       }
-      
-      if (isResizing) {
-        const deltaX = e.clientX - resizeStart.x;
-        const deltaY = e.clientY - resizeStart.y;
-        const newSize = {
-          width: Math.max(50, resizeStart.width + deltaX),
-          height: Math.max(33, resizeStart.height + deltaY),
-        };
-        setSize(newSize);
-        onSizeChange?.(newSize);
-      }
     };
 
     const handleMouseUp = () => {
       setIsDragging(false);
-      setIsResizing(false);
     };
 
-    if (isDragging || isResizing) {
+    const handleWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        const rect = logoRef.current?.getBoundingClientRect();
+        if (rect) {
+          const mouseX = e.clientX;
+          const mouseY = e.clientY;
+          const logoX = rect.left;
+          const logoY = rect.top;
+          const logoRight = rect.right;
+          const logoBottom = rect.bottom;
+          
+          // Check if mouse is over the logo
+          if (mouseX >= logoX && mouseX <= logoRight && mouseY >= logoY && mouseY <= logoBottom) {
+            const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1;
+            const newSize = {
+              width: Math.max(50, Math.min(800, size.width * scaleFactor)),
+              height: Math.max(33, Math.min(533, size.height * scaleFactor)),
+            };
+            setSize(newSize);
+            onSizeChange?.(newSize);
+          }
+        }
+      }
+    };
+
+    if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
     }
 
+    // Add wheel listener to the document
+    document.addEventListener("wheel", handleWheel, { passive: false });
+
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("wheel", handleWheel);
     };
-  }, [isDragging, isResizing, dragStart, resizeStart, onPositionChange, onSizeChange]);
+  }, [isDragging, dragStart, onPositionChange, onSizeChange, size]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (e.target === logoRef.current || (e.target as HTMLElement).closest('.logo-image')) {
@@ -76,16 +90,7 @@ export function DraggableLogo({
     }
   };
 
-  const handleResizeMouseDown = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsResizing(true);
-    setResizeStart({
-      x: e.clientX,
-      y: e.clientY,
-      width: size.width,
-      height: size.height,
-    });
-  };
+
 
   const resetPosition = () => {
     const newPosition = { x: 50, y: 50 };
@@ -111,7 +116,7 @@ export function DraggableLogo({
       }}
       onMouseDown={handleMouseDown}
       onMouseEnter={() => setShowControls(true)}
-      onMouseLeave={() => !isDragging && !isResizing && setShowControls(false)}
+      onMouseLeave={() => !isDragging && setShowControls(false)}
     >
       {/* Logo Image */}
       <img
@@ -121,45 +126,11 @@ export function DraggableLogo({
         draggable={false}
       />
       
-      {/* Control Buttons */}
-      {showControls && (
-        <div className="absolute -top-10 left-0 flex gap-1 bg-white dark:bg-gray-800 rounded-md shadow-md p-1 border">
-          <Button
-            size="sm"
-            variant="ghost"
-            className="h-6 w-6 p-0"
-            onClick={() => setShowControls(false)}
-            title="Hide controls"
-          >
-            <Move className="h-3 w-3" />
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            className="h-6 w-6 p-0"
-            onClick={resetPosition}
-            title="Reset position and size"
-          >
-            <RotateCcw className="h-3 w-3" />
-          </Button>
-        </div>
-      )}
-      
-      {/* Resize Handle */}
-      {showControls && (
-        <div
-          className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 cursor-se-resize opacity-75 hover:opacity-100"
-          onMouseDown={handleResizeMouseDown}
-          title="Drag to resize"
-        >
-          <Grip className="h-3 w-3 text-white" />
-        </div>
-      )}
-      
-      {/* Size and Position Info */}
+      {/* Size and Position Info - shows when hovering */}
       {showControls && (
         <div className="absolute -bottom-8 left-0 text-xs bg-black bg-opacity-75 text-white px-2 py-1 rounded whitespace-nowrap">
           {Math.round(position.x)}, {Math.round(position.y)} | {Math.round(size.width)}×{Math.round(size.height)}
+          <div className="text-[10px] opacity-75 mt-1">Ctrl+scroll to resize</div>
         </div>
       )}
     </div>

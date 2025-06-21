@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Settings, Eye, EyeOff } from "lucide-react";
+import { Settings, Eye, EyeOff, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
@@ -72,10 +72,10 @@ export function LogoManager() {
 
       {/* Settings Panel */}
       {showSettings && (
-        <Card className="fixed top-16 left-4 z-50 w-80 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm">
+        <Card className="fixed top-16 left-4 z-50 w-72 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center justify-between">
-              Logo Settings
+              Logo Controls
               <Button
                 variant="ghost"
                 size="sm"
@@ -115,68 +115,25 @@ export function LogoManager() {
               />
             </div>
 
-            {/* Position Display */}
-            <div className="space-y-2">
-              <Label>Position</Label>
-              <div className="text-sm text-muted-foreground">
-                X: {Math.round(settings.position.x)}px, Y: {Math.round(settings.position.y)}px
-              </div>
-            </div>
-
-            {/* Size Display */}
-            <div className="space-y-2">
-              <Label>Size</Label>
-              <div className="text-sm text-muted-foreground">
-                {Math.round(settings.size.width)} × {Math.round(settings.size.height)}px
-              </div>
-            </div>
-
-            {/* Quick Size Presets */}
-            <div className="space-y-2">
-              <Label>Quick Sizes</Label>
-              <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => updateSize({ width: 100, height: 67 })}
-                >
-                  Small
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => updateSize({ width: 150, height: 100 })}
-                >
-                  Medium
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => updateSize({ width: 200, height: 133 })}
-                >
-                  Large
-                </Button>
-              </div>
-            </div>
-
             {/* Reset Button */}
             <Button
-              variant="destructive"
+              variant="outline"
               size="sm"
               onClick={resetToDefaults}
-              className="w-full"
+              className="w-full flex items-center gap-2"
             >
-              Reset to Defaults
+              <RotateCcw className="h-4 w-4" />
+              Reset Position & Size
             </Button>
 
             {/* Instructions */}
-            <div className="text-xs text-muted-foreground bg-muted p-2 rounded">
-              <strong>Instructions:</strong>
-              <ul className="mt-1 space-y-1">
-                <li>• Hover over logo to see controls</li>
+            <div className="text-xs text-muted-foreground bg-muted p-3 rounded">
+              <strong>How to use:</strong>
+              <ul className="mt-2 space-y-1">
                 <li>• Drag logo to move it anywhere</li>
-                <li>• Drag the corner handle to resize</li>
-                <li>• Logo position is saved automatically</li>
+                <li>• Hold Ctrl + scroll to resize logo</li>
+                <li>• Position saves automatically</li>
+                <li>• Toggle visibility on/off above</li>
               </ul>
             </div>
           </CardContent>
