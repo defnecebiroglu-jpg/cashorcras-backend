@@ -14,9 +14,11 @@ export function DraggableCoin({
 }: DraggableCoinProps) {
   const [position, setPosition] = useState(initialPosition);
   const [size, setSize] = useState(initialSize);
+  const [rotation, setRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [showControls, setShowControls] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
   
   const coinRef = useRef<HTMLDivElement>(null);
 
@@ -65,25 +67,42 @@ export function DraggableCoin({
       }
     };
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isSelected) {
+        if (e.key === 'r' || e.key === 'R') {
+          const newRotation = (rotation + 15) % 360;
+          setRotation(newRotation);
+          localStorage.setItem(`coin-${id}-rotation`, JSON.stringify(newRotation));
+        } else if (e.key === 'e' || e.key === 'E') {
+          const newRotation = (rotation - 15 + 360) % 360;
+          setRotation(newRotation);
+          localStorage.setItem(`coin-${id}-rotation`, JSON.stringify(newRotation));
+        }
+      }
+    };
+
     if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
     }
 
-    // Add wheel listener to the document
+    // Add wheel and keyboard listeners
     document.addEventListener("wheel", handleWheel, { passive: false });
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("wheel", handleWheel);
+      document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isDragging, dragStart, size, id]);
+  }, [isDragging, dragStart, size, id, isSelected, rotation]);
 
-  // Load saved position and size from localStorage
+  // Load saved position, size, and rotation from localStorage
   useEffect(() => {
     const savedPosition = localStorage.getItem(`coin-${id}-position`);
     const savedSize = localStorage.getItem(`coin-${id}-size`);
+    const savedRotation = localStorage.getItem(`coin-${id}-rotation`);
     
     if (savedPosition) {
       setPosition(JSON.parse(savedPosition));
@@ -91,11 +110,15 @@ export function DraggableCoin({
     if (savedSize) {
       setSize(JSON.parse(savedSize));
     }
+    if (savedRotation) {
+      setRotation(JSON.parse(savedRotation));
+    }
   }, [id]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (e.target === coinRef.current || (e.target as HTMLElement).closest('.coin-image')) {
       setIsDragging(true);
+      setIsSelected(true);
       setDragStart({
         x: e.clientX - position.x,
         y: e.clientY - position.y,
@@ -103,20 +126,39 @@ export function DraggableCoin({
     }
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsSelected(true);
+  };
+
+  // Global click listener to deselect when clicking elsewhere
+  useEffect(() => {
+    const handleGlobalClick = (e: MouseEvent) => {
+      if (!coinRef.current?.contains(e.target as Node)) {
+        setIsSelected(false);
+      }
+    };
+
+    document.addEventListener("click", handleGlobalClick);
+    return () => document.removeEventListener("click", handleGlobalClick);
+  }, []);
+
   return (
     <div
       ref={coinRef}
       className={`fixed z-40 select-none transition-all duration-200 ${
         showControls ? 'drop-shadow-lg' : ''
-      }`}
+      } ${isSelected ? 'ring-2 ring-blue-500 ring-opacity-50' : ''}`}
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
         width: `${size.width}px`,
         height: `${size.height}px`,
         cursor: isDragging ? 'grabbing' : 'grab',
+        transform: `rotate(${rotation}deg)`,
       }}
       onMouseDown={handleMouseDown}
+      onClick={handleClick}
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => !isDragging && setShowControls(false)}
     >
@@ -130,9 +172,11 @@ export function DraggableCoin({
       
       {/* Size and Position Info - shows when hovering */}
       {showControls && (
-        <div className="absolute -bottom-8 left-0 text-xs bg-black bg-opacity-75 text-white px-2 py-1 rounded whitespace-nowrap">
-          {Math.round(position.x)}, {Math.round(position.y)} | {Math.round(size.width)}×{Math.round(size.height)}
-          <div className="text-[10px] opacity-75 mt-1">Ctrl+scroll to resize</div>
+        <div className="absolute -bottom-12 left-0 text-xs bg-black bg-opacity-75 text-white px-2 py-1 rounded whitespace-nowrap">
+          {Math.round(position.x)}, {Math.round(position.y)} | {Math.round(size.width)}×{Math.round(size.height)} | {rotation}°
+          <div className="text-[10px] opacity-75 mt-1">
+            Ctrl+scroll: resize | R/E: rotate | Click: select
+          </div>
         </div>
       )}
     </div>

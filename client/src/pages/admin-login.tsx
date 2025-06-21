@@ -54,6 +54,7 @@ export default function AdminLogin() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
       <LogoManager />
+      <DraggableCoins />
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
