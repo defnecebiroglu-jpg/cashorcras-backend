@@ -20,7 +20,7 @@ export function LogoManager() {
     const saved = localStorage.getItem("logoSettings");
     return saved ? JSON.parse(saved) : {
       visible: true,
-      position: { x: 229, y: -70 },
+      position: { x: 229, y: -200 },
       size: { width: 800, height: 533 },
       opacity: 100,
     };
@@ -50,7 +50,7 @@ export function LogoManager() {
   const resetToDefaults = () => {
     const defaultSettings = {
       visible: true,
-      position: { x: 229, y: -70 },
+      position: { x: 229, y: -200 },
       size: { width: 800, height: 533 },
       opacity: 100,
     };
@@ -119,7 +119,7 @@ export function LogoManager() {
             <div className="text-xs text-muted-foreground bg-muted p-3 rounded">
               <strong>Logo Status:</strong>
               <ul className="mt-2 space-y-1">
-                <li>• Fixed at position 229, -70</li>
+                <li>• Fixed at position 229, -200</li>
                 <li>• Fixed size: 800×533 pixels</li>
                 <li>• Cannot be moved or resized</li>
                 <li>• Use visibility toggle above to show/hide</li>

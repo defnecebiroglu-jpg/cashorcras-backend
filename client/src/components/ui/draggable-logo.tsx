@@ -9,7 +9,7 @@ interface DraggableLogoProps {
 }
 
 export function DraggableLogo({
-  initialPosition = { x: 229, y: -70 },
+  initialPosition = { x: 229, y: -200 },
   initialSize = { width: 800, height: 533 },
   onPositionChange,
   onSizeChange,
@@ -57,7 +57,7 @@ export function DraggableLogo({
 
 
   const resetPosition = () => {
-    const newPosition = { x: 229, y: -70 };
+    const newPosition = { x: 229, y: -200 };
     const newSize = { width: 800, height: 533 };
     setPosition(newPosition);
     setSize(newSize);
@@ -68,7 +68,7 @@ export function DraggableLogo({
   return (
     <div
       ref={logoRef}
-      className={`fixed z-60 select-none transition-shadow duration-200 ${
+      className={`fixed z-60 select-none transition-shadow duration-200 pointer-events-none ${
         showControls ? 'shadow-lg ring-2 ring-blue-500 ring-opacity-50' : ''
       }`}
       style={{
