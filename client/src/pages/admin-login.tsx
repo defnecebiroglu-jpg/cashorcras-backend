@@ -79,7 +79,7 @@ export default function AdminLogin() {
             </div>
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-[#52492f]"
               disabled={isLoading || !password.trim()}
             >
               {isLoading ? "Giriş Yapılıyor..." : "Giriş Yap"}
@@ -88,7 +88,7 @@ export default function AdminLogin() {
           <div className="mt-6 text-center">
             <Button 
               variant="ghost" 
-              className="text-muted-foreground"
+              className="text-[#73673f]"
               onClick={() => setLocation("/")}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
