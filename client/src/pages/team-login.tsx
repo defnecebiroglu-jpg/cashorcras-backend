@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LogoManager } from "@/components/ui/logo-manager";
-import coinImage from "@assets/C (2) 5 (2)_1750529353646.png";
+import { Coins } from "@/components/ui/coins";
 import { ChartLine } from "lucide-react";
 
 export default function TeamLogin() {
@@ -16,94 +16,7 @@ export default function TeamLogin() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
-  // Coin states - inline implementation
-  const [coins, setCoins] = useState([
-    { id: 1, x: 200, y: 200, size: 60, rotation: 0, selected: false },
-    { id: 2, x: 300, y: 250, size: 60, rotation: 0, selected: false },
-    { id: 3, x: 400, y: 300, size: 60, rotation: 0, selected: false },
-    { id: 4, x: 500, y: 200, size: 60, rotation: 0, selected: false },
-    { id: 5, x: 600, y: 250, size: 60, rotation: 0, selected: false },
-    { id: 6, x: 700, y: 300, size: 60, rotation: 0, selected: false },
-  ]);
-  const [draggedCoin, setDraggedCoin] = useState<number | null>(null);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
-  // Coin event handlers
-  const handleCoinMouseDown = (e: React.MouseEvent, coinId: number) => {
-    e.preventDefault();
-    setDraggedCoin(coinId);
-    setDragOffset({
-      x: e.clientX - coins.find(c => c.id === coinId)!.x,
-      y: e.clientY - coins.find(c => c.id === coinId)!.y,
-    });
-    
-    // Select coin
-    setCoins(prevCoins => 
-      prevCoins.map(coin => ({ ...coin, selected: coin.id === coinId }))
-    );
-  };
-
-  const handleCoinWheel = (e: React.WheelEvent, coinId: number) => {
-    if (e.ctrlKey) {
-      e.preventDefault();
-      const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1;
-      setCoins(prevCoins =>
-        prevCoins.map(coin =>
-          coin.id === coinId
-            ? { ...coin, size: Math.max(20, Math.min(200, coin.size * scaleFactor)) }
-            : coin
-        )
-      );
-    }
-  };
-
-  // Global mouse and keyboard events
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (draggedCoin !== null) {
-        setCoins(prevCoins =>
-          prevCoins.map(coin =>
-            coin.id === draggedCoin
-              ? { ...coin, x: e.clientX - dragOffset.x, y: e.clientY - dragOffset.y }
-              : coin
-          )
-        );
-      }
-    };
-
-    const handleMouseUp = () => {
-      setDraggedCoin(null);
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const selectedCoin = coins.find(c => c.selected);
-      if (selectedCoin) {
-        if (e.key.toLowerCase() === 'r') {
-          setCoins(prevCoins =>
-            prevCoins.map(coin =>
-              coin.selected ? { ...coin, rotation: (coin.rotation + 15) % 360 } : coin
-            )
-          );
-        } else if (e.key.toLowerCase() === 'e') {
-          setCoins(prevCoins =>
-            prevCoins.map(coin =>
-              coin.selected ? { ...coin, rotation: (coin.rotation - 15 + 360) % 360 } : coin
-            )
-          );
-        }
-      }
-    };
-
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [draggedCoin, dragOffset, coins]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,40 +57,7 @@ export default function TeamLogin() {
   return (
     <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-end justify-center p-4 bg-[#fff5ad] pb-32">
       <LogoManager />
-      {/* Draggable Coins - Debug */}
-      <div className="fixed top-4 left-4 bg-red-500 text-white p-2 z-50 text-sm">
-        Coins: {coins.length} | Image: {coinImage ? 'loaded' : 'missing'}
-      </div>
-      
-      {coins.map((coin) => (
-        <div
-          key={coin.id}
-          className={`fixed z-40 cursor-grab select-none border-2 border-red-500 ${
-            coin.selected ? 'ring-2 ring-yellow-400' : ''
-          }`}
-          style={{
-            left: `${coin.x}px`,
-            top: `${coin.y}px`,
-            width: `${coin.size}px`,
-            height: `${coin.size}px`,
-            transform: `rotate(${coin.rotation}deg)`,
-            backgroundColor: 'rgba(255, 255, 0, 0.3)',
-          }}
-          onMouseDown={(e) => handleCoinMouseDown(e, coin.id)}
-          onWheel={(e) => handleCoinWheel(e, coin.id)}
-          onClick={() => console.log('Coin clicked:', coin.id)}
-        >
-          <div className="text-xs text-black">{coin.id}</div>
-          <img
-            src={coinImage}
-            alt={`Coin ${coin.id}`}
-            className="w-full h-full object-contain pointer-events-none"
-            draggable={false}
-            onLoad={() => console.log(`Coin ${coin.id} image loaded`)}
-            onError={() => console.log(`Coin ${coin.id} image failed`)}
-          />
-        </div>
-      ))}
+      <Coins />
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
