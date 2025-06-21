@@ -11,20 +11,33 @@ interface Coin {
 }
 
 export function Coins() {
-  const getDefaultCoins = () => [
-    { id: 1, x: 1100, y: 100, size: 60, rotation: 0, selected: false },
-    { id: 2, x: 1200, y: 100, size: 60, rotation: 0, selected: false },
-    { id: 3, x: 1300, y: 100, size: 60, rotation: 0, selected: false },
-    { id: 4, x: 1100, y: 200, size: 60, rotation: 0, selected: false },
-    { id: 5, x: 1200, y: 200, size: 60, rotation: 0, selected: false },
-    { id: 6, x: 1300, y: 200, size: 60, rotation: 0, selected: false },
-  ];
+  // Function to capture current state as new defaults
+  const captureCurrentAsDefaults = () => {
+    const currentCoins = localStorage.getItem('coins-data');
+    if (currentCoins) {
+      const parsed = JSON.parse(currentCoins);
+      console.log('Current coin configuration captured as defaults:', parsed);
+      return parsed;
+    }
+    return [
+      { id: 1, x: 1100, y: 100, size: 60, rotation: 0, selected: false },
+      { id: 2, x: 1200, y: 100, size: 60, rotation: 0, selected: false },
+      { id: 3, x: 1300, y: 100, size: 60, rotation: 0, selected: false },
+      { id: 4, x: 1100, y: 200, size: 60, rotation: 0, selected: false },
+      { id: 5, x: 1200, y: 200, size: 60, rotation: 0, selected: false },
+      { id: 6, x: 1300, y: 200, size: 60, rotation: 0, selected: false },
+    ];
+  };
+
+  const getDefaultCoins = captureCurrentAsDefaults;
 
   const [coins, setCoins] = useState<Coin[]>(() => {
-    // Force reset to new safe positions
-    const defaultCoins = getDefaultCoins();
-    localStorage.setItem('coins-data', JSON.stringify(defaultCoins));
-    return defaultCoins;
+    // Load current positions and fix them as defaults
+    const savedCoins = localStorage.getItem('coins-data');
+    if (savedCoins) {
+      return JSON.parse(savedCoins);
+    }
+    return getDefaultCoins();
   });
   
   const [draggedCoin, setDraggedCoin] = useState<number | null>(null);
