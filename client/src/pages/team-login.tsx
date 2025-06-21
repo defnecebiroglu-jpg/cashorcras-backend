@@ -57,13 +57,12 @@ export default function TeamLogin() {
   return (
     <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-end justify-center p-4 bg-[#fff5ad] pb-32">
       <LogoManager />
-
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-      <Card className="w-full max-w-lg bg-[#fbf7eb] relative z-50">
+      <Card className="w-full max-w-lg bg-[#fee58a] relative z-50">
         <CardHeader className="text-center py-8">
-          <p className="text-muted-foreground text-lg">Takım Girişi</p>
+          <p className="text-lg text-[#6d5f3b]">Takım Girişi</p>
         </CardHeader>
         <CardContent className="px-8 pb-8">
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -76,12 +75,12 @@ export default function TeamLogin() {
                 value={accessCode}
                 onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
                 required
-                className="h-12 text-base"
+                className="h-12 text-base bg-[#ffffff]"
               />
             </div>
             <Button
               type="submit"
-              className="w-full bg-[#f5d456] text-[#000000] hover:bg-[#f5d456]/90 h-12 text-base font-semibold"
+              className="w-full bg-[#fff7c9] text-[#635a3b] hover:bg-[#fff7c9]/90 h-12 text-base font-semibold"
               disabled={isLoading || !accessCode.trim()}
             >
               {isLoading ? "Giriş Yapılıyor..." : "Takıma Giriş Yap"}
@@ -92,7 +91,7 @@ export default function TeamLogin() {
               Admin girişi için{" "}
               <Button 
                 variant="link" 
-                className="p-0 h-auto font-normal text-[#c79d0a] text-base"
+                className="p-0 h-auto font-normal text-[#fffcf2] text-base"
                 onClick={() => setLocation("/admin-login")}
               >
                 buraya tıklayın
