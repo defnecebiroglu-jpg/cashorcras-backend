@@ -87,7 +87,7 @@ export default function TeamLogin() {
             </Button>
           </form>
           <div className="mt-8 text-center">
-            <p className="text-base text-muted-foreground">
+            <p className="text-base text-[#6d5f3b]">
               Admin girişi için{" "}
               <Button 
                 variant="link" 
