@@ -20,7 +20,7 @@ export function LogoManager() {
     const saved = localStorage.getItem("logoSettings");
     return saved ? JSON.parse(saved) : {
       visible: true,
-      position: { x: 50, y: 50 },
+      position: { x: 229, y: -70 },
       size: { width: 800, height: 533 },
       opacity: 100,
     };
@@ -50,7 +50,7 @@ export function LogoManager() {
   const resetToDefaults = () => {
     const defaultSettings = {
       visible: true,
-      position: { x: 50, y: 50 },
+      position: { x: 229, y: -70 },
       size: { width: 800, height: 533 },
       opacity: 100,
     };

@@ -9,7 +9,7 @@ interface DraggableLogoProps {
 }
 
 export function DraggableLogo({
-  initialPosition = { x: 50, y: 50 },
+  initialPosition = { x: 229, y: -70 },
   initialSize = { width: 800, height: 533 },
   onPositionChange,
   onSizeChange,
@@ -65,7 +65,7 @@ export function DraggableLogo({
 
 
   const resetPosition = () => {
-    const newPosition = { x: 50, y: 50 };
+    const newPosition = { x: 229, y: -70 };
     const newSize = { width: 800, height: 533 };
     setPosition(newPosition);
     setSize(newSize);
