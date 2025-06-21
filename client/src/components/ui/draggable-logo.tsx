@@ -68,7 +68,7 @@ export function DraggableLogo({
   return (
     <div
       ref={logoRef}
-      className={`fixed z-40 select-none transition-shadow duration-200 ${
+      className={`fixed z-60 select-none transition-shadow duration-200 ${
         showControls ? 'shadow-lg ring-2 ring-blue-500 ring-opacity-50' : ''
       }`}
       style={{
