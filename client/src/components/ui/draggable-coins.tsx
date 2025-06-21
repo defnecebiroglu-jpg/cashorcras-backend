@@ -3,26 +3,31 @@ import coinImage from "@assets/C (2) 5 (2)_1750529353646.png";
 
 interface DraggableCoinProps {
   id: number;
-  initialPosition?: { x: number; y: number };
-  initialSize?: { width: number; height: number };
 }
 
-export function DraggableCoin({
-  id,
-  initialPosition = { x: 100 + id * 60, y: 100 + id * 60 },
-  initialSize = { width: 80, height: 80 },
-}: DraggableCoinProps) {
-  const [position, setPosition] = useState(initialPosition);
-  const [size, setSize] = useState(initialSize);
+export function DraggableCoin({ id }: DraggableCoinProps) {
+  const [position, setPosition] = useState({ x: 200 + id * 70, y: 200 + id * 40 });
+  const [size, setSize] = useState({ width: 60, height: 60 });
   const [rotation, setRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [showControls, setShowControls] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   
   const coinRef = useRef<HTMLDivElement>(null);
 
-  // Handle mouse move for dragging and wheel for resizing
+  // Load saved values from localStorage
+  useEffect(() => {
+    const savedPosition = localStorage.getItem(`coin-${id}-position`);
+    const savedSize = localStorage.getItem(`coin-${id}-size`);
+    const savedRotation = localStorage.getItem(`coin-${id}-rotation`);
+    
+    if (savedPosition) setPosition(JSON.parse(savedPosition));
+    if (savedSize) setSize(JSON.parse(savedSize));
+    if (savedRotation) setRotation(JSON.parse(savedRotation));
+  }, [id]);
+
+  // Handle dragging
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {
@@ -31,7 +36,6 @@ export function DraggableCoin({
           y: e.clientY - dragStart.y,
         };
         setPosition(newPosition);
-        // Save position to localStorage
         localStorage.setItem(`coin-${id}-position`, JSON.stringify(newPosition));
       }
     };
@@ -40,101 +44,69 @@ export function DraggableCoin({
       setIsDragging(false);
     };
 
-    const handleWheel = (e: WheelEvent) => {
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault();
-        const rect = coinRef.current?.getBoundingClientRect();
-        if (rect) {
-          const mouseX = e.clientX;
-          const mouseY = e.clientY;
-          const coinX = rect.left;
-          const coinY = rect.top;
-          const coinRight = rect.right;
-          const coinBottom = rect.bottom;
-          
-          // Check if mouse is over the coin
-          if (mouseX >= coinX && mouseX <= coinRight && mouseY >= coinY && mouseY <= coinBottom) {
-            const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1;
-            const newSize = {
-              width: Math.max(20, Math.min(200, size.width * scaleFactor)),
-              height: Math.max(20, Math.min(200, size.height * scaleFactor)),
-            };
-            setSize(newSize);
-            // Save size to localStorage
-            localStorage.setItem(`coin-${id}-size`, JSON.stringify(newSize));
-          }
-        }
-      }
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (isSelected) {
-        if (e.key === 'r' || e.key === 'R') {
-          const newRotation = (rotation + 15) % 360;
-          setRotation(newRotation);
-          localStorage.setItem(`coin-${id}-rotation`, JSON.stringify(newRotation));
-        } else if (e.key === 'e' || e.key === 'E') {
-          const newRotation = (rotation - 15 + 360) % 360;
-          setRotation(newRotation);
-          localStorage.setItem(`coin-${id}-rotation`, JSON.stringify(newRotation));
-        }
-      }
-    };
-
     if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
+      return () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+      };
     }
+  }, [isDragging, dragStart, id]);
 
-    // Add wheel and keyboard listeners
-    document.addEventListener("wheel", handleWheel, { passive: false });
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-      document.removeEventListener("wheel", handleWheel);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isDragging, dragStart, size, id, isSelected, rotation]);
-
-  // Load saved position, size, and rotation from localStorage
+  // Handle resizing with Ctrl+scroll
   useEffect(() => {
-    const savedPosition = localStorage.getItem(`coin-${id}-position`);
-    const savedSize = localStorage.getItem(`coin-${id}-size`);
-    const savedRotation = localStorage.getItem(`coin-${id}-rotation`);
-    
-    if (savedPosition) {
-      setPosition(JSON.parse(savedPosition));
-    }
-    if (savedSize) {
-      setSize(JSON.parse(savedSize));
-    }
-    if (savedRotation) {
-      setRotation(JSON.parse(savedRotation));
-    }
-  }, [id]);
+    const handleWheel = (e: WheelEvent) => {
+      if ((e.ctrlKey || e.metaKey) && coinRef.current) {
+        const rect = coinRef.current.getBoundingClientRect();
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        if (mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1;
+          const newSize = {
+            width: Math.max(20, Math.min(200, size.width * scaleFactor)),
+            height: Math.max(20, Math.min(200, size.height * scaleFactor)),
+          };
+          setSize(newSize);
+          localStorage.setItem(`coin-${id}-size`, JSON.stringify(newSize));
+        }
+      }
+    };
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.target === coinRef.current || (e.target as HTMLElement).closest('.coin-image')) {
-      setIsDragging(true);
-      setIsSelected(true);
-      setDragStart({
-        x: e.clientX - position.x,
-        y: e.clientY - position.y,
-      });
-    }
-  };
+    document.addEventListener("wheel", handleWheel, { passive: false });
+    return () => document.removeEventListener("wheel", handleWheel);
+  }, [size, id]);
 
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsSelected(true);
-  };
+  // Handle rotation with R/E keys
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isSelected) {
+        let newRotation = rotation;
+        if (e.key.toLowerCase() === 'r') {
+          newRotation = (rotation + 15) % 360;
+        } else if (e.key.toLowerCase() === 'e') {
+          newRotation = (rotation - 15 + 360) % 360;
+        }
+        
+        if (newRotation !== rotation) {
+          setRotation(newRotation);
+          localStorage.setItem(`coin-${id}-rotation`, JSON.stringify(newRotation));
+        }
+      }
+    };
 
-  // Global click listener to deselect when clicking elsewhere
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isSelected, rotation, id]);
+
+  // Handle selection/deselection
   useEffect(() => {
     const handleGlobalClick = (e: MouseEvent) => {
-      if (!coinRef.current?.contains(e.target as Node)) {
+      if (coinRef.current && !coinRef.current.contains(e.target as Node)) {
         setIsSelected(false);
       }
     };
@@ -143,39 +115,54 @@ export function DraggableCoin({
     return () => document.removeEventListener("click", handleGlobalClick);
   }, []);
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsSelected(true);
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y,
+    });
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsSelected(true);
+  };
+
   return (
     <div
       ref={coinRef}
-      className={`fixed z-40 select-none transition-all duration-200 ${
-        showControls ? 'drop-shadow-lg' : ''
-      } ${isSelected ? 'ring-2 ring-blue-500 ring-opacity-50' : ''}`}
+      className={`fixed z-40 select-none cursor-grab ${
+        isDragging ? 'cursor-grabbing' : ''
+      } ${isSelected ? 'ring-2 ring-yellow-400' : ''}`}
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
         width: `${size.width}px`,
         height: `${size.height}px`,
-        cursor: isDragging ? 'grabbing' : 'grab',
         transform: `rotate(${rotation}deg)`,
+        transition: isDragging ? 'none' : 'transform 0.1s ease',
       }}
       onMouseDown={handleMouseDown}
       onClick={handleClick}
-      onMouseEnter={() => setShowControls(true)}
-      onMouseLeave={() => !isDragging && setShowControls(false)}
+      onMouseEnter={() => setShowInfo(true)}
+      onMouseLeave={() => setShowInfo(false)}
     >
-      {/* Coin Image */}
       <img
         src={coinImage}
         alt={`Coin ${id}`}
-        className="coin-image w-full h-full object-contain pointer-events-none"
+        className="w-full h-full object-contain pointer-events-none"
         draggable={false}
       />
       
-      {/* Size and Position Info - shows when hovering */}
-      {showControls && (
-        <div className="absolute -bottom-12 left-0 text-xs bg-black bg-opacity-75 text-white px-2 py-1 rounded whitespace-nowrap">
-          {Math.round(position.x)}, {Math.round(position.y)} | {Math.round(size.width)}×{Math.round(size.height)} | {rotation}°
+      {showInfo && (
+        <div className="absolute -bottom-16 left-0 text-xs bg-black bg-opacity-80 text-white px-2 py-1 rounded whitespace-nowrap z-50">
+          <div>Pos: {position.x}, {position.y}</div>
+          <div>Size: {Math.round(size.width)}×{Math.round(size.height)}</div>
+          <div>Rotation: {rotation}°</div>
           <div className="text-[10px] opacity-75 mt-1">
-            Ctrl+scroll: resize | R/E: rotate | Click: select
+            Drag: move | Ctrl+scroll: resize | R/E: rotate
           </div>
         </div>
       )}
@@ -188,7 +175,7 @@ export function DraggableCoins() {
   return (
     <>
       {[1, 2, 3, 4, 5, 6].map((id) => (
-        <DraggableCoin key={id} id={id} />
+        <DraggableCoin key={`coin-${id}`} id={id} />
       ))}
     </>
   );
