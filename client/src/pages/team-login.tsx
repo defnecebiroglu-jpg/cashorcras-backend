@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LogoManager } from "@/components/ui/logo-manager";
+import { DraggableCoins } from "@/components/ui/draggable-coins";
 import { ChartLine } from "lucide-react";
 
 export default function TeamLogin() {
@@ -54,6 +55,7 @@ export default function TeamLogin() {
   return (
     <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-end justify-center p-4 bg-[#fff5ad] pb-32">
       <LogoManager />
+      <DraggableCoins />
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
