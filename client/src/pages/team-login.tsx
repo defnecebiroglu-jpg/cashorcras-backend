@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { ChartLine } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 
 export default function TeamLogin() {
   const [accessCode, setAccessCode] = useState("");
@@ -51,20 +51,22 @@ export default function TeamLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 bg-[#fff5ad]">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-      <Card className="w-full max-w-md bg-[#fbf7eb]">
-        <CardHeader className="text-center">
-          <div className="mx-auto w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
-            <ChartLine className="text-primary-foreground h-6 w-6" />
+      <div className="w-full max-w-md">
+        {/* Logo Frame */}
+        <div className="rounded-t-lg p-6 text-center shadow-sm mt-[-23px] mb-[-23px] pt-[0px] pb-[0px] ml-[0px] mr-[0px] pl-[14px] pr-[14px] bg-[#fff5ad]">
+          <div className="mx-auto flex items-center justify-center relative w-48 h-32">
+            <TrendingUp className="w-20 h-20 text-[#c7a230]" />
           </div>
-          <CardTitle className="text-2xl font-bold">
-            Cash or Crash
-          </CardTitle>
-          <p className="text-muted-foreground">Takım Girişi</p>
-        </CardHeader>
+        </div>
+
+        <Card className="rounded-t-none rounded-b-lg border-none text-card-foreground shadow-sm bg-[#fbf7eb]">
+          <CardHeader className="text-center pt-4">
+            <p className="text-[#c7a230] text-[20px] font-bold ml-[6px] mr-[6px] mt-[-1px] mb-[-1px] pt-[-5px] pb-[-5px] pl-[0px] pr-[0px]">TAKIM GİRİŞİ</p>
+          </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
@@ -80,7 +82,7 @@ export default function TeamLogin() {
             </div>
             <Button
               type="submit"
-              className="w-full bg-[#f5d456] text-[#000000] hover:bg-[#f5d456]/90"
+              className="w-full"
               disabled={isLoading || !accessCode.trim()}
             >
               {isLoading ? "Giriş Yapılıyor..." : "Takıma Giriş Yap"}
@@ -91,7 +93,7 @@ export default function TeamLogin() {
               Admin girişi için{" "}
               <Button 
                 variant="link" 
-                className="p-0 h-auto font-normal text-[#c79d0a]"
+                className="p-0 h-auto font-normal text-primary"
                 onClick={() => setLocation("/admin-login")}
               >
                 buraya tıklayın
@@ -99,7 +101,8 @@ export default function TeamLogin() {
             </p>
           </div>
         </CardContent>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 }
