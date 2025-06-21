@@ -52,11 +52,11 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 bg-[#73673f]">
+    <div className="min-h-screen from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 bg-[#73673f] text-[#403a1e]">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md bg-[#bda864]">
         <CardHeader className="text-center">
           
           <CardTitle className="text-2xl font-bold">
