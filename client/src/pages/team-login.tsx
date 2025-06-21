@@ -144,11 +144,15 @@ export default function TeamLogin() {
   return (
     <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-end justify-center p-4 bg-[#fff5ad] pb-32">
       <LogoManager />
-      {/* Draggable Coins */}
+      {/* Draggable Coins - Debug */}
+      <div className="fixed top-4 left-4 bg-red-500 text-white p-2 z-50 text-sm">
+        Coins: {coins.length} | Image: {coinImage ? 'loaded' : 'missing'}
+      </div>
+      
       {coins.map((coin) => (
         <div
           key={coin.id}
-          className={`fixed z-40 cursor-grab select-none ${
+          className={`fixed z-40 cursor-grab select-none border-2 border-red-500 ${
             coin.selected ? 'ring-2 ring-yellow-400' : ''
           }`}
           style={{
@@ -157,15 +161,20 @@ export default function TeamLogin() {
             width: `${coin.size}px`,
             height: `${coin.size}px`,
             transform: `rotate(${coin.rotation}deg)`,
+            backgroundColor: 'rgba(255, 255, 0, 0.3)',
           }}
           onMouseDown={(e) => handleCoinMouseDown(e, coin.id)}
           onWheel={(e) => handleCoinWheel(e, coin.id)}
+          onClick={() => console.log('Coin clicked:', coin.id)}
         >
+          <div className="text-xs text-black">{coin.id}</div>
           <img
             src={coinImage}
             alt={`Coin ${coin.id}`}
             className="w-full h-full object-contain pointer-events-none"
             draggable={false}
+            onLoad={() => console.log(`Coin ${coin.id} image loaded`)}
+            onError={() => console.log(`Coin ${coin.id} image failed`)}
           />
         </div>
       ))}
