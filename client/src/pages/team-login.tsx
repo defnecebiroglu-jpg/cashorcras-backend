@@ -137,7 +137,7 @@ export default function TeamLogin() {
       <div className="absolute top-4 right-4 z-10">
         <ThemeToggle />
       </div>
-      <div className="bg-[#FFFAE2] p-10 rounded-xl text-center w-80 shadow-lg font-sans relative z-10 ml-[3px] mr-[3px]">
+      <div className="bg-[#FFFAE2] p-12 rounded-xl text-center w-96 shadow-lg font-sans relative z-10">
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <input
