@@ -80,7 +80,7 @@ export default function TeamDashboard() {
             <div className="flex items-center space-x-6">
               <div className="text-right">
                 <div className="text-sm text-[#7f7952]">Nakit Bakiye</div>
-                <div className="text-lg font-bold">
+                <div className="text-lg font-bold text-[#666147]">
                   ₺{portfolio ? parseFloat(portfolio.team.cashBalance).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00"}
                 </div>
               </div>
