@@ -114,12 +114,13 @@ export default function TeamLogin() {
       {/* Draggable Logo */}
       <div
         ref={logoRef}
-        className={`absolute z-20 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+        className={`absolute z-20 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} border-2 border-dashed border-blue-300 border-opacity-30 hover:border-opacity-60 transition-all`}
         style={{
           left: logoPosition.x,
           top: logoPosition.y,
-          width: logoSize.width,
-          height: logoSize.height,
+          width: logoSize.width + 40,
+          height: logoSize.height + 40,
+          padding: '20px',
         }}
         onMouseDown={handleMouseDown}
       >
@@ -129,7 +130,7 @@ export default function TeamLogin() {
           className="w-full h-full object-contain pointer-events-none"
           draggable={false}
         />
-        <div className="absolute bottom-0 right-0 text-xs bg-black bg-opacity-50 text-white px-1 rounded opacity-50">
+        <div className="absolute bottom-1 right-1 text-xs bg-black bg-opacity-50 text-white px-1 rounded opacity-50">
           Drag to move • Ctrl+Scroll to resize {isDragging ? '(DRAGGING)' : ''}
         </div>
       </div>
