@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+
 import { TrendingUp } from "lucide-react";
 import coinImage from "@assets/Adsız tasarım (6)_1750263227259.png";
 
@@ -53,40 +53,17 @@ export default function TeamLogin() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center relative overflow-hidden">
-      {/* Background Coins */}
       
-      <img 
-        src={coinImage} 
-        alt="Coin" 
-        className="absolute top-20 right-16 w-20 h-20 opacity-15 animate-bounce"
-        style={{ animationDelay: '0.5s' }}
-      />
-      <img 
-        src={coinImage} 
-        alt="Coin" 
-        className="absolute bottom-32 left-20 w-14 h-14 opacity-25 animate-pulse"
-        style={{ animationDelay: '1s' }}
-      />
-      
-      
-      <img 
-        src={coinImage} 
-        alt="Coin" 
-        className="absolute top-1/3 right-8 w-16 h-16 opacity-20 animate-bounce"
-        style={{ animationDelay: '2.5s' }}
-      />
 
-      <div className="absolute top-4 right-4 z-10">
-        <ThemeToggle />
-      </div>
       
-      <div className="bg-[#FFFAE2] p-10 rounded-xl text-center w-80 shadow-lg font-sans relative z-10">
+      
+      <div className="bg-[#FFFAE2] p-10 rounded-xl text-center w-80 shadow-lg font-sans relative z-10 pt-20">
         {/* Logo */}
-        <div className="mb-5">
+        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
           <img 
             src={coinImage} 
             alt="Cash or Crash Logo" 
-            className="w-36 h-36 mx-auto"
+            className="w-40 h-40"
           />
         </div>
 
