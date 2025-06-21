@@ -67,7 +67,7 @@ export default function TeamLogin() {
         <CardContent className="px-8 pb-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-3">
-              <Label htmlFor="accessCode" className="text-base">Erişim Kodu</Label>
+              <Label htmlFor="accessCode" className="text-base text-[#635a3b]">Erişim Kodu</Label>
               <Input
                 id="accessCode"
                 type="text"
