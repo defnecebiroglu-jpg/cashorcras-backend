@@ -157,17 +157,7 @@ export default function TeamLogin() {
           </button>
         </form>
         
-        <div className="mt-6">
-          <p className="text-sm text-gray-600">
-            Admin girişi için{" "}
-            <button 
-              className="text-[#E4B300] underline bg-transparent border-none cursor-pointer"
-              onClick={() => setLocation("/admin-login")}
-            >
-              buraya tıklayın
-            </button>
-          </p>
-        </div>
+        
       </div>
     </div>
   );
