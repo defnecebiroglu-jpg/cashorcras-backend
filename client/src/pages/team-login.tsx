@@ -51,7 +51,7 @@ export default function TeamLogin() {
   };
 
   return (
-    <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 bg-[#fff5ad]">
+    <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
