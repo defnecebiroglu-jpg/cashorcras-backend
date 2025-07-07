@@ -321,6 +321,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // PATCH endpoint for bulk price updates
+  app.patch('/api/companies/:id', async (req, res) => {
+    try {
+      const { price } = req.body;
+      if (!price || isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
+        return res.status(400).json({ message: 'Invalid price value' });
+      }
+      
+      const company = await storage.updateCompany(parseInt(req.params.id), { price });
+      res.json(company);
+    } catch (error) {
+      res.status(400).json({ message: 'Failed to update company price' });
+    }
+  });
+
   // Currencies
   app.get('/api/currencies', async (req, res) => {
     try {
@@ -363,6 +378,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: 'Failed to delete currency' });
+    }
+  });
+
+  // PATCH endpoint for bulk rate updates
+  app.patch('/api/currencies/:id', async (req, res) => {
+    try {
+      const { rate } = req.body;
+      if (!rate || isNaN(parseFloat(rate)) || parseFloat(rate) <= 0) {
+        return res.status(400).json({ message: 'Invalid rate value' });
+      }
+      
+      const currency = await storage.updateCurrency(parseInt(req.params.id), { rate });
+      res.json(currency);
+    } catch (error) {
+      res.status(400).json({ message: 'Failed to update currency rate' });
     }
   });
 
