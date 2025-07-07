@@ -14,8 +14,8 @@ export function NavigationTabs({ activeTab, onTabChange }: NavigationTabsProps) 
 
   return (
     <nav className="bg-white border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-[#fffce6]">
-        <div className="flex space-x-8 bg-[#fffce6]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex space-x-8">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -24,7 +24,11 @@ export function NavigationTabs({ activeTab, onTabChange }: NavigationTabsProps) 
               <button
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
-                className="py-4 px-1 border-b-2 font-medium text-sm transition-colors border-primary text-[#7f7952]"
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  isActive
+                    ? "border-primary text-primary"
+                    : "border-transparent text-slate-500 hover:text-slate-700"
+                }`}
               >
                 <Icon className="h-4 w-4 mr-2 inline" />
                 {tab.label}

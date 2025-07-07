@@ -5,16 +5,12 @@ import { StockMarketDesk } from "@/components/dashboard/stock-market-desk";
 import { CurrencyDesk } from "@/components/dashboard/currency-desk";
 import { StartupDesk } from "@/components/dashboard/startup-desk";
 
-
-
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<"stocks" | "currency" | "startup">("stocks");
   const [selectedTeamId, setSelectedTeamId] = useState(1);
 
   return (
     <div className="min-h-screen bg-slate-50">
-
-
       <Header selectedTeamId={selectedTeamId} onTeamChange={setSelectedTeamId} />
       <NavigationTabs activeTab={activeTab} onTabChange={setActiveTab} />
       
