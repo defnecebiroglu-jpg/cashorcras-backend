@@ -101,6 +101,28 @@ currency,İsviçre Frangı,38.54`;
     setCurrencyUpdates([]);
   };
 
+  const processCsvText = () => {
+    if (!csvText.trim()) {
+      toast({ title: "CSV metni boş olamaz", variant: "destructive" });
+      return;
+    }
+    setIsProcessing(true);
+    
+    try {
+      const { stocks, currencies } = parseCSV(csvText);
+      setStockUpdates(stocks);
+      setCurrencyUpdates(currencies);
+    } catch (error) {
+      toast({ title: "CSV verisi işlenemedi", variant: "destructive" });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const loadTemplate = () => {
+    setCsvText(defaultCsvTemplate);
+  };
+
   const parseCSV = (text: string): { stocks: PriceUpdate[]; currencies: PriceUpdate[] } => {
     const lines = text.trim().split('\n');
     const stocks: PriceUpdate[] = [];
@@ -108,6 +130,7 @@ currency,İsviçre Frangı,38.54`;
 
     // Skip header line if it exists
     const dataLines = lines.filter(line => 
+      line.toLowerCase().includes('type,') || 
       line.toLowerCase().includes('stock,') || 
       line.toLowerCase().includes('currency,')
     );
@@ -116,6 +139,7 @@ currency,İsviçre Frangı,38.54`;
       const [type, nameStr, priceStr] = line.split(',').map(s => s.trim());
       
       if (!type || !nameStr || !priceStr) continue;
+      if (type.toLowerCase() === 'type') continue; // Skip header
 
       const price = parseFloat(priceStr);
 
@@ -189,28 +213,6 @@ currency,İsviçre Frangı,38.54`;
     }
   };
 
-  const processCsvText = () => {
-    if (!csvText.trim()) {
-      toast({ title: "CSV metni boş olamaz", variant: "destructive" });
-      return;
-    }
-    setIsProcessing(true);
-    
-    try {
-      const { stocks, currencies } = parseCSV(csvText);
-      setStockUpdates(stocks);
-      setCurrencyUpdates(currencies);
-    } catch (error) {
-      toast({ title: "CSV verisi işlenemedi", variant: "destructive" });
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const loadTemplate = () => {
-    setCsvText(defaultCsvTemplate);
-  };
-
   const confirmStockUpdates = () => {
     const validUpdates = stockUpdates
       .filter(update => update.valid)
@@ -227,7 +229,7 @@ currency,İsviçre Frangı,38.54`;
   const confirmCurrencyUpdates = () => {
     const validUpdates = currencyUpdates
       .filter(update => update.valid)
-      .map(update => ({ currencyId: update.id, newRate: update.newPrice }));
+      .map(update => ({ currencyId: update.id, newRate: update.newRate }));
     
     if (validUpdates.length === 0) {
       toast({ title: "Güncellenecek geçerli döviz kuru yok", variant: "destructive" });
@@ -248,135 +250,51 @@ currency,İsviçre Frangı,38.54`;
           Toplu Fiyat Güncelleme
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          CSV dosyası veya metin editörü ile hisse ve döviz fiyatlarını toplu olarak güncelleyin
+          CSV dosyası ile hisse ve döviz fiyatlarını toplu olarak güncelleyin
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
-        <Tabs defaultValue="editor" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="editor" className="flex items-center gap-2">
-              <Edit3 className="h-4 w-4" />
-              CSV Editörü
-            </TabsTrigger>
-            <TabsTrigger value="upload" className="flex items-center gap-2">
-              <Upload className="h-4 w-4" />
-              Dosya Yükle
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="editor" className="space-y-4">
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <Label htmlFor="csv-text">CSV Verisi</Label>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={loadTemplate}
-                  disabled={isProcessing}
-                >
-                  Şablon Yükle
-                </Button>
-              </div>
-              
-              <Textarea
-                id="csv-text"
-                placeholder="CSV verisini buraya yapıştırın veya yazın..."
-                value={csvText}
-                onChange={(e) => setCsvText(e.target.value)}
-                disabled={isProcessing}
-                className="min-h-[300px] font-mono text-sm"
-              />
-              
-              <div className="flex items-center gap-2">
-                <Button
-                  onClick={processCsvText}
-                  disabled={isProcessing || !csvText.trim()}
-                  className="flex items-center gap-2"
-                >
-                  {isProcessing ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      İşleniyor...
-                    </>
-                  ) : (
-                    <>
-                      <FileText className="h-4 w-4" />
-                      Verileri İşle
-                    </>
-                  )}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={resetForm}
-                  disabled={isProcessing}
-                >
-                  Temizle
-                </Button>
-              </div>
+        {/* File Upload */}
+        <div className="space-y-4">
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label htmlFor="csv-file">CSV Dosyası</Label>
+            <Input
+              id="csv-file"
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+              disabled={isProcessing}
+            />
+          </div>
+          
+          <div className="text-sm text-muted-foreground">
+            <p className="font-medium mb-2">CSV Format Örneği:</p>
+            <div className="bg-muted p-3 rounded font-mono text-xs">
+              stock,1,150.75<br/>
+              stock,2,89.50<br/>
+              currency,1,34.2500<br/>
+              currency,2,0.8750
             </div>
-
-            <div className="text-sm text-muted-foreground">
-              <p className="font-medium mb-2">CSV Format Örneği:</p>
-              <div className="bg-muted p-3 rounded font-mono text-xs">
-                type,name,new_price<br/>
-                stock,Apple Inc.,175.50<br/>
-                stock,Microsoft Corporation,380.25<br/>
-                currency,ABD Doları,34.85<br/>
-                currency,Euro,37.92
-              </div>
-              <p className="mt-2">
-                <strong>Format:</strong> tip,isim,yeni_fiyat<br/>
-                <strong>Tips:</strong> stock (hisse), currency (döviz)<br/>
-                <strong>İsim:</strong> Tam şirket/döviz adı (büyük/küçük harf önemli değil)
-              </p>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="upload" className="space-y-4">
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="csv-file">CSV Dosyası</Label>
-              <Input
-                id="csv-file"
-                type="file"
-                accept=".csv"
-                onChange={handleFileUpload}
-                disabled={isProcessing}
-              />
-            </div>
-            
-            <div className="text-sm text-muted-foreground">
-              <p className="font-medium mb-2">CSV Format Örneği:</p>
-              <div className="bg-muted p-3 rounded font-mono text-xs">
-                type,name,new_price<br/>
-                stock,Apple Inc.,175.50<br/>
-                stock,Microsoft Corporation,380.25<br/>
-                currency,ABD Doları,34.85<br/>
-                currency,Euro,37.92
-              </div>
-              <p className="mt-2">
-                <strong>Format:</strong> tip,isim,yeni_fiyat<br/>
-                <strong>Tips:</strong> stock (hisse), currency (döviz)<br/>
-                <strong>İsim:</strong> Tam şirket/döviz adı (büyük/küçük harf önemli değil)
-              </p>
-            </div>
-          </TabsContent>
-        </Tabs>
+            <p className="mt-2">
+              <strong>Format:</strong> tip,id,yeni_fiyat
+            </p>
+          </div>
+        </div>
 
         {/* Processing State */}
         {isProcessing && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-            Veriler işleniyor...
+            Dosya işleniyor...
           </div>
         )}
 
         {/* Preview */}
-        {!isProcessing && (stockUpdates.length > 0 || currencyUpdates.length > 0) && (
+        {file && !isProcessing && (stockUpdates.length > 0 || currencyUpdates.length > 0) && (
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
-              <span className="font-medium">Önizleme</span>
+              <span className="font-medium">Önizleme: {file.name}</span>
             </div>
 
             <Tabs defaultValue="stocks" className="w-full">
@@ -435,7 +353,7 @@ currency,İsviçre Frangı,38.54`;
                   </div>
                 ) : (
                   <p className="text-center text-muted-foreground py-8">
-                    Veriler işlendikten sonra hisse fiyatı güncellemeleri burada görünecek
+                    Dosyada hisse fiyatı güncellemesi bulunamadı
                   </p>
                 )}
               </TabsContent>
@@ -486,11 +404,19 @@ currency,İsviçre Frangı,38.54`;
                   </div>
                 ) : (
                   <p className="text-center text-muted-foreground py-8">
-                    Veriler işlendikten sonra döviz kuru güncellemeleri burada görünecek
+                    Dosyada döviz kuru güncellemesi bulunamadı
                   </p>
                 )}
               </TabsContent>
             </Tabs>
+
+            <Button
+              variant="outline"
+              onClick={resetForm}
+              className="w-full"
+            >
+              Temizle
+            </Button>
           </div>
         )}
       </CardContent>
