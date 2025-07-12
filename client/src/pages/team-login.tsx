@@ -55,7 +55,7 @@ export default function TeamLogin() {
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-      <Card className="w-full max-w-md bg-[#fbf7eb]">
+      <Card className="w-full max-w-md bg-[#f0f6ff]">
         <CardHeader className="text-center">
           <div className="mx-auto w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
             <ChartLine className="text-primary-foreground h-6 w-6" />
