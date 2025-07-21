@@ -32,6 +32,20 @@ An advanced educational entrepreneurship simulation platform that transforms lea
 
 ## Recent Changes
 
+### 2025-01-21 - Portfolio Value Calculation Update
+- ✅ Updated portfolio value calculation to use current sell prices instead of purchase prices
+- ✅ Portfolio values now reflect what teams would receive if selling all assets at current market rates
+- ✅ Stock values calculated using `sellPrice` field instead of `price` field
+- ✅ Currency values calculated using `sellRate` field instead of `rate` field
+- ✅ More realistic portfolio valuation for educational simulation
+
+### 2025-01-07 - CSV Editor Enhancement
+- ✅ Added inline CSV editor to admin panel alongside file upload option
+- ✅ Built-in template loading with sample data for quick editing
+- ✅ Updated CSV format to use company/currency names instead of IDs
+- ✅ Copy/paste functionality for direct text editing in large textarea
+- ✅ Real-time validation and preview before applying changes
+
 ### 2025-01-07 - Bulk Price Update Enhancement
 - ✅ Added comprehensive bulk price update system with CSV upload
 - ✅ Implemented PATCH endpoints for companies (`/api/companies/:id`) and currencies (`/api/currencies/:id`)

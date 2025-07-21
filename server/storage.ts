@@ -252,11 +252,11 @@ export class MemStorage implements IStorage {
     const startup = await this.getTeamStartup(teamId);
 
     const totalStockValue = stocks.reduce((sum, stock) => {
-      return sum + (parseFloat(stock.company.price) * stock.shares);
+      return sum + (parseFloat(stock.company.sellPrice) * stock.shares);
     }, 0);
 
     const totalCurrencyValue = currencies.reduce((sum, currency) => {
-      return sum + (parseFloat(currency.amount) * parseFloat(currency.currency.rate));
+      return sum + (parseFloat(currency.amount) * parseFloat(currency.currency.sellRate));
     }, 0);
 
     const startupValue = startup ? parseFloat(startup.value) : 0;
