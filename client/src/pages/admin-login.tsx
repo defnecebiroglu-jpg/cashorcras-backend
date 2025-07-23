@@ -5,8 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { Settings, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 export default function AdminLogin() {
   const [password, setPassword] = useState("");
@@ -50,32 +49,45 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
-      <div className="absolute top-4 left-4">
+    <div className="min-h-screen bg-[#1B1B1B] flex items-center justify-center p-4 relative">
+      {/* Header with brand name */}
+      <div className="absolute top-8 left-8">
+        <h1 className="text-2xl font-bold text-[#E3DFD6]" style={{ fontFamily: "'Bowlby One', cursive" }}>
+          KALGIRISIMCILIK
+        </h1>
+      </div>
+
+      {/* Back button */}
+      <div className="absolute top-8 right-8">
         <Link href="/">
-          <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">
+          <Button variant="ghost" size="sm" className="text-[#E3DFD6] hover:text-white hover:bg-white/10">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Ana Sayfa
           </Button>
         </Link>
       </div>
-      <div className="absolute top-4 right-4">
-        <ThemeToggle />
-      </div>
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="mx-auto w-12 h-12 bg-slate-800 dark:bg-slate-200 rounded-lg flex items-center justify-center mb-4">
-            <Settings className="text-white dark:text-slate-800 h-6 w-6" />
-          </div>
-          <CardTitle className="text-2xl font-bold">
-            Yönetici Girişi
+
+      {/* Main login card */}
+      <Card className="w-full max-w-lg bg-[#2A2A2A] border-[#3A3A3A] shadow-2xl">
+        <CardHeader className="text-center pb-8">
+          <CardTitle className="text-4xl font-bold text-[#E3DFD6] mb-4" style={{ fontFamily: "'Bowlby One', cursive" }}>
+            YÖNETİCİ GİRİŞİ
           </CardTitle>
-          <p className="text-muted-foreground">Cash or Crash Admin Paneli</p>
+          <p className="text-[#B0B0B0] text-lg">
+            Admin paneline erişim için şifrenizi girin
+          </p>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="password">Yönetici Şifresi</Label>
+
+        <CardContent className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-3">
+              <Label 
+                htmlFor="password" 
+                className="text-[#E3DFD6] text-lg font-semibold"
+                style={{ fontFamily: "'Bowlby One', cursive" }}
+              >
+                YÖNETİCİ ŞİFRESİ
+              </Label>
               <Input
                 id="password"
                 type="password"
@@ -83,30 +95,36 @@ export default function AdminLogin() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="h-16 bg-[#3A3A3A] border-[#4A4A4A] text-[#E3DFD6] placeholder-[#888] focus:border-[#AA95C7] focus:ring-[#AA95C7]/20 text-2xl font-bold text-center tracking-wider"
+                style={{ fontSize: "30px", fontFamily: "'Bowlby One', cursive" }}
               />
             </div>
+            
             <Button
               type="submit"
-              className="w-full"
+              className="w-full h-16 bg-[#AA95C7] hover:bg-[#9A85B7] text-[#1B1B1B] font-bold text-xl transition-all duration-200 shadow-lg"
+              style={{ fontFamily: "'Bowlby One', cursive" }}
               disabled={isLoading || !password.trim()}
             >
-              {isLoading ? "Giriş Yapılıyor..." : "Giriş Yap"}
+              {isLoading ? "GİRİŞ YAPILIYOR..." : "ADMİN PANELİNE GİR"}
             </Button>
           </form>
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              Takım girişi için{" "}
-              <Button 
-                variant="link" 
-                className="p-0 h-auto font-normal text-primary"
-                onClick={() => setLocation("/team-login")}
-              >
-                buraya tıklayın
-              </Button>
-            </p>
+
+          {/* Team login link */}
+          <div className="pt-6 border-t border-[#3A3A3A] text-center">
+            <p className="text-[#B0B0B0] text-sm mb-2">Takım üyesi misiniz?</p>
+            <Button 
+              variant="link" 
+              className="text-[#AA95C7] hover:text-[#9A85B7] font-semibold"
+              onClick={() => setLocation("/team-login")}
+            >
+              Takım girişi için tıklayın
+            </Button>
           </div>
         </CardContent>
       </Card>
+
+
     </div>
   );
 }
