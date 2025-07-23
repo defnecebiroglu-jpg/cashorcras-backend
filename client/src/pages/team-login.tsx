@@ -173,7 +173,7 @@ export default function TeamLogin() {
                   disabled={isLoading || !accessCode.trim()}
                 >
                   <span 
-                    className="w-fit text-[32px] text-center tracking-[0] leading-normal text-[#1b1b1b]"
+                    className="w-fit text-[32px] text-center tracking-[0] leading-normal"
                     style={{ 
                       color: colors.buttonText, 
                       fontFamily: 'Bowlby One', 
