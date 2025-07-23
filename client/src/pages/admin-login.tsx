@@ -139,12 +139,6 @@ export default function AdminLogin() {
                 }}
               >
                 ADMIN GIRISI
-                {/* Admin indicator - orange dot */}
-                <span 
-                  className="absolute top-0 right-0 w-3 h-3 rounded-full"
-                  style={{ backgroundColor: '#FF9800' }}
-                  title="Admin Login"
-                ></span>
               </h1>
 
               <form onSubmit={handleSubmit} className="w-full space-y-[42px]">
