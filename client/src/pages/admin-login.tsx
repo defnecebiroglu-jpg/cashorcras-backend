@@ -150,12 +150,11 @@ export default function AdminLogin() {
               <form onSubmit={handleSubmit} className="w-full space-y-[42px]">
                 <div className="w-full">
                   <label 
-                    className="block h-5 text-[32px] tracking-[0] leading-10 whitespace-nowrap mb-[12px]"
+                    className="block h-5 text-[32px] tracking-[0] leading-10 whitespace-nowrap mb-4"
                     style={{ 
                       color: colors.textPrimary, 
                       fontFamily: 'Inter', 
-                      fontWeight: 800,
-                      marginTop: '-40px'
+                      fontWeight: 800 
                     }}
                   >
                     Yönetici Şifresi
