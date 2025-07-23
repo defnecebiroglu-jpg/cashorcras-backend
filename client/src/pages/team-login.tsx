@@ -151,15 +151,13 @@ export default function TeamLogin() {
               <form onSubmit={handleSubmit} className="w-full space-y-[42px]">
                 <div className="w-full">
                   <label 
-                    className="block h-5 text-[32px] tracking-[0] leading-10 whitespace-nowrap mt-[12px] mb-[12px]"
+                    className="block h-5 text-[32px] tracking-[0] leading-10 whitespace-nowrap mt-[12px] mb-[12px] text-[#1b1b1b]"
                     style={{ 
                       color: colors.textPrimary, 
                       fontFamily: 'Inter', 
                       fontWeight: 800 
                     }}
-                  >
-                    Erişim Kodu
-                  </label>
+                  >Erm Kodu</label>
                   
                   <Input
                     className="h-[60px] rounded-lg border-2 border-solid text-[30px] tracking-[0] leading-10 pl-[20px] pr-[20px]"
