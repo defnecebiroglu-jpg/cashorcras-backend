@@ -140,12 +140,6 @@ export default function TeamLogin() {
                 }}
               >
                 TAKIM GIRISI
-                {/* Team indicator - green dot */}
-                <span 
-                  className="absolute top-0 right-0 w-3 h-3 rounded-full"
-                  style={{ backgroundColor: '#4CAF50' }}
-                  title="Team Login"
-                ></span>
               </h1>
 
               <form onSubmit={handleSubmit} className="w-full space-y-[42px]">
