@@ -6,17 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { Shield, ArrowLeft, ChevronRight } from "lucide-react";
-
-const colors = {
-  background: '#1B1B1B',
-  textPrimary: '#E3DFD6',
-  textSecondary: '#1B1B1B',
-  accent: 'rgba(202, 227, 4, 0.90)',
-  button: '#AA95C7',
-  adminAccent: '#F59E0B', // Orange accent for admin
-  card: '#2A2A2A'
-};
+import { Settings, ArrowLeft } from "lucide-react";
 
 export default function AdminLogin() {
   const [password, setPassword] = useState("");
@@ -60,159 +50,61 @@ export default function AdminLogin() {
   };
 
   return (
-    <div 
-      className="min-h-screen flex items-center justify-center p-4 relative"
-      style={{ backgroundColor: colors.background }}
-    >
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div 
-          className="absolute w-96 h-96 rounded-full opacity-10 top-20 right-20"
-          style={{ backgroundColor: colors.adminAccent }}
-        />
-        <div 
-          className="absolute w-64 h-64 rounded-full opacity-5 bottom-20 left-20"
-          style={{ backgroundColor: colors.button }}
-        />
-      </div>
-
-      {/* Back button */}
-      <div className="absolute top-6 left-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
+      <div className="absolute top-4 left-4">
         <Link href="/">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="hover:bg-white/10"
-            style={{ color: colors.textPrimary }}
-          >
+          <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Ana Sayfa
           </Button>
         </Link>
       </div>
-
-      {/* Theme toggle */}
-      <div className="absolute top-6 right-6">
+      <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-
-      {/* Main content */}
-      <div className="w-full max-w-md relative z-10">
-        {/* Admin indicator badge */}
-        <div className="text-center mb-6">
-          <div 
-            className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium"
-            style={{ 
-              backgroundColor: colors.adminAccent + '20',
-              color: colors.adminAccent,
-              border: `1px solid ${colors.adminAccent}40`
-            }}
-          >
-            <Shield className="w-4 h-4 mr-2" />
-            YÖNETİCİ GİRİŞİ
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <div className="mx-auto w-12 h-12 bg-slate-800 dark:bg-slate-200 rounded-lg flex items-center justify-center mb-4">
+            <Settings className="text-white dark:text-slate-800 h-6 w-6" />
           </div>
-        </div>
-
-        <Card 
-          className="border-0 shadow-2xl"
-          style={{ backgroundColor: colors.card }}
-        >
-          <CardHeader className="text-center pb-8">
-            <div 
-              className="mx-auto w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-lg"
-              style={{ backgroundColor: colors.adminAccent }}
-            >
-              <Shield className="h-8 w-8" style={{ color: colors.textSecondary }} />
-            </div>
-            
-            <CardTitle 
-              className="text-3xl font-bold mb-2"
-              style={{ 
-                color: colors.textPrimary,
-                fontFamily: 'Bowlby One',
-                fontWeight: 'normal'
-              }}
-            >
-              CASH OR CRASH
-            </CardTitle>
-            
-            <p 
-              className="text-lg"
-              style={{ color: colors.textPrimary + '80' }}
-            >
-              Yönetici Kontrol Paneli
-            </p>
-          </CardHeader>
-
-          <CardContent className="px-8 pb-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-3">
-                <Label 
-                  htmlFor="password"
-                  className="text-base font-medium"
-                  style={{ color: colors.textPrimary }}
-                >
-                  Yönetici Şifresi
-                </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Admin şifrenizi girin"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="h-12 text-lg border-0 bg-white/10 text-white placeholder:text-white/50 focus:bg-white/20 transition-colors"
-                  style={{ color: colors.textPrimary }}
-                />
-              </div>
-              
-              <Button
-                type="submit"
-                className="w-full h-12 text-lg font-semibold rounded-xl transition-all duration-200 hover:scale-105 disabled:hover:scale-100"
-                disabled={isLoading || !password.trim()}
-                style={{ 
-                  backgroundColor: colors.adminAccent,
-                  color: colors.textSecondary
-                }}
-              >
-                {isLoading ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-current mr-2"></div>
-                    Giriş Yapılıyor...
-                  </div>
-                ) : (
-                  <div className="flex items-center">
-                    Admin Paneline Giriş
-                    <ChevronRight className="w-5 h-5 ml-2" />
-                  </div>
-                )}
-              </Button>
-            </form>
-
-            <div className="mt-8 text-center">
-              <div 
-                className="h-px w-full mb-6"
-                style={{ backgroundColor: colors.textPrimary + '20' }}
+          <CardTitle className="text-2xl font-bold">
+            Yönetici Girişi
+          </CardTitle>
+          <p className="text-muted-foreground">Cash or Crash Admin Paneli</p>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="password">Yönetici Şifresi</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Admin şifrenizi girin"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
-              <p 
-                className="text-sm mb-3"
-                style={{ color: colors.textPrimary + '60' }}
-              >
-                Takım üyesi misiniz?
-              </p>
-              <Button 
-                variant="ghost"
-                className="text-sm hover:bg-white/10 p-0 h-auto"
-                style={{ color: colors.button }}
-                onClick={() => setLocation("/team-login")}
-              >
-                Takım girişine geçin
-                <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isLoading || !password.trim()}
+            >
+              {isLoading ? "Giriş Yapılıyor..." : "Giriş Yap"}
+            </Button>
+          </form>
+          <div className="mt-6 text-center">
+            <Button 
+              variant="ghost" 
+              className="text-muted-foreground"
+              onClick={() => setLocation("/")}
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Takım Girişine Dön
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
