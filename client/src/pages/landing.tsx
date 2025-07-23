@@ -84,30 +84,7 @@ export default function Landing() {
           />
         </section>
 
-        {/* Decorative rectangles */}
-        <div 
-          className="absolute"
-          style={{
-            width: '260px',
-            height: '223px',
-            left: '388px',
-            top: '741px',
-            transform: 'rotate(180deg)',
-            outline: `6px ${colors.decorativePurple} solid`,
-            outlineOffset: '-3px'
-          }}
-        ></div>
-        <div 
-          className="absolute"
-          style={{
-            width: '260px',
-            height: '223px',
-            left: '1089px',
-            top: '518px',
-            outline: `6px ${colors.decorativeYellow} solid`,
-            outlineOffset: '-3px'
-          }}
-        ></div>
+        
 
         {/* Quote Section */}
         <div 
