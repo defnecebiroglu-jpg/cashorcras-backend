@@ -18,16 +18,16 @@ export default function Landing() {
         {/* Header */}
         <header className="flex w-[1440px] items-end justify-between p-8 absolute top-0 left-0">
           <h1 
-            className="relative w-fit h-[47px] font-bold text-2xl tracking-wider leading-normal"
-            style={{ color: colors.textPrimary, fontFamily: 'Inter', fontWeight: 900 }}
+            className="relative w-fit h-[47px] text-2xl tracking-[0] leading-normal"
+            style={{ color: colors.textPrimary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
           >
             KALGIRISIMCILIK
           </h1>
 
           <nav className="flex w-fit items-end gap-10 relative">
             <div 
-              className="relative w-fit h-[47px] font-bold text-2xl tracking-[0] leading-normal"
-              style={{ color: colors.textSecondary, fontFamily: 'Inter', fontWeight: 900 }}
+              className="relative w-fit h-[47px] text-2xl tracking-[0] leading-normal"
+              style={{ color: colors.textSecondary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
             >
               HAKKINDA
             </div>
@@ -38,8 +38,8 @@ export default function Landing() {
                 style={{ backgroundColor: colors.button }}
               >
                 <span 
-                  className="font-bold text-2xl text-center tracking-[0] leading-normal"
-                  style={{ color: colors.textSecondary, fontFamily: 'Inter', fontWeight: 900 }}
+                  className="text-2xl text-center tracking-[0] leading-normal"
+                  style={{ color: colors.textSecondary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
                 >
                   GİRİŞ YAP
                 </span>
@@ -50,16 +50,16 @@ export default function Landing() {
 
         {/* Hero Section */}
         <h2 
-          className="absolute w-[1352px] top-[114px] left-[44px] font-bold text-center tracking-[0] uppercase whitespace-normal"
+          className="absolute w-[1111px] top-[148px] left-[165px] text-center tracking-[0] leading-[80px] whitespace-nowrap"
           style={{ 
             color: colors.textPrimary,
-            fontFamily: 'Inter',
-            fontWeight: 900,
-            fontSize: '128px',
-            lineHeight: '100px'
+            fontFamily: 'Bowlby One',
+            fontWeight: 'normal',
+            fontSize: '96px',
+            lineHeight: '80px'
           }}
         >
-          Kazanmaya cesaretin var mı?
+          KAZANMAYA<br />CESARETIN VAR MI?
         </h2>
 
         {/* Main Image/Content Section */}
@@ -93,15 +93,16 @@ export default function Landing() {
         >
           <div className="flex items-start justify-between p-20">
             <blockquote 
-              className="relative w-[650px] h-[201px] mt-[-1.00px] font-bold tracking-[0] leading-[79px] uppercase"
+              className="relative w-[650px] h-[201px] mt-[-1.00px] tracking-[0] leading-[70px]"
               style={{ 
                 color: colors.textSecondary,
-                fontFamily: 'Inter',
-                fontWeight: 900,
-                fontSize: '96px'
+                fontFamily: 'Bowlby One',
+                fontWeight: 'normal',
+                fontSize: '80px',
+                lineHeight: '70px'
               }}
             >
-              "Bir karar, her şeyi değiştirir."
+              "BIR KARAR, HER SEYI DEGISTIRIR."
             </blockquote>
 
             <div className="relative w-[423px] h-[111px] mt-4">
