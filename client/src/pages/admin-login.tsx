@@ -111,7 +111,7 @@ export default function AdminLogin() {
         <div className="absolute w-[1186px] h-[710px] top-[289px] left-[127px]">
           {/* Vector graphics */}
           <img
-            className="absolute top-[481px] left-0 w-[265px] h-[229px]"
+            className="absolute top-[431px] left-0 w-[265px] h-[229px]"
             alt="Vector graphic"
             src="/figmaAssets/vector-2.svg"
           />
