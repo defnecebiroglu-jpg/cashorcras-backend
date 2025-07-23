@@ -151,7 +151,7 @@ export default function TeamLogin() {
               <form onSubmit={handleSubmit} className="w-full space-y-[42px]">
                 <div className="w-full">
                   <label 
-                    className="block h-5 text-[32px] tracking-[0] leading-10 whitespace-nowrap mb-4"
+                    className="block h-5 text-[32px] tracking-[0] leading-10 whitespace-nowrap mt-[12px] mb-[12px]"
                     style={{ 
                       color: colors.textPrimary, 
                       fontFamily: 'Inter', 
