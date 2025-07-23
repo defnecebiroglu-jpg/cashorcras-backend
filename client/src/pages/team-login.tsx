@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { Users, ArrowLeft, Shield } from "lucide-react";
+import { ChartLine, ArrowLeft } from "lucide-react";
 
 export default function TeamLogin() {
   const [accessCode, setAccessCode] = useState("");
@@ -51,54 +51,32 @@ export default function TeamLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1B1B1B] flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-20 w-32 h-32 bg-emerald-500 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-40 h-40 bg-emerald-400 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-emerald-300 rounded-full blur-3xl"></div>
-      </div>
-
-      {/* Back button */}
-      <div className="absolute top-6 left-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
+      <div className="absolute top-4 left-4">
         <Link href="/">
-          <Button variant="ghost" size="sm" className="text-[#E3DFD6] hover:text-white hover:bg-white/10 transition-all duration-200">
+          <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Ana Sayfa
           </Button>
         </Link>
       </div>
-
-      {/* Theme toggle */}
-      <div className="absolute top-6 right-6">
+      <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-
-      {/* Main card */}
-      <Card className="w-full max-w-md bg-[#2A2A2A] border-[#3A3A3A] shadow-2xl backdrop-blur-sm">
-        <CardHeader className="text-center pb-6">
-          {/* Icon with badge */}
-          <div className="relative mx-auto mb-6">
-            <div className="w-16 h-16 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <Users className="text-white h-8 w-8" />
-            </div>
-            <div className="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-              TEAM
-            </div>
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <div className="mx-auto w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
+            <ChartLine className="text-primary-foreground h-6 w-6" />
           </div>
-          
-          <CardTitle className="text-3xl font-bold text-[#E3DFD6] mb-2">
+          <CardTitle className="text-2xl font-bold">
             Cash or Crash
           </CardTitle>
-          <p className="text-[#B0B0B0] text-lg">Takım Girişi</p>
+          <p className="text-muted-foreground">Takım Girişi</p>
         </CardHeader>
-
-        <CardContent className="space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-3">
-              <Label htmlFor="accessCode" className="text-[#E3DFD6] text-sm font-medium">
-                Erişim Kodu
-              </Label>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="accessCode">Erişim Kodu</Label>
               <Input
                 id="accessCode"
                 type="text"
@@ -106,32 +84,27 @@ export default function TeamLogin() {
                 value={accessCode}
                 onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
                 required
-                className="h-12 bg-[#3A3A3A] border-[#4A4A4A] text-[#E3DFD6] placeholder-[#888] focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200"
               />
             </div>
-            
             <Button
               type="submit"
-              className="w-full h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-medium transition-all duration-200 shadow-lg hover:shadow-emerald-500/25"
+              className="w-full"
               disabled={isLoading || !accessCode.trim()}
             >
               {isLoading ? "Giriş Yapılıyor..." : "Takıma Giriş Yap"}
             </Button>
           </form>
-
-          {/* Cross navigation */}
-          <div className="pt-4 border-t border-[#3A3A3A]">
-            <div className="flex items-center justify-center space-x-2 text-sm">
-              <Shield className="w-4 h-4 text-orange-500" />
-              <span className="text-[#B0B0B0]">Admin girişi için</span>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-muted-foreground">
+              Admin girişi için{" "}
               <Button 
                 variant="link" 
-                className="p-0 h-auto font-medium text-orange-500 hover:text-orange-400 transition-colors"
+                className="p-0 h-auto font-normal text-primary"
                 onClick={() => setLocation("/admin-login")}
               >
                 buraya tıklayın
               </Button>
-            </div>
+            </p>
           </div>
         </CardContent>
       </Card>

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { Shield, ArrowLeft, Users } from "lucide-react";
+import { Settings, ArrowLeft } from "lucide-react";
 
 export default function AdminLogin() {
   const [password, setPassword] = useState("");
@@ -50,54 +50,32 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1B1B1B] flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-20 w-32 h-32 bg-orange-500 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-40 h-40 bg-orange-400 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-orange-300 rounded-full blur-3xl"></div>
-      </div>
-
-      {/* Back button */}
-      <div className="absolute top-6 left-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
+      <div className="absolute top-4 left-4">
         <Link href="/">
-          <Button variant="ghost" size="sm" className="text-[#E3DFD6] hover:text-white hover:bg-white/10 transition-all duration-200">
+          <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Ana Sayfa
           </Button>
         </Link>
       </div>
-
-      {/* Theme toggle */}
-      <div className="absolute top-6 right-6">
+      <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-
-      {/* Main card */}
-      <Card className="w-full max-w-md bg-[#2A2A2A] border-[#3A3A3A] shadow-2xl backdrop-blur-sm">
-        <CardHeader className="text-center pb-6">
-          {/* Icon with badge */}
-          <div className="relative mx-auto mb-6">
-            <div className="w-16 h-16 bg-orange-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <Shield className="text-white h-8 w-8" />
-            </div>
-            <div className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-              ADMIN
-            </div>
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <div className="mx-auto w-12 h-12 bg-slate-800 dark:bg-slate-200 rounded-lg flex items-center justify-center mb-4">
+            <Settings className="text-white dark:text-slate-800 h-6 w-6" />
           </div>
-          
-          <CardTitle className="text-3xl font-bold text-[#E3DFD6] mb-2">
-            Cash or Crash
+          <CardTitle className="text-2xl font-bold">
+            Yönetici Girişi
           </CardTitle>
-          <p className="text-[#B0B0B0] text-lg">Yönetici Girişi</p>
+          <p className="text-muted-foreground">Cash or Crash Admin Paneli</p>
         </CardHeader>
-
-        <CardContent className="space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-3">
-              <Label htmlFor="password" className="text-[#E3DFD6] text-sm font-medium">
-                Yönetici Şifresi
-              </Label>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="password">Yönetici Şifresi</Label>
               <Input
                 id="password"
                 type="password"
@@ -105,32 +83,27 @@ export default function AdminLogin() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="h-12 bg-[#3A3A3A] border-[#4A4A4A] text-[#E3DFD6] placeholder-[#888] focus:border-orange-500 focus:ring-orange-500/20 transition-all duration-200"
               />
             </div>
-            
             <Button
               type="submit"
-              className="w-full h-12 bg-orange-600 hover:bg-orange-700 text-white font-medium transition-all duration-200 shadow-lg hover:shadow-orange-500/25"
+              className="w-full"
               disabled={isLoading || !password.trim()}
             >
               {isLoading ? "Giriş Yapılıyor..." : "Giriş Yap"}
             </Button>
           </form>
-
-          {/* Cross navigation */}
-          <div className="pt-4 border-t border-[#3A3A3A]">
-            <div className="flex items-center justify-center space-x-2 text-sm">
-              <Users className="w-4 h-4 text-emerald-500" />
-              <span className="text-[#B0B0B0]">Takım girişi için</span>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-muted-foreground">
+              Takım girişi için{" "}
               <Button 
                 variant="link" 
-                className="p-0 h-auto font-medium text-emerald-500 hover:text-emerald-400 transition-colors"
+                className="p-0 h-auto font-normal text-primary"
                 onClick={() => setLocation("/team-login")}
               >
                 buraya tıklayın
               </Button>
-            </div>
+            </p>
           </div>
         </CardContent>
       </Card>
