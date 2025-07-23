@@ -64,39 +64,24 @@ export default function Landing() {
 
         {/* Main Image/Content Section */}
         <section className="absolute w-[1306px] h-[776px] top-[316px] left-[93px]">
-          <div
-            className="absolute w-[1306px] h-[776px] top-0 left-0 bg-gray-700 flex items-center justify-center rounded-lg"
-            style={{ backgroundColor: '#2a2a2a' }}
-          >
-            {/* Stylized CASH CRASH logo */}
-            <div className="text-center">
-              <div 
-                className="font-black mb-4"
-                style={{ 
-                  fontSize: '120px', 
-                  color: colors.decorativeYellow,
-                  fontFamily: 'Inter',
-                  fontWeight: 900,
-                  textShadow: '4px 4px 8px rgba(0,0,0,0.8)'
-                }}
-              >
-                CASH
-              </div>
-              <div 
-                className="font-black relative"
-                style={{ 
-                  fontSize: '120px', 
-                  color: colors.decorativeYellow,
-                  fontFamily: 'Inter',
-                  fontWeight: 900,
-                  textShadow: '4px 4px 8px rgba(0,0,0,0.8)'
-                }}
-              >
-                CRASH!
-                <span className="absolute -top-4 -right-8 text-6xl">★</span>
-              </div>
-            </div>
-          </div>
+          {/* Decorative vector graphics */}
+          <img
+            className="absolute w-[265px] h-[229px] top-[199px] left-8"
+            alt="Vector graphic"
+            src="/figmaAssets/vector-4.svg"
+          />
+          <img
+            className="absolute w-[265px] h-[229px] top-[199px] left-[994px]"
+            alt="Vector graphic"
+            src="/figmaAssets/vector-5.svg"
+          />
+          
+          {/* Main Cash Crash image */}
+          <img
+            className="absolute w-[1306px] h-[776px] top-0 left-0 object-cover"
+            alt="Cash Crash graphic"
+            src="/figmaAssets/image-1.png"
+          />
         </section>
 
         {/* Decorative rectangles */}
@@ -142,29 +127,25 @@ export default function Landing() {
               "Bir karar, her şeyi değiştirir."
             </blockquote>
 
-            <div className="relative w-[524px] h-[201px] text-right flex flex-col justify-center">
-              <div 
-                className="font-semibold leading-[40px]"
-                style={{
-                  color: colors.textSecondary,
-                  fontFamily: 'Inter',
-                  fontWeight: 600,
-                  fontSize: '32px'
-                }}
-              >
-                defnecebiroglu@gmail.com<br/>
-                iremcebiroglu@gmail.com<br/>
-                eylllllltasirtaon@gmail.com
-              </div>
+            <div className="relative w-[423px] h-[111px] mt-4">
+              <img
+                className="relative w-[423px] h-[111px]"
+                alt="Contact emails"
+                src="/figmaAssets/defnecebiroglu-gmail-com-iremcebiroglu-gmail-com-eylllllltasirta.png"
+              />
             </div>
           </div>
         </div>
 
         {/* Social Media Section */}
-        <footer className="absolute bottom-[151px] left-[329px] right-[155px] flex items-center justify-between">
+        <footer className="absolute bottom-[151px] left-[329px] right-[155px] flex items-center">
           <div className="flex items-center">
             <div className="w-[60px] h-[60px] relative flex items-center justify-center">
-              <div className="w-[44px] h-[44px] bg-[#E3DFD6] rounded"></div>
+              <img
+                src="/figmaAssets/vector.svg"
+                alt="Social media icon for @kalgirisimcilik_"
+                className="relative w-11 h-11 top-2 left-2"
+              />
             </div>
             <span 
               className="ml-[10px] font-semibold tracking-[0] leading-10 whitespace-nowrap"
@@ -179,9 +160,15 @@ export default function Landing() {
             </span>
           </div>
           
+          <div className="w-[50px]"></div>
+          
           <div className="flex items-center">
             <div className="w-[60px] h-[60px] relative flex items-center justify-center">
-              <div className="w-[48px] h-[48px] bg-[#E3DFD6] rounded"></div>
+              <img
+                src="/figmaAssets/vector-1.svg"
+                alt="Social media icon for @kalgirisimcilik"
+                className="relative w-12 h-12 top-1.5 left-1.5"
+              />
             </div>
             <span 
               className="ml-[10px] font-semibold tracking-[0] leading-10 whitespace-nowrap"
