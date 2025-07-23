@@ -41,7 +41,7 @@ export default function Landing() {
                   className="text-2xl text-center tracking-[0] leading-normal"
                   style={{ color: colors.textSecondary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
                 >
-                  GİRİŞ YAP
+                  GIRIS YAP
                 </span>
               </button>
             </Link>
