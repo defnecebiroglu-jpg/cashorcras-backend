@@ -2,104 +2,157 @@ import { Link } from "wouter";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0">
-        {/* Yellow accent lines - top left */}
-        <div className="absolute top-20 left-10 w-20 h-1 bg-yellow-400 rotate-12"></div>
-        <div className="absolute top-24 left-8 w-16 h-1 bg-yellow-400 rotate-12"></div>
-        <div className="absolute top-28 left-12 w-12 h-1 bg-yellow-400 rotate-12"></div>
-        
-        {/* Purple accent lines - bottom right */}
-        <div className="absolute bottom-32 right-10 w-20 h-1 bg-purple-400 -rotate-12"></div>
-        <div className="absolute bottom-28 right-8 w-16 h-1 bg-purple-400 -rotate-12"></div>
-        <div className="absolute bottom-24 right-12 w-12 h-1 bg-purple-400 -rotate-12"></div>
-      </div>
-
+    <div className="min-h-screen relative overflow-hidden" style={{ background: '#1B1B1B' }}>
       {/* Header */}
-      <header className="relative z-10 flex justify-between items-center p-6">
-        <div className="text-xl font-bold tracking-wider">
-          KALGIRIŞIMCILIK
+      <header className="w-full px-8 py-8 flex justify-between items-end">
+        <div className="text-[#E3DFD6] text-2xl font-bold tracking-wider" style={{ fontFamily: 'Inter', fontWeight: 900 }}>
+          KALGIRISIMCILIK
         </div>
-        <div className="flex space-x-4">
-          <Link href="/admin-login">
-            <button className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full font-semibold transition-colors text-sm">
-              Admin
-            </button>
-          </Link>
+        <div className="flex items-end gap-10">
+          <div className="text-[#1B1B1B] text-2xl font-bold" style={{ fontFamily: 'Inter', fontWeight: 900 }}>
+            HAKKINDA
+          </div>
           <Link href="/team-login">
-            <button className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-semibold transition-colors">
-              GİRİŞ YAP
+            <button 
+              className="h-[50px] px-6 rounded-lg flex items-center justify-center transition-colors hover:opacity-90"
+              style={{ background: '#AA95C7' }}
+            >
+              <div className="text-[#1B1B1B] text-2xl font-bold" style={{ fontFamily: 'Inter', fontWeight: 900 }}>
+                GİRİŞ YAP
+              </div>
             </button>
           </Link>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="relative z-10 flex flex-col items-center justify-center min-h-[calc(100vh-200px)] px-6">
-        {/* Main heading */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
-            KAZANMAYA<br />
-            CESARETIN VAR MI?
-          </h1>
-        </div>
+      {/* Main heading */}
+      <div className="w-full px-11 mt-8">
+        <h1 
+          className="text-center text-[#E3DFD6] uppercase leading-[100px]"
+          style={{ 
+            fontSize: '128px', 
+            fontFamily: 'Inter', 
+            fontWeight: 900,
+            lineHeight: '100px'
+          }}
+        >
+          Kazanmaya cesaretin var mı?
+        </h1>
+      </div>
 
-        {/* Logo/Brand section */}
-        <div className="relative mb-12">
-          <div className="bg-yellow-400 px-8 py-6 rounded-lg transform -rotate-2 shadow-2xl">
-            <div className="text-center">
-              <div className="text-6xl md:text-8xl font-black text-black mb-2 tracking-wider">
-                CASH
-              </div>
-              <div className="text-4xl md:text-6xl font-black text-black tracking-wider relative">
-                CRASH!
-                {/* Star decoration */}
-                <div className="absolute -top-2 -right-4 text-yellow-600 text-3xl">★</div>
-              </div>
-            </div>
+      {/* Central image placeholder */}
+      <div className="flex justify-center mt-8">
+        <div 
+          className="bg-gray-300 flex items-center justify-center"
+          style={{ width: '1306px', height: '776px' }}
+        >
+          <div className="text-6xl font-black text-gray-600">
+            CASH CRASH!
           </div>
         </div>
+      </div>
 
-        {/* Quote section */}
-        <div className="bg-yellow-400 text-black px-8 py-6 rounded-lg max-w-2xl w-full text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            "BİR KARAR,<br />
-            HER ŞEYİ<br />
-            DEĞİŞTİRİR."
-          </h2>
-          <div className="text-sm md:text-base space-y-1">
-            <div>defnecebiroglu@gmail.com</div>
-            <div>iremcebiroglu@gmail.com</div>
-            <div>eylillilitasitaon@gmail.com</div>
-          </div>
-        </div>
+      {/* Decorative rectangles */}
+      <div 
+        className="absolute"
+        style={{
+          width: '260px',
+          height: '223px',
+          left: '388px',
+          top: '741px',
+          transform: 'rotate(180deg)',
+          outline: '6px #AA95C7 solid',
+          outlineOffset: '-3px'
+        }}
+      ></div>
+      <div 
+        className="absolute"
+        style={{
+          width: '260px',
+          height: '223px',
+          left: '1089px',
+          top: '518px',
+          outline: '6px #CBED46 solid',
+          outlineOffset: '-3px'
+        }}
+      ></div>
 
-        {/* Call to action */}
-        <div className="text-center">
-          <Link href="/team-login">
-            <button className="bg-purple-600 hover:bg-purple-700 px-12 py-4 rounded-full text-xl font-bold transition-colors shadow-xl">
-              OYUNA BAŞLA
-            </button>
-          </Link>
+      {/* Quote section */}
+      <div 
+        className="mx-auto mt-20 px-20 py-20 rounded-[25px] flex justify-between items-center"
+        style={{ 
+          width: '1364px',
+          background: 'rgba(202, 227, 4, 0.90)'
+        }}
+      >
+        <div 
+          className="text-[#1B1B1B] uppercase leading-[79px]"
+          style={{
+            width: '650px',
+            fontSize: '96px',
+            fontFamily: 'Inter',
+            fontWeight: 900,
+            lineHeight: '79px'
+          }}
+        >
+          "Bir karar, her şeyi değiştirir."
         </div>
-      </main>
+        <div 
+          className="text-right text-[#1B1B1B] leading-[40px]"
+          style={{
+            width: '524px',
+            fontSize: '32px',
+            fontFamily: 'Inter',
+            fontWeight: 600,
+            lineHeight: '40px'
+          }}
+        >
+          defnecebiroglu@gmail.com<br/>
+          iremcebiroglu@gmail.com<br/>
+          eylllllltasirtaon@gmail.com
+        </div>
+      </div>
 
       {/* Footer social links */}
-      <footer className="relative z-10 flex justify-center items-center space-x-8 pb-8">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
-            <span className="text-black font-bold text-sm">♪</span>
+      <footer className="flex justify-center items-center gap-96 mt-12 pb-8">
+        <div className="flex items-center gap-4">
+          <div className="w-[60px] h-[60px] overflow-hidden">
+            <div className="w-[44px] h-[44px] ml-2 mt-2 bg-[#E3DFD6]"></div>
           </div>
-          <span className="text-sm">@kalgirisimcilik_</span>
+          <div 
+            className="text-[#E3DFD6] leading-[40px]"
+            style={{
+              fontSize: '32px',
+              fontFamily: 'Inter',
+              fontWeight: 600
+            }}
+          >
+            @kalgirisimcilik_
+          </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
-            <span className="text-black font-bold text-sm">@</span>
+        <div className="flex items-center gap-4">
+          <div className="w-[60px] h-[60px] overflow-hidden">
+            <div className="w-[48px] h-[48px] ml-1.5 mt-1.5 bg-[#E3DFD6]"></div>
           </div>
-          <span className="text-sm">@kalgirisimcilik</span>
+          <div 
+            className="text-[#E3DFD6] leading-[40px]"
+            style={{
+              fontSize: '32px',
+              fontFamily: 'Inter',
+              fontWeight: 600
+            }}
+          >
+            @kalgirisimcilik
+          </div>
         </div>
       </footer>
+
+      {/* Hidden admin access */}
+      <Link href="/admin-login">
+        <button className="fixed bottom-4 right-4 opacity-20 hover:opacity-60 bg-gray-800 px-3 py-1 rounded text-xs transition-opacity">
+          Admin
+        </button>
+      </Link>
     </div>
   );
 }
