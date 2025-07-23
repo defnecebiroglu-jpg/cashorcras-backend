@@ -1,12 +1,22 @@
 import { useState } from "react";
-import { useLocation, Link } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLocation } from "wouter";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { ChartLine, ArrowLeft } from "lucide-react";
+import { Link } from "wouter";
+
+const colors = {
+  background: '#1B1B1B',
+  textPrimary: '#E3DFD6',
+  textSecondary: '#1B1B1B',
+  accent: '#AA95C7',
+  button: '#E3DFD6',
+  buttonText: '#8A8A8A',
+  linkHighlight: '#CBED46',
+  cardBorder: '#AA95C7',
+  inputBg: '#AA95C766'
+};
 
 export default function TeamLogin() {
   const [accessCode, setAccessCode] = useState("");
@@ -51,63 +61,169 @@ export default function TeamLogin() {
   };
 
   return (
-    <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 bg-[#f0f6ff]">
-      <div className="absolute top-4 left-4">
-        <Link href="/">
-          <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Ana Sayfa
-          </Button>
-        </Link>
-      </div>
-      <div className="absolute top-4 right-4">
-        <ThemeToggle />
-      </div>
-      <Card className="w-full max-w-md bg-[#fcfdff]">
-        <CardHeader className="text-center">
-          <div className="mx-auto w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
-            <ChartLine className="text-primary-foreground h-6 w-6" />
-          </div>
-          <CardTitle className="text-2xl font-bold">
-            Cash or Crash
-          </CardTitle>
-          <p className="text-muted-foreground">Takım Girişi</p>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="accessCode">Erişim Kodu</Label>
-              <Input
-                id="accessCode"
-                type="text"
-                placeholder="Takım erişim kodunuzu girin"
-                value={accessCode}
-                onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
-                required
-              />
-            </div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading || !accessCode.trim()}
+    <div className="flex flex-row justify-center w-full min-h-screen" style={{ backgroundColor: colors.background }}>
+      <div className="w-[1440px] h-[1165px] relative overflow-hidden" style={{ backgroundColor: colors.background }}>
+        
+        {/* Header */}
+        <header className="flex w-[1440px] items-end justify-between p-8 absolute top-0 left-0">
+          <Link href="/">
+            <h1 
+              className="relative w-fit h-[47px] text-2xl tracking-[0] leading-normal cursor-pointer hover:opacity-80 transition-opacity"
+              style={{ color: colors.textPrimary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
             >
-              {isLoading ? "Giriş Yapılıyor..." : "Takıma Giriş Yap"}
-            </Button>
-          </form>
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              Admin girişi için{" "}
-              <Button 
-                variant="link" 
-                className="p-0 h-auto font-normal text-primary"
-                onClick={() => setLocation("/admin-login")}
+              KALGIRISIMCILIK
+            </h1>
+          </Link>
+
+          <nav className="flex w-fit items-end gap-10 relative">
+            <div 
+              className="relative w-fit h-[47px] text-2xl tracking-[0] leading-normal"
+              style={{ color: colors.textSecondary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
+            >
+              HAKKINDA
+            </div>
+
+            <Button 
+              className="h-[50px] px-6 py-0 rounded-lg transition-colors hover:opacity-90"
+              style={{ backgroundColor: colors.accent }}
+            >
+              <span 
+                className="text-2xl text-center tracking-[0] leading-normal"
+                style={{ color: colors.textSecondary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
               >
-                buraya tıklayın
-              </Button>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+                GIRIS YAP
+              </span>
+            </Button>
+          </nav>
+        </header>
+
+        {/* Banner text */}
+        <div 
+          className="absolute w-[3432px] top-[154px] left-[-996px] text-8xl text-center tracking-[0] leading-[80px] whitespace-nowrap"
+          style={{ 
+            color: colors.linkHighlight, 
+            fontFamily: 'Bowlby One', 
+            fontWeight: 'normal' 
+          }}
+        >
+          RASH OR CASH OR CRASH OR CAS
+        </div>
+
+        <div className="absolute w-[1186px] h-[710px] top-[289px] left-[127px]">
+          {/* Vector graphics */}
+          <img
+            className="absolute top-[481px] left-0 w-[265px] h-[229px]"
+            alt="Vector graphic"
+            src="/figmaAssets/vector-2.svg"
+          />
+          <img
+            className="absolute top-[50px] left-[921px] w-[265px] h-[229px]"
+            alt="Vector graphic"
+            src="/figmaAssets/vector-3.svg"
+          />
+
+          {/* Login card - Team version */}
+          <Card 
+            className="w-[700px] absolute top-[123px] left-[243px] rounded-[25px] border-4 border-solid"
+            style={{ 
+              backgroundColor: colors.background, 
+              borderColor: colors.cardBorder 
+            }}
+          >
+            <CardContent className="flex flex-col items-start gap-[42px] p-10">
+              <h1 
+                className="relative self-stretch h-[74px] mt-[-4.00px] text-5xl text-center tracking-[0] leading-[80px] whitespace-nowrap w-full"
+                style={{ 
+                  color: colors.textPrimary, 
+                  fontFamily: 'Bowlby One', 
+                  fontWeight: 'normal' 
+                }}
+              >
+                TAKIM GIRISI
+                {/* Team indicator - green dot */}
+                <span 
+                  className="absolute top-0 right-0 w-3 h-3 rounded-full"
+                  style={{ backgroundColor: '#4CAF50' }}
+                  title="Team Login"
+                ></span>
+              </h1>
+
+              <form onSubmit={handleSubmit} className="w-full space-y-[42px]">
+                <div className="w-full">
+                  <label 
+                    className="block h-5 text-[32px] tracking-[0] leading-10 whitespace-nowrap mb-4"
+                    style={{ 
+                      color: colors.textPrimary, 
+                      fontFamily: 'Inter', 
+                      fontWeight: 800 
+                    }}
+                  >
+                    Erişim Kodu
+                  </label>
+                  
+                  <Input
+                    className="h-[60px] rounded-lg border-2 border-solid text-[30px] tracking-[0] leading-10 pl-[20px] pr-[20px]"
+                    style={{ 
+                      backgroundColor: colors.inputBg,
+                      borderColor: colors.cardBorder,
+                      color: colors.textPrimary,
+                      fontFamily: 'Inter',
+                      fontWeight: 'normal'
+                    }}
+                    placeholder="Takım erişim kodunu giriniz"
+                    value={accessCode}
+                    onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
+                    required
+                  />
+                </div>
+
+                <Button 
+                  type="submit"
+                  className="h-[60px] justify-center gap-2.5 px-6 py-0 w-full rounded-lg transition-colors hover:opacity-90"
+                  style={{ backgroundColor: colors.button }}
+                  disabled={isLoading || !accessCode.trim()}
+                >
+                  <span 
+                    className="w-fit text-[32px] text-center tracking-[0] leading-normal"
+                    style={{ 
+                      color: colors.buttonText, 
+                      fontFamily: 'Bowlby One', 
+                      fontWeight: 'normal' 
+                    }}
+                  >
+                    {isLoading ? "GIRIS YAPILIYOR..." : "GIRIS YAP"}
+                  </span>
+                </Button>
+              </form>
+
+              <div className="w-full h-10 text-center">
+                <span 
+                  className="text-3xl tracking-[0] leading-10 whitespace-nowrap"
+                  style={{ 
+                    color: colors.textPrimary, 
+                    fontFamily: 'Inter', 
+                    fontWeight: 'normal' 
+                  }}
+                >
+                  Admin girişi için{" "}
+                </span>
+                <Link href="/admin-login">
+                  <button 
+                    className="text-3xl tracking-[0] leading-10 whitespace-nowrap hover:underline transition-all"
+                    style={{ 
+                      color: colors.linkHighlight, 
+                      fontFamily: 'Inter', 
+                      fontWeight: 500 
+                    }}
+                  >
+                    buraya tıklayınız
+                  </button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }
