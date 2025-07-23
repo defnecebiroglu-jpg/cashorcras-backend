@@ -32,12 +32,15 @@ An advanced educational entrepreneurship simulation platform that transforms lea
 
 ## Recent Changes
 
-### 2025-01-21 - Portfolio Value Calculation Update
+### 2025-01-21 - Landing Page & Portfolio Updates
+- ✅ Created welcome landing page matching Figma design with dark theme and vibrant branding
+- ✅ Added "CASH CRASH!" logo with yellow styling and decorative elements
+- ✅ Implemented navigation buttons to team login and admin login from landing page
+- ✅ Added back navigation from login pages to landing page
 - ✅ Updated portfolio value calculation to use current sell prices instead of purchase prices
 - ✅ Portfolio values now reflect what teams would receive if selling all assets at current market rates
 - ✅ Stock values calculated using `sellPrice` field instead of `price` field
 - ✅ Currency values calculated using `sellRate` field instead of `rate` field
-- ✅ More realistic portfolio valuation for educational simulation
 
 ### 2025-01-07 - CSV Editor Enhancement
 - ✅ Added inline CSV editor to admin panel alongside file upload option

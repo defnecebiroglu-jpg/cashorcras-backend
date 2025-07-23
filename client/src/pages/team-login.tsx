@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { ChartLine } from "lucide-react";
+import { ChartLine, ArrowLeft } from "lucide-react";
 
 export default function TeamLogin() {
   const [accessCode, setAccessCode] = useState("");
@@ -52,6 +52,14 @@ export default function TeamLogin() {
 
   return (
     <div className="min-h-screen from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 bg-[#f0f6ff]">
+      <div className="absolute top-4 left-4">
+        <Link href="/">
+          <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Ana Sayfa
+          </Button>
+        </Link>
+      </div>
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
