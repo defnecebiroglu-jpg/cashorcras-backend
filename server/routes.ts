@@ -418,6 +418,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Team trading endpoint
+  app.post('/api/teams/:id/trade', async (req, res) => {
+    try {
+      const teamId = parseInt(req.params.id);
+      const { companyId, shares, type } = req.body;
+      
+      if (!['buy', 'sell'].includes(type) || !companyId || !shares || shares <= 0) {
+        return res.status(400).json({ message: 'Geçersiz işlem verileri' });
+      }
+      
+      const team = await storage.getTeam(teamId);
+      const company = await storage.getCompany(companyId);
+      
+      if (!team || !company) {
+        return res.status(404).json({ message: 'Takım veya şirket bulunamadı' });
+      }
+      
+      const currentBalance = parseFloat(team.cashBalance);
+      const price = type === 'buy' ? parseFloat(company.price) : parseFloat(company.sellPrice);
+      const totalAmount = shares * price;
+      
+      if (type === 'buy') {
+        // Check if team has enough cash
+        if (currentBalance < totalAmount) {
+          return res.status(400).json({ message: 'Yetersiz nakit bakiye' });
+        }
+        
+        // Deduct cash and add shares
+        await storage.updateTeam(teamId, {
+          cashBalance: (currentBalance - totalAmount).toFixed(2)
+        });
+        
+        await storage.createTeamStock({
+          teamId,
+          companyId,
+          shares
+        });
+        
+      } else { // sell
+        // Check if team has enough shares
+        const teamStocks = await storage.getTeamStocks(teamId);
+        const currentStock = teamStocks.find(s => s.companyId === companyId);
+        
+        if (!currentStock || currentStock.shares < shares) {
+          return res.status(400).json({ message: 'Yetersiz hisse senedi' });
+        }
+        
+        // Add cash and remove shares
+        await storage.updateTeam(teamId, {
+          cashBalance: (currentBalance + totalAmount).toFixed(2)
+        });
+        
+        await storage.createTeamStock({
+          teamId,
+          companyId,
+          shares: -shares
+        });
+      }
+      
+      // Return updated portfolio
+      const updatedPortfolio = await storage.getTeamPortfolio(teamId);
+      res.json({
+        success: true,
+        portfolio: updatedPortfolio,
+        transaction: {
+          type,
+          companyName: company.name,
+          shares,
+          price: price.toFixed(2),
+          total: totalAmount.toFixed(2)
+        }
+      });
+      
+    } catch (error) {
+      console.error('Trade error:', error);
+      res.status(500).json({ message: 'İşlem gerçekleştirilemedi' });
+    }
+  });
+
   app.post('/api/teams', async (req, res) => {
     try {
       const data = insertTeamSchema.parse(req.body);
