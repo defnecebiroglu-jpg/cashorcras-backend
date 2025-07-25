@@ -38,7 +38,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Geçersiz erişim kodu' });
       }
       
-      (req.session as any).teamId = team.id;
+      req.session = req.session || {};
+      req.session.teamId = team.id;
       res.json({ team });
     } catch (error) {
       res.status(500).json({ message: 'Kimlik doğrulama hatası' });
@@ -53,7 +54,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Geçersiz admin şifresi' });
       }
       
-      (req.session as any).isAdmin = true;
+      req.session = req.session || {};
+      req.session.isAdmin = true;
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ message: 'Kimlik doğrulama hatası' });
@@ -61,12 +63,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post('/api/auth/logout', (req, res) => {
-    req.session.destroy((err) => {
-      if (err) {
-        return res.status(500).json({ message: 'Logout error' });
-      }
-      res.json({ success: true });
-    });
+    req.session = {};
+    res.json({ success: true });
   });
 
   // Admin dividend distribution endpoint
@@ -469,88 +467,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(teamStock);
     } catch (error) {
       res.status(400).json({ message: 'Invalid team stock data' });
-    }
-  });
-
-  // Buy Stock endpoint
-  app.post('/api/teams/:teamId/stocks', async (req, res) => {
-    try {
-      const { companyId, shares } = req.body;
-      const teamId = parseInt(req.params.teamId);
-      
-      const team = await storage.getTeam(teamId);
-      const company = await storage.getCompany(companyId);
-      
-      if (!team || !company) {
-        return res.status(404).json({ message: 'Team or company not found' });
-      }
-      
-      const currentBalance = parseFloat(team.cashBalance);
-      const shareCount = Math.abs(shares);
-      const totalCost = shareCount * parseFloat(company.price);
-      
-      if (currentBalance < totalCost) {
-        return res.status(400).json({ message: 'Yetersiz bakiye' });
-      }
-      
-      // Deduct cost from team balance
-      await storage.updateTeam(teamId, {
-        cashBalance: (currentBalance - totalCost).toFixed(2)
-      });
-      
-      // Add shares to portfolio
-      const teamStock = await storage.createTeamStock({
-        teamId,
-        companyId,
-        shares: shareCount
-      });
-      
-      res.status(201).json({ success: true, teamStock });
-    } catch (error) {
-      res.status(400).json({ message: 'Hisse senedi satın alma başarısız' });
-    }
-  });
-
-  // Sell Stock endpoint
-  app.post('/api/teams/:teamId/stocks/sell', async (req, res) => {
-    try {
-      const { companyId, shares } = req.body;
-      const teamId = parseInt(req.params.teamId);
-      
-      const team = await storage.getTeam(teamId);
-      const company = await storage.getCompany(companyId);
-      
-      if (!team || !company) {
-        return res.status(404).json({ message: 'Team or company not found' });
-      }
-      
-      // Check if team has enough shares
-      const teamStocks = await storage.getTeamStocks(teamId);
-      const currentStock = teamStocks.find(s => s.companyId === companyId);
-      const shareCount = Math.abs(shares);
-      
-      if (!currentStock || currentStock.shares < shareCount) {
-        return res.status(400).json({ message: 'Yetersiz hisse' });
-      }
-      
-      const currentBalance = parseFloat(team.cashBalance);
-      const totalRevenue = shareCount * parseFloat(company.sellPrice);
-      
-      // Add revenue to team balance
-      await storage.updateTeam(teamId, {
-        cashBalance: (currentBalance + totalRevenue).toFixed(2)
-      });
-      
-      // Remove shares from portfolio
-      const teamStock = await storage.createTeamStock({
-        teamId,
-        companyId,
-        shares: -shareCount
-      });
-      
-      res.status(200).json({ success: true, teamStock });
-    } catch (error) {
-      res.status(400).json({ message: 'Hisse senedi satış başarısız' });
     }
   });
 
