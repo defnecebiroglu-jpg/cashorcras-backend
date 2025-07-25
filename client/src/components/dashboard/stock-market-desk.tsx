@@ -5,9 +5,10 @@ import type { Company, TeamPortfolio } from "@shared/schema";
 
 interface StockMarketDeskProps {
   teamId: number;
+  onTabChange?: (tab: "stocks" | "currency" | "startup") => void;
 }
 
-export function StockMarketDesk({ teamId }: StockMarketDeskProps) {
+export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
   const { data: portfolio, isLoading: portfolioLoading } = useQuery<TeamPortfolio>({
     queryKey: ["/api/teams", teamId, "portfolio"],
     queryFn: async () => {
@@ -24,7 +25,7 @@ export function StockMarketDesk({ teamId }: StockMarketDeskProps) {
   if (portfolioLoading || companiesLoading) {
     return (
       <div 
-        className="flex items-center justify-center h-64"
+        className="fixed inset-0 flex items-center justify-center z-50"
         style={{ 
           backgroundColor: '#1b1b1b',
           color: '#e3dfd6'
@@ -37,157 +38,184 @@ export function StockMarketDesk({ teamId }: StockMarketDeskProps) {
 
   return (
     <div 
-      className="min-h-screen p-6"
+      className="fixed inset-0 overflow-y-auto z-50"
       style={{ backgroundColor: '#1b1b1b' }}
     >
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header with Team Name and Exit Button */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-3">
-            <div 
-              className="w-12 h-12 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: '#cae304' }}
-            >
-              <span 
-                className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
-                style={{ color: '#1b1b1b' }}
+      <div className="p-6">
+        <div className="max-w-7xl mx-auto space-y-8">
+          {/* Header with Team Name and Exit Button */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center space-x-3">
+              <div 
+                className="w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: '#cae304' }}
               >
-                T
+                <span 
+                  className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
+                  style={{ color: '#1b1b1b' }}
+                >
+                  T
+                </span>
+              </div>
+              <span 
+                className="[font-family:'Bowlby_One',Helvetica] font-normal text-xl"
+                style={{ color: '#e3dfd6' }}
+              >
+                {portfolio?.team?.name || "TAKIM 1"}
               </span>
             </div>
-            <span 
-              className="[font-family:'Bowlby_One',Helvetica] font-normal text-xl"
-              style={{ color: '#e3dfd6' }}
+            <button 
+              className="px-6 py-2 rounded-lg [font-family:'Bowlby_One',Helvetica] font-normal"
+              style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
+              onClick={() => window.location.href = '/'}
             >
-              TAKIM 1
-            </span>
+              ÇIKIŞ
+            </button>
           </div>
-          <button 
-            className="px-6 py-2 rounded-lg [font-family:'Bowlby_One',Helvetica] font-normal"
-            style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
-          >
-            ÇIKIŞ
-          </button>
-        </div>
 
-        {/* Balance Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div 
-            className="p-6 rounded-lg border-2 border-dashed"
-            style={{ borderColor: '#cae304' }}
-          >
+          {/* Balance Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div 
-              className="[font-family:'Bowlby_One',Helvetica] font-normal text-4xl mb-2"
-              style={{ color: '#e3dfd6' }}
+              className="p-6 rounded-lg border-2 border-dashed"
+              style={{ 
+                backgroundColor: 'rgba(0,0,0,0.2)',
+                borderColor: '#e3dfd6'
+              }}
             >
-              ₺{portfolio ? parseFloat(portfolio.team.cashBalance).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) : "0"}
+              <h3 
+                className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg mb-2"
+                style={{ color: '#e3dfd6' }}
+              >
+                NAKİT BAKİYE
+              </h3>
+              <p 
+                className="[font-family:'Inter',Helvetica] text-3xl font-bold"
+                style={{ color: '#cae304' }}
+              >
+                ₺{portfolio ? Math.round(parseFloat(portfolio.team.cashBalance)) : "0"}
+              </p>
             </div>
+            
             <div 
-              className="[font-family:'Inter',Helvetica] text-lg"
-              style={{ color: '#e3dfd6' }}
+              className="p-6 rounded-lg border-2 border-dashed"
+              style={{ 
+                backgroundColor: 'rgba(0,0,0,0.2)',
+                borderColor: '#e3dfd6'
+              }}
             >
-              Nakit Bakiye
+              <h3 
+                className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg mb-2"
+                style={{ color: '#e3dfd6' }}
+              >
+                TOPLAM PORTFÖY
+              </h3>
+              <p 
+                className="[font-family:'Inter',Helvetica] text-3xl font-bold"
+                style={{ color: '#cae304' }}
+              >
+                ₺{portfolio ? Math.round(parseFloat(portfolio.totalPortfolioValue)) : "0"}
+              </p>
             </div>
           </div>
-          <div 
-            className="p-6 rounded-lg border-2 border-dashed"
-            style={{ borderColor: '#aa95c7' }}
-          >
+
+          {/* Navigation Tabs */}
+          <div className="flex space-x-6 mb-8">
             <div 
-              className="[font-family:'Bowlby_One',Helvetica] font-normal text-4xl mb-2"
-              style={{ color: '#e3dfd6' }}
+              className="px-6 py-3 rounded-lg border-b-4 cursor-pointer"
+              style={{ 
+                backgroundColor: '#cae304',
+                borderColor: '#cae304',
+                color: '#1b1b1b'
+              }}
             >
-              ₺{portfolio ? parseFloat(portfolio.totalPortfolioValue).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) : "0"}
+              <span className="[font-family:'Bowlby_One',Helvetica] font-normal">BORSA MASASI</span>
             </div>
             <div 
-              className="[font-family:'Inter',Helvetica] text-lg"
-              style={{ color: '#e3dfd6' }}
+              className="px-6 py-3 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+              style={{ 
+                backgroundColor: 'rgba(0,0,0,0.2)',
+                color: '#e3dfd6'
+              }}
+              onClick={() => onTabChange?.("currency")}
             >
-              Toplam Portföy
+              <span className="[font-family:'Bowlby_One',Helvetica] font-normal">DÖVİZ MASASI</span>
+            </div>
+            <div 
+              className="px-6 py-3 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+              style={{ 
+                backgroundColor: 'rgba(0,0,0,0.2)',
+                color: '#e3dfd6'
+              }}
+              onClick={() => onTabChange?.("startup")}
+            >
+              <span className="[font-family:'Bowlby_One',Helvetica] font-normal">GİRİŞİM MASASI</span>
             </div>
           </div>
-        </div>
 
-        {/* Navigation Tabs */}
-        <div className="flex space-x-8 mb-6">
-          <button 
-            className="flex items-center space-x-2 pb-2 border-b-2"
-            style={{ borderColor: '#cae304', color: '#e3dfd6' }}
-          >
-            <span>$</span>
-            <span className="[font-family:'Inter',Helvetica]">Döviz Masası</span>
-          </button>
-          <button 
-            className="flex items-center space-x-2 pb-2 border-b-2"
-            style={{ borderColor: '#cae304', color: '#e3dfd6' }}
-          >
-            <span>📈</span>
-            <span className="[font-family:'Inter',Helvetica]">Girişim Masası</span>
-          </button>
-        </div>
-
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Stock Portfolio Section */}
-          <div 
-            className="p-6 rounded-lg border-2"
-            style={{ borderColor: '#cae304', backgroundColor: 'rgba(0,0,0,0.2)' }}
-          >
-            <h2 
-              className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2"
-              style={{ color: '#e3dfd6' }}
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Stock Portfolio Section */}
+            <div 
+              className="p-6 rounded-lg border-2"
+              style={{ 
+                backgroundColor: 'rgba(0,0,0,0.2)',
+                borderColor: '#cae304'
+              }}
             >
-              Hisse Senedi Portföyü
-            </h2>
-            <p 
-              className="[font-family:'Inter',Helvetica] text-sm mb-6"
-              style={{ color: '#e3dfd6' }}
-            >
-              Mevcut Varlık Ve Performans
-            </p>
+              <h2 
+                className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2"
+                style={{ color: '#e3dfd6' }}
+              >
+                Hisse Portföyü
+              </h2>
+              <p 
+                className="[font-family:'Inter',Helvetica] text-sm mb-6"
+                style={{ color: '#e3dfd6' }}
+              >
+                Sahip Olduğunuz Hisse Senetleri
+              </p>
 
-            <div className="space-y-4">
-              {portfolio?.stocks.map((stock) => (
-                <div key={stock.id} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div 
-                      className="w-12 h-12 rounded"
-                      style={{ backgroundColor: '#e3dfd6' }}
-                    />
-                    <div>
-                      <div 
-                        className="[font-family:'Bowlby_One',Helvetica] font-normal"
-                        style={{ color: '#e3dfd6' }}
-                      >
-                        {stock.company.name}
+              <div className="space-y-4 mb-6">
+                {portfolio?.stocks && portfolio.stocks.length > 0 ? (
+                  portfolio.stocks.map((stock, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div 
+                          className="w-8 h-8 rounded"
+                          style={{ backgroundColor: '#e3dfd6' }}
+                        />
+                        <div>
+                          <div 
+                            className="[font-family:'Bowlby_One',Helvetica] font-normal"
+                            style={{ color: '#e3dfd6' }}
+                          >
+                            {stock.company.name}
+                          </div>
+                          <div 
+                            className="[font-family:'Inter',Helvetica] text-sm"
+                            style={{ color: '#e3dfd6' }}
+                          >
+                            {stock.shares} adet
+                          </div>
+                        </div>
                       </div>
                       <div 
-                        className="[font-family:'Inter',Helvetica] text-sm"
-                        style={{ color: '#e3dfd6' }}
+                        className="px-3 py-1 rounded [font-family:'Bowlby_One',Helvetica] font-normal"
+                        style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
                       >
-                        {stock.shares} Adet Hisse
+                        ₺{Math.round(parseFloat(stock.company.price))}
                       </div>
                     </div>
-                  </div>
+                  ))
+                ) : (
                   <div 
-                    className="px-4 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal"
-                    style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
-                  >
-                    ₺{Math.round(parseFloat(stock.company.sellPrice) * stock.shares)}
-                  </div>
-                </div>
-              ))}
-
-              {portfolio?.stocks.length === 0 && (
-                <div className="text-center py-8">
-                  <p 
-                    className="[font-family:'Inter',Helvetica]"
+                    className="text-center py-8 [font-family:'Inter',Helvetica]"
                     style={{ color: '#e3dfd6' }}
                   >
-                    Henüz hisse senedi yok
-                  </p>
-                </div>
-              )}
+                    Henüz hisse senedi satın almadınız
+                  </div>
+                )}
+              </div>
 
               <div 
                 className="flex justify-between items-center pt-4 border-t"
@@ -207,81 +235,83 @@ export function StockMarketDesk({ teamId }: StockMarketDeskProps) {
                 </span>
               </div>
             </div>
-          </div>
 
-          {/* Market Companies Section */}
-          <div 
-            className="p-6 rounded-lg"
-            style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}
-          >
-            <h2 
-              className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2"
-              style={{ color: '#e3dfd6' }}
+            {/* Market Companies Section */}
+            <div 
+              className="p-6 rounded-lg"
+              style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}
             >
-              Piyasa Şirketleri
-            </h2>
-            <p 
-              className="[font-family:'Inter',Helvetica] text-sm mb-6"
-              style={{ color: '#e3dfd6' }}
-            >
-              Yatırım İçin Mevcut Hisse Senetleri
-            </p>
+              <h2 
+                className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2"
+                style={{ color: '#e3dfd6' }}
+              >
+                Piyasa Şirketleri
+              </h2>
+              <p 
+                className="[font-family:'Inter',Helvetica] text-sm mb-6"
+                style={{ color: '#e3dfd6' }}
+              >
+                Yatırım İçin Mevcut Hisse Senetleri
+              </p>
 
-            <div className="space-y-4">
-              {companies?.slice(0, 3).map((company) => (
-                <div key={company.id} className="space-y-2">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start space-x-3">
-                      <div 
-                        className="w-12 h-12 rounded"
-                        style={{ backgroundColor: '#e3dfd6' }}
-                      />
-                      <div>
+              <div className="space-y-4">
+                {companies?.slice(0, 5).map((company) => (
+                  <div key={company.id} className="space-y-2">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-3">
                         <div 
-                          className="[font-family:'Bowlby_One',Helvetica] font-normal"
-                          style={{ color: '#e3dfd6' }}
-                        >
-                          {company.name}
+                          className="w-12 h-12 rounded"
+                          style={{ backgroundColor: '#e3dfd6' }}
+                        />
+                        <div>
+                          <div 
+                            className="[font-family:'Bowlby_One',Helvetica] font-normal"
+                            style={{ color: '#e3dfd6' }}
+                          >
+                            {company.name}
+                          </div>
+                          <p 
+                            className="[font-family:'Inter',Helvetica] text-sm mt-1"
+                            style={{ color: '#e3dfd6' }}
+                          >
+                            {company.description}
+                          </p>
                         </div>
-                        <p 
-                          className="[font-family:'Inter',Helvetica] text-sm mt-1"
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span 
+                          className="[font-family:'Inter',Helvetica] text-sm"
                           style={{ color: '#e3dfd6' }}
                         >
-                          {company.description}
-                        </p>
+                          Alış
+                        </span>
+                        <span 
+                          className="[font-family:'Inter',Helvetica] text-sm"
+                          style={{ color: '#e3dfd6' }}
+                        >
+                          Satış
+                        </span>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <span 
-                        className="[font-family:'Inter',Helvetica] text-sm"
-                        style={{ color: '#e3dfd6' }}
+                    <div className="flex justify-end space-x-2">
+                      <button 
+                        className="px-4 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity"
+                        style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
+                        onClick={() => console.log('Buy', company.name)}
                       >
-                        Alış
-                      </span>
-                      <span 
-                        className="[font-family:'Inter',Helvetica] text-sm"
-                        style={{ color: '#e3dfd6' }}
+                        ₺{Math.round(parseFloat(company.price))}
+                      </button>
+                      <button 
+                        className="px-4 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity"
+                        style={{ backgroundColor: '#cae304', color: '#1b1b1b' }}
+                        onClick={() => console.log('Sell', company.name)}
                       >
-                        Satış
-                      </span>
+                        ₺{Math.round(parseFloat(company.sellPrice))}
+                      </button>
                     </div>
                   </div>
-                  <div className="flex justify-end space-x-2">
-                    <div 
-                      className="px-4 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal"
-                      style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
-                    >
-                      {Math.round(parseFloat(company.price))}
-                    </div>
-                    <div 
-                      className="px-4 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal"
-                      style={{ backgroundColor: '#cae304', color: '#1b1b1b' }}
-                    >
-                      {Math.round(parseFloat(company.sellPrice))}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>

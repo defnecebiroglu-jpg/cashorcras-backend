@@ -58,6 +58,11 @@ export default function TeamDashboard() {
     );
   }
 
+  // When stocks tab is active, show full-screen custom design
+  if (activeTab === "stocks") {
+    return <StockMarketDesk teamId={teamId} onTabChange={setActiveTab} />;
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -106,7 +111,6 @@ export default function TeamDashboard() {
       
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeTab === "stocks" && <StockMarketDesk teamId={teamId} />}
         {activeTab === "currency" && <CurrencyDesk teamId={teamId} />}
         {activeTab === "startup" && <StartupDesk teamId={teamId} />}
       </main>
