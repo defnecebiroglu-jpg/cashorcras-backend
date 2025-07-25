@@ -37,50 +37,122 @@ export function StockMarketDesk({ teamId }: StockMarketDeskProps) {
 
   return (
     <div 
-      className="min-h-screen p-8"
+      className="min-h-screen p-6"
       style={{ backgroundColor: '#1b1b1b' }}
     >
-      <div className="max-w-6xl mx-auto space-y-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 
-            className="[font-family:'Bowlby_One',Helvetica] font-normal text-5xl mb-4"
-            style={{ color: '#e3dfd6' }}
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header with Team Name and Exit Button */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center space-x-3">
+            <div 
+              className="w-12 h-12 rounded-full flex items-center justify-center"
+              style={{ backgroundColor: '#cae304' }}
+            >
+              <span 
+                className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
+                style={{ color: '#1b1b1b' }}
+              >
+                T
+              </span>
+            </div>
+            <span 
+              className="[font-family:'Bowlby_One',Helvetica] font-normal text-xl"
+              style={{ color: '#e3dfd6' }}
+            >
+              TAKIM 1
+            </span>
+          </div>
+          <button 
+            className="px-6 py-2 rounded-lg [font-family:'Bowlby_One',Helvetica] font-normal"
+            style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
           >
-            BORSA MASASİ
-          </h1>
-          <p 
-            className="[font-family:'Inter',Helvetica] text-lg"
-            style={{ color: '#e3dfd6' }}
-          >
-            Hisse senedi portföyünüz ve piyasa durumu
-          </p>
+            ÇIKIŞ
+          </button>
         </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Team's Stock Portfolio */}
+
+        {/* Balance Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div 
-            className="rounded-[25px] p-8"
-            style={{ backgroundColor: '#cae304e6' }}
+            className="p-6 rounded-lg border-2 border-dashed"
+            style={{ borderColor: '#cae304' }}
+          >
+            <div 
+              className="[font-family:'Bowlby_One',Helvetica] font-normal text-4xl mb-2"
+              style={{ color: '#e3dfd6' }}
+            >
+              ₺{portfolio ? parseFloat(portfolio.team.cashBalance).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) : "0"}
+            </div>
+            <div 
+              className="[font-family:'Inter',Helvetica] text-lg"
+              style={{ color: '#e3dfd6' }}
+            >
+              Nakit Bakiye
+            </div>
+          </div>
+          <div 
+            className="p-6 rounded-lg border-2 border-dashed"
+            style={{ borderColor: '#aa95c7' }}
+          >
+            <div 
+              className="[font-family:'Bowlby_One',Helvetica] font-normal text-4xl mb-2"
+              style={{ color: '#e3dfd6' }}
+            >
+              ₺{portfolio ? parseFloat(portfolio.totalPortfolioValue).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) : "0"}
+            </div>
+            <div 
+              className="[font-family:'Inter',Helvetica] text-lg"
+              style={{ color: '#e3dfd6' }}
+            >
+              Toplam Portföy
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation Tabs */}
+        <div className="flex space-x-8 mb-6">
+          <button 
+            className="flex items-center space-x-2 pb-2 border-b-2"
+            style={{ borderColor: '#cae304', color: '#e3dfd6' }}
+          >
+            <span>$</span>
+            <span className="[font-family:'Inter',Helvetica]">Döviz Masası</span>
+          </button>
+          <button 
+            className="flex items-center space-x-2 pb-2 border-b-2"
+            style={{ borderColor: '#cae304', color: '#e3dfd6' }}
+          >
+            <span>📈</span>
+            <span className="[font-family:'Inter',Helvetica]">Girişim Masası</span>
+          </button>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Stock Portfolio Section */}
+          <div 
+            className="p-6 rounded-lg border-2"
+            style={{ borderColor: '#cae304', backgroundColor: 'rgba(0,0,0,0.2)' }}
           >
             <h2 
-              className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-6"
-              style={{ color: '#1b1b1b' }}
+              className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2"
+              style={{ color: '#e3dfd6' }}
             >
-              Hisse Senedi Portföyünüz
+              Hisse Senedi Portföyü
             </h2>
+            <p 
+              className="[font-family:'Inter',Helvetica] text-sm mb-6"
+              style={{ color: '#e3dfd6' }}
+            >
+              Mevcut Varlık Ve Performans
+            </p>
+
             <div className="space-y-4">
               {portfolio?.stocks.map((stock) => (
-                <div 
-                  key={stock.id} 
-                  className="flex items-center justify-between p-4 rounded-lg"
-                  style={{ backgroundColor: '#1b1b1b' }}
-                >
+                <div key={stock.id} className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <img 
-                      src={stock.company.logoUrl || "/api/placeholder/40/40"} 
-                      alt={stock.company.name}
-                      className="w-10 h-10 rounded object-cover"
+                    <div 
+                      className="w-12 h-12 rounded"
+                      style={{ backgroundColor: '#e3dfd6' }}
                     />
                     <div>
                       <div 
@@ -93,116 +165,119 @@ export function StockMarketDesk({ teamId }: StockMarketDeskProps) {
                         className="[font-family:'Inter',Helvetica] text-sm"
                         style={{ color: '#e3dfd6' }}
                       >
-                        {stock.shares} adet
+                        {stock.shares} Adet Hisse
                       </div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div 
-                      className="[font-family:'Bowlby_One',Helvetica] font-normal"
-                      style={{ color: '#cae304' }}
-                    >
-                      ₺{(parseFloat(stock.company.sellPrice) * stock.shares).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </div>
-                    <div 
-                      className="[font-family:'Inter',Helvetica] text-sm"
-                      style={{ color: '#aa95c7' }}
-                    >
-                      {parseFloat(stock.company.dividend) > 0 ? `%${stock.company.dividend} temettü` : "Temettü yok"}
-                    </div>
+                  <div 
+                    className="px-4 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal"
+                    style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
+                  >
+                    ₺{Math.round(parseFloat(stock.company.sellPrice) * stock.shares)}
                   </div>
                 </div>
               ))}
-              
+
               {portfolio?.stocks.length === 0 && (
-                <div 
-                  className="text-center py-8 rounded-lg"
-                  style={{ backgroundColor: '#1b1b1b' }}
-                >
+                <div className="text-center py-8">
                   <p 
-                    className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
+                    className="[font-family:'Inter',Helvetica]"
                     style={{ color: '#e3dfd6' }}
                   >
                     Henüz hisse senedi yok
                   </p>
                 </div>
               )}
-              
+
               <div 
-                className="flex justify-between items-center pt-4 border-t-2"
-                style={{ borderColor: '#1b1b1b' }}
+                className="flex justify-between items-center pt-4 border-t"
+                style={{ borderColor: '#e3dfd6' }}
               >
                 <span 
                   className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
-                  style={{ color: '#1b1b1b' }}
+                  style={{ color: '#e3dfd6' }}
                 >
-                  Toplam Değer:
+                  Toplam Hisse Değeri:
                 </span>
                 <span 
                   className="[font-family:'Bowlby_One',Helvetica] font-normal text-xl"
-                  style={{ color: '#1b1b1b' }}
+                  style={{ color: '#cae304' }}
                 >
-                  ₺{portfolio ? parseFloat(portfolio.totalStockValue).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00"}
+                  ₺{portfolio ? Math.round(parseFloat(portfolio.totalStockValue)) : "0"}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Available Stocks */}
+          {/* Market Companies Section */}
           <div 
-            className="rounded-[25px] p-8"
-            style={{ backgroundColor: '#aa95c7' }}
+            className="p-6 rounded-lg"
+            style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}
           >
             <h2 
-              className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-6"
-              style={{ color: '#1b1b1b' }}
+              className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2"
+              style={{ color: '#e3dfd6' }}
             >
               Piyasa Şirketleri
             </h2>
+            <p 
+              className="[font-family:'Inter',Helvetica] text-sm mb-6"
+              style={{ color: '#e3dfd6' }}
+            >
+              Yatırım İçin Mevcut Hisse Senetleri
+            </p>
+
             <div className="space-y-4">
-              {companies?.map((company) => (
-                <div 
-                  key={company.id} 
-                  className="p-4 rounded-lg"
-                  style={{ backgroundColor: '#1b1b1b' }}
-                >
-                  <div className="flex items-start space-x-3">
-                    <img 
-                      src={company.logoUrl || "/api/placeholder/40/40"} 
-                      alt={company.name}
-                      className="w-10 h-10 rounded object-cover flex-shrink-0"
-                    />
-                    <div className="flex-grow">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 
-                            className="[font-family:'Bowlby_One',Helvetica] font-normal"
-                            style={{ color: '#e3dfd6' }}
-                          >
-                            {company.name}
-                          </h3>
-                          <p 
-                            className="[font-family:'Inter',Helvetica] text-sm mt-1"
-                            style={{ color: '#e3dfd6' }}
-                          >
-                            {company.description}
-                          </p>
+              {companies?.slice(0, 3).map((company) => (
+                <div key={company.id} className="space-y-2">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start space-x-3">
+                      <div 
+                        className="w-12 h-12 rounded"
+                        style={{ backgroundColor: '#e3dfd6' }}
+                      />
+                      <div>
+                        <div 
+                          className="[font-family:'Bowlby_One',Helvetica] font-normal"
+                          style={{ color: '#e3dfd6' }}
+                        >
+                          {company.name}
                         </div>
-                        <div className="text-right text-sm ml-4">
-                          <div 
-                            className="[font-family:'Inter',Helvetica] font-semibold"
-                            style={{ color: '#cae304' }}
-                          >
-                            Alış: ₺{parseFloat(company.price).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </div>
-                          <div 
-                            className="[font-family:'Inter',Helvetica] font-semibold"
-                            style={{ color: '#aa95c7' }}
-                          >
-                            Satış: ₺{parseFloat(company.sellPrice).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </div>
-                        </div>
+                        <p 
+                          className="[font-family:'Inter',Helvetica] text-sm mt-1"
+                          style={{ color: '#e3dfd6' }}
+                        >
+                          {company.description}
+                        </p>
                       </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span 
+                        className="[font-family:'Inter',Helvetica] text-sm"
+                        style={{ color: '#e3dfd6' }}
+                      >
+                        Alış
+                      </span>
+                      <span 
+                        className="[font-family:'Inter',Helvetica] text-sm"
+                        style={{ color: '#e3dfd6' }}
+                      >
+                        Satış
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <div 
+                      className="px-4 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal"
+                      style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
+                    >
+                      {Math.round(parseFloat(company.price))}
+                    </div>
+                    <div 
+                      className="px-4 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal"
+                      style={{ backgroundColor: '#cae304', color: '#1b1b1b' }}
+                    >
+                      {Math.round(parseFloat(company.sellPrice))}
                     </div>
                   </div>
                 </div>
