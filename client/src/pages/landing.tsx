@@ -1,5 +1,7 @@
 import { Link } from "wouter";
 
+import kalcc_borsa_gmail_com_kalcc_doviz_gmail_com_kalcc_girisimcilik_gmail_com from "@assets/kalcc.borsa@gmail.com kalcc.doviz@gmail.com kalcc.girisimcilik@gmail.com.png";
+
 const colors = {
   background: '#1B1B1B',
   textPrimary: '#E3DFD6',
@@ -109,7 +111,7 @@ export default function Landing() {
               <img
                 className="relative w-[423px] h-[111px]"
                 alt="Contact emails"
-                src="/figmaAssets/defnecebiroglu-gmail-com-iremcebiroglu-gmail-com-eylllllltasirta.png"
+                src={kalcc_borsa_gmail_com_kalcc_doviz_gmail_com_kalcc_girisimcilik_gmail_com}
               />
             </div>
           </div>
