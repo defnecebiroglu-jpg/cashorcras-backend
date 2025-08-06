@@ -256,12 +256,12 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
                 {companies?.slice(0, 5).map((company) => (
                   <div key={company.id} className="space-y-2">
                     <div className="flex items-start justify-between">
-                      <div className="flex items-start space-x-3">
+                      <div className="flex items-start space-x-3 flex-1 min-w-0">
                         <div 
-                          className="w-12 h-12 rounded"
+                          className="w-12 h-12 rounded flex-shrink-0"
                           style={{ backgroundColor: '#e3dfd6' }}
                         />
-                        <div>
+                        <div className="flex-1 min-w-0">
                           <div 
                             className="[font-family:'Bowlby_One',Helvetica] font-normal"
                             style={{ color: '#e3dfd6' }}
@@ -269,7 +269,7 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
                             {company.name}
                           </div>
                           <p 
-                            className="[font-family:'Inter',Helvetica] text-sm mt-1"
+                            className="[font-family:'Inter',Helvetica] text-sm mt-1 max-w-xs pr-4"
                             style={{ color: '#e3dfd6' }}
                           >
                             {company.description}
