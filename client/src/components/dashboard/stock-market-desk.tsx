@@ -85,9 +85,7 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
               <h3 
                 className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg mb-2"
                 style={{ color: '#e3dfd6' }}
-              >
-                NAKİT BAKİYE
-              </h3>
+              >NAKIT BAKİYE</h3>
               <p 
                 className="[font-family:'Inter',Helvetica] text-3xl font-bold"
                 style={{ color: '#cae304' }}
