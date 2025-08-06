@@ -138,7 +138,7 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
               }}
               onClick={() => onTabChange?.("currency")}
             >
-              <span className="[font-family:'Bowlby_One',Helvetica] font-normal">DÖVİZ MASASI</span>
+              <span className="[font-family:'Bowlby_One',Helvetica] font-normal">DÖVIZ MASASI</span>
             </div>
             <div 
               className="px-6 py-3 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
