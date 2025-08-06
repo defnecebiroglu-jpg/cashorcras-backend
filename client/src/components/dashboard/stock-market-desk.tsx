@@ -254,28 +254,28 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
 
               <div className="space-y-4">
                 {companies?.slice(0, 5).map((company) => (
-                  <div key={company.id} className="space-y-2">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start space-x-3 flex-1 min-w-0">
+                  <div key={company.id} className="flex items-start justify-between">
+                    <div className="flex items-start space-x-3 flex-1 min-w-0">
+                      <div 
+                        className="w-12 h-12 rounded flex-shrink-0"
+                        style={{ backgroundColor: '#e3dfd6' }}
+                      />
+                      <div className="flex-1 min-w-0">
                         <div 
-                          className="w-12 h-12 rounded flex-shrink-0"
-                          style={{ backgroundColor: '#e3dfd6' }}
-                        />
-                        <div className="flex-1 min-w-0">
-                          <div 
-                            className="[font-family:'Bowlby_One',Helvetica] font-normal"
-                            style={{ color: '#e3dfd6' }}
-                          >
-                            {company.name}
-                          </div>
-                          <p 
-                            className="[font-family:'Inter',Helvetica] text-sm mt-1 max-w-xs pr-4"
-                            style={{ color: '#e3dfd6' }}
-                          >
-                            {company.description}
-                          </p>
+                          className="[font-family:'Bowlby_One',Helvetica] font-normal"
+                          style={{ color: '#e3dfd6' }}
+                        >
+                          {company.name}
                         </div>
+                        <p 
+                          className="[font-family:'Inter',Helvetica] text-sm mt-1 max-w-xs pr-4"
+                          style={{ color: '#e3dfd6' }}
+                        >
+                          {company.description}
+                        </p>
                       </div>
+                    </div>
+                    <div className="flex flex-col items-end space-y-2">
                       <div className="flex items-center space-x-2">
                         <span 
                           className="[font-family:'Inter',Helvetica] text-sm"
@@ -290,22 +290,22 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
                           Satış
                         </span>
                       </div>
-                    </div>
-                    <div className="flex justify-end space-x-2">
-                      <button 
-                        className="px-4 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity"
-                        style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
-                        onClick={() => console.log('Buy', company.name)}
-                      >
-                        ₺{Math.round(parseFloat(company.price))}
-                      </button>
-                      <button 
-                        className="px-4 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity"
-                        style={{ backgroundColor: '#cae304', color: '#1b1b1b' }}
-                        onClick={() => console.log('Sell', company.name)}
-                      >
-                        ₺{Math.round(parseFloat(company.sellPrice))}
-                      </button>
+                      <div className="flex space-x-2">
+                        <button 
+                          className="px-4 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity"
+                          style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
+                          onClick={() => console.log('Buy', company.name)}
+                        >
+                          ₺{Math.round(parseFloat(company.price))}
+                        </button>
+                        <button 
+                          className="px-4 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity"
+                          style={{ backgroundColor: '#cae304', color: '#1b1b1b' }}
+                          onClick={() => console.log('Sell', company.name)}
+                        >
+                          ₺{Math.round(parseFloat(company.sellPrice))}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
