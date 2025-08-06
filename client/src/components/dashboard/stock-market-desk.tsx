@@ -278,7 +278,7 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
                     <div className="flex flex-col items-end space-y-2">
                       <div className="flex items-center space-x-2">
                         <span 
-                          className="[font-family:'Inter',Helvetica] text-sm ml-[48px] mr-[48px] text-[#e3dfd6]"
+                          className="[font-family:'Inter',Helvetica] text-sm text-[#e3dfd6] ml-[45px] mr-[45px]"
                           style={{ color: '#e3dfd6' }}
                         >
                           Alış
