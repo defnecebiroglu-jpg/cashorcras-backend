@@ -240,7 +240,7 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
               style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}
             >
               <h2 
-                className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2"
+                className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2 text-[#e3dfd6]"
                 style={{ color: '#e3dfd6' }}
               >Piyasa Sirketleri</h2>
               <p 
