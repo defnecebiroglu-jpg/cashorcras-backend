@@ -170,7 +170,7 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
               className="px-6 py-3 rounded-lg border-b-4 cursor-pointer"
               style={{ 
                 backgroundColor: '#cae304',
-                borderColor: '#aa95c7',
+                borderColor: '#cae304',
                 color: '#1b1b1b'
               }}
             >
@@ -272,12 +272,12 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
                     className="text-center p-6 rounded-lg border-2"
                     style={{ 
                       backgroundColor: 'rgba(0,0,0,0.3)',
-                      borderColor: '#aa95c7'
+                      borderColor: '#e3dfd6'
                     }}
                   >
                     <div 
                       className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
-                      style={{ backgroundColor: '#aa95c7' }}
+                      style={{ backgroundColor: '#e3dfd6' }}
                     >
                       <svg 
                         className="w-8 h-8" 
@@ -290,7 +290,7 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
                     </div>
                     <h3 
                       className="[font-family:'Bowlby_One',Helvetica] font-normal text-sm mb-2"
-                      style={{ color: '#aa95c7' }}
+                      style={{ color: '#e3dfd6' }}
                     >
                       SEKTÖR
                     </h3>
@@ -374,7 +374,7 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
                     <div className="flex items-start space-x-3">
                       <div 
                         className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
-                        style={{ backgroundColor: '#aa95c7' }}
+                        style={{ backgroundColor: '#e3dfd6' }}
                       ></div>
                       <p 
                         className="[font-family:'Inter',Helvetica] text-base"
@@ -398,7 +398,7 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
                     <div className="flex items-start space-x-3">
                       <div 
                         className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
-                        style={{ backgroundColor: '#aa95c7' }}
+                        style={{ backgroundColor: '#e3dfd6' }}
                       ></div>
                       <p 
                         className="[font-family:'Inter',Helvetica] text-base"
