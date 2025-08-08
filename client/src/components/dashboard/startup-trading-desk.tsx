@@ -174,7 +174,7 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
                 color: '#1b1b1b'
               }}
             >
-              <span className="[font-family:'Bowlby_One',Helvetica] font-normal">GİRİŞİM MASASI</span>
+              <span className="[font-family:'Bowlby_One',Helvetica] font-normal">GIRISIM MASASI</span>
             </div>
           </div>
 
