@@ -51,6 +51,8 @@ export default function CurrencyTradingDesk({ onTabChange }: CurrencyTradingDesk
     enabled: !!teamId,
   });
 
+
+
   // Transform the portfolio data to match currency-specific structure
   const portfolio: CurrencyPortfolioResponse | null = portfolioData ? {
     team: portfolioData.team,
