@@ -106,12 +106,10 @@ export default function CurrencyTradingDesk({ onTabChange }: CurrencyTradingDesk
               </span>
             </div>
             <button 
-              className="px-6 py-2 rounded-lg [font-family:'Bowlby_One',Helvetica] font-normal"
+              className="px-6 py-2 rounded-lg [font-family:'Bowlby_One',Helvetica] font-normal bg-[#aa95c7]"
               style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
               onClick={() => window.location.href = '/'}
-            >
-              ÇIKIŞ
-            </button>
+            >ÇIKIS</button>
           </div>
 
           {/* Balance Cards */}
