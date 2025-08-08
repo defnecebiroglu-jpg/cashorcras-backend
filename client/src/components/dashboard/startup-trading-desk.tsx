@@ -342,71 +342,7 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
                   </div>
                 </div>
 
-                {/* Key Highlights */}
-                <div 
-                  className="rounded-lg p-6 border-2"
-                  style={{ 
-                    backgroundColor: 'rgba(0,0,0,0.3)',
-                    borderColor: '#e3dfd6'
-                  }}
-                >
-                  <h3 
-                    className="[font-family:'Bowlby_One',Helvetica] font-normal text-xl mb-6 text-center"
-                    style={{ color: '#cae304' }}
-                  >
-                    ÖNE ÇIKAN ÖZELLIKLER
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="flex items-start space-x-3">
-                      <div 
-                        className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
-                        style={{ backgroundColor: '#cae304' }}
-                      ></div>
-                      <p 
-                        className="[font-family:'Inter',Helvetica] text-base"
-                        style={{ color: '#e3dfd6' }}
-                      >
-                        Yenilikçi teknoloji altyapısı ve güçlü patent portföyü
-                      </p>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <div 
-                        className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
-                        style={{ backgroundColor: '#e3dfd6' }}
-                      ></div>
-                      <p 
-                        className="[font-family:'Inter',Helvetica] text-base"
-                        style={{ color: '#e3dfd6' }}
-                      >
-                        Deneyimli kurucu ekip ve güçlü danışman kurulu
-                      </p>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <div 
-                        className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
-                        style={{ backgroundColor: '#cae304' }}
-                      ></div>
-                      <p 
-                        className="[font-family:'Inter',Helvetica] text-base"
-                        style={{ color: '#e3dfd6' }}
-                      >
-                        Büyük pazar potansiyeli ve ölçeklenebilir iş modeli
-                      </p>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <div 
-                        className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
-                        style={{ backgroundColor: '#e3dfd6' }}
-                      ></div>
-                      <p 
-                        className="[font-family:'Inter',Helvetica] text-base"
-                        style={{ color: '#e3dfd6' }}
-                      >
-                        Stratejik ortaklıklar ve çeşitlendirilmiş gelir akışı
-                      </p>
-                    </div>
-                  </div>
-                </div>
+
               </div>
             )}
           </div>
