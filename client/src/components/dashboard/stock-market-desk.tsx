@@ -242,34 +242,16 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
                 borderColor: '#aa95c7'
               }}
             >
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 
-                    className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2 text-[#e3dfd6]"
-                    style={{ color: '#e3dfd6' }}
-                  >Piyasa Sirketleri</h2>
-                  <p 
-                    className="[font-family:'Inter',Helvetica] text-sm"
-                    style={{ color: '#e3dfd6' }}
-                  >
-                    Yatırım İçin Mevcut Hisse Senetleri
-                  </p>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span 
-                    className="[font-family:'Inter',Helvetica] text-sm ml-[45px] mr-[45px]"
-                    style={{ color: '#e3dfd6' }}
-                  >
-                    Alış
-                  </span>
-                  <span 
-                    className="[font-family:'Inter',Helvetica] text-sm"
-                    style={{ color: '#e3dfd6' }}
-                  >
-                    Satış
-                  </span>
-                </div>
-              </div>
+              <h2 
+                className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2 text-[#e3dfd6]"
+                style={{ color: '#e3dfd6' }}
+              >Piyasa Sirketleri</h2>
+              <p 
+                className="[font-family:'Inter',Helvetica] text-sm mb-6"
+                style={{ color: '#e3dfd6' }}
+              >
+                Yatırım İçin Mevcut Hisse Senetleri
+              </p>
 
               <div className="space-y-4">
                 {companies?.slice(0, 5).map((company) => (
@@ -294,21 +276,37 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
                         </p>
                       </div>
                     </div>
-                    <div className="flex space-x-2">
-                      <button 
-                        className="w-20 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity text-center"
-                        style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
-                        onClick={() => console.log('Buy', company.name)}
-                      >
-                        ₺{Math.round(parseFloat(company.price))}
-                      </button>
-                      <button 
-                        className="w-20 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity text-center"
-                        style={{ backgroundColor: '#cae304', color: '#1b1b1b' }}
-                        onClick={() => console.log('Sell', company.name)}
-                      >
-                        ₺{Math.round(parseFloat(company.sellPrice))}
-                      </button>
+                    <div className="flex flex-col items-end space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <span 
+                          className="[font-family:'Inter',Helvetica] text-sm text-[#e3dfd6] ml-[45px] mr-[45px]"
+                          style={{ color: '#e3dfd6' }}
+                        >
+                          Alış
+                        </span>
+                        <span 
+                          className="[font-family:'Inter',Helvetica] text-sm"
+                          style={{ color: '#e3dfd6' }}
+                        >
+                          Satış
+                        </span>
+                      </div>
+                      <div className="flex space-x-2">
+                        <button 
+                          className="w-20 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity text-center"
+                          style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
+                          onClick={() => console.log('Buy', company.name)}
+                        >
+                          ₺{Math.round(parseFloat(company.price))}
+                        </button>
+                        <button 
+                          className="w-20 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity text-center"
+                          style={{ backgroundColor: '#cae304', color: '#1b1b1b' }}
+                          onClick={() => console.log('Sell', company.name)}
+                        >
+                          ₺{Math.round(parseFloat(company.sellPrice))}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
