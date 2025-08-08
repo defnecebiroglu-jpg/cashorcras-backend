@@ -236,8 +236,11 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
 
             {/* Market Companies Section */}
             <div 
-              className="p-6 rounded-lg"
-              style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}
+              className="p-6 rounded-lg border-2"
+              style={{ 
+                backgroundColor: 'rgba(0,0,0,0.2)',
+                borderColor: '#aa95c7'
+              }}
             >
               <h2 
                 className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2 text-[#e3dfd6]"
