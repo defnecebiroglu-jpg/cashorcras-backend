@@ -162,7 +162,7 @@ export default function TeamLogin() {
 
                 <Button 
                   type="submit"
-                  className="inline-flex items-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/90 h-[60px] justify-center gap-2.5 px-6 py-0 w-full rounded-lg transition-colors hover:opacity-90 bg-[#cbed46] text-[#1b1b1b]"
+                  className="inline-flex items-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/90 h-[60px] justify-center gap-2.5 px-6 py-0 w-full rounded-lg transition-colors hover:opacity-90 text-[#1b1b1b] bg-[#cbed46]"
                   style={{ backgroundColor: colors.button }}
                   disabled={isLoading || !accessCode.trim()}
                 >
