@@ -86,7 +86,7 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
                 className="[font-family:'Inter',Helvetica] text-3xl font-bold"
                 style={{ color: '#cae304' }}
               >
-                ₺{portfolio ? Math.round(parseFloat(portfolio.team.cashBalance)) : "0"}
+                ₺{portfolio?.team?.cashBalance ? Math.round(parseFloat(portfolio.team.cashBalance)) : "0"}
               </p>
             </div>
             
@@ -107,7 +107,7 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
                 className="[font-family:'Inter',Helvetica] text-3xl font-bold"
                 style={{ color: '#cae304' }}
               >
-                ₺{portfolio ? Math.round(parseFloat(portfolio.totalPortfolioValue)) : "0"}
+                ₺{portfolio?.totalPortfolioValue ? Math.round(parseFloat(portfolio.totalPortfolioValue)) : "0"}
               </p>
             </div>
           </div>
@@ -235,7 +235,7 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
                   className="[font-family:'Bowlby_One',Helvetica] font-normal text-xl"
                   style={{ color: '#cae304' }}
                 >
-                  ₺{portfolio ? Math.round(parseFloat(portfolio.totalStockValue)) : "0"}
+                  ₺{portfolio?.totalStockValue ? Math.round(parseFloat(portfolio.totalStockValue)) : "0"}
                 </span>
               </div>
             </div>
