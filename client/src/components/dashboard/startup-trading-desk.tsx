@@ -178,234 +178,239 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
             </div>
           </div>
 
-          {/* Main Content - Startup Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* Startup Investment Section */}
-            <div 
-              className="p-4 rounded-lg border-4 h-fit"
-              style={{ 
-                backgroundColor: 'rgba(0,0,0,0.2)',
-                borderColor: '#cae304'
-              }}
-            >
-              <h2 
-                className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2"
-                style={{ color: '#e3dfd6' }}
-              >
-                Girişim Yatırımı
-              </h2>
-              <p 
-                className="[font-family:'Inter',Helvetica] text-sm mb-6"
-                style={{ color: '#e3dfd6' }}
-              >
-                Atanan Startup Projesi
-              </p>
-
-              {!portfolio?.startup ? (
-                <div className="text-center py-12">
-                  <div 
-                    className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
-                    style={{ backgroundColor: '#aa95c7' }}
+          {/* Main Content - Full Width Startup Display */}
+          <div 
+            className="p-6 rounded-lg border-4"
+            style={{ 
+              backgroundColor: 'rgba(0,0,0,0.2)',
+              borderColor: '#cae304'
+            }}
+          >
+            {!portfolio?.startup ? (
+              <div className="text-center py-16">
+                <div 
+                  className="w-24 h-24 rounded-full mx-auto mb-8 flex items-center justify-center"
+                  style={{ backgroundColor: 'rgba(202, 227, 4, 0.2)', border: '3px solid #cae304' }}
+                >
+                  <svg 
+                    className="w-12 h-12" 
+                    style={{ color: '#cae304' }}
+                    fill="currentColor" 
+                    viewBox="0 0 24 24"
                   >
-                    <svg 
-                      className="w-8 h-8" 
-                      style={{ color: '#1b1b1b' }}
-                      fill="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 2L13.09 8.26L19 7L17.74 13.09L24 12L17.74 10.91L19 17L13.09 15.74L12 22L10.91 15.74L5 17L6.26 10.91L0 12L6.26 13.09L5 7L10.91 8.26L12 2Z"/>
-                    </svg>
-                  </div>
-                  <h3 
-                    className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg mb-2"
-                    style={{ color: '#e3dfd6' }}
-                  >
-                    Girişim Ataması Bekleniyor
-                  </h3>
-                  <p 
-                    className="[font-family:'Inter',Helvetica] text-sm"
-                    style={{ color: '#aa95c7' }}
-                  >
-                    Bu takıma henüz bir girişim projesi atanmamış
-                  </p>
+                    <path d="M12 2L13.09 8.26L19 7L17.74 13.09L24 12L17.74 10.91L19 17L13.09 15.74L12 22L10.91 15.74L5 17L6.26 10.91L0 12L6.26 13.09L5 7L10.91 8.26L12 2Z"/>
+                  </svg>
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  <h3 
-                    className="[font-family:'Bowlby_One',Helvetica] font-normal text-xl mb-4"
+                <h2 
+                  className="[font-family:'Bowlby_One',Helvetica] font-normal text-3xl mb-4"
+                  style={{ color: '#cae304' }}
+                >
+                  GİRİŞİM ATAMASI BEKLENİYOR
+                </h2>
+                <p 
+                  className="[font-family:'Inter',Helvetica] text-lg max-w-md mx-auto"
+                  style={{ color: '#e3dfd6' }}
+                >
+                  Bu takıma henüz bir startup projesi atanmamış. Admin panel üzerinden girişim ataması yapılmasını bekleyin.
+                </p>
+              </div>
+            ) : (
+              <div>
+                {/* Startup Header */}
+                <div className="text-center mb-8">
+                  <h2 
+                    className="[font-family:'Bowlby_One',Helvetica] font-normal text-3xl mb-4"
                     style={{ color: '#cae304' }}
                   >
                     {portfolio.startup.name}
-                  </h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div 
-                      className="rounded-lg p-3 text-center"
-                      style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
-                    >
-                      <div 
-                        className="[font-family:'Inter',Helvetica] text-xs mb-1"
-                        style={{ color: '#aa95c7' }}
-                      >
-                        Değer
-                      </div>
-                      <div 
-                        className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
-                        style={{ color: '#cae304' }}
-                      >
-                        ₺{parseFloat(portfolio.startup.value).toLocaleString()}
-                      </div>
-                    </div>
-                    
-                    <div 
-                      className="rounded-lg p-3 text-center"
-                      style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
-                    >
-                      <div 
-                        className="[font-family:'Inter',Helvetica] text-xs mb-1"
-                        style={{ color: '#aa95c7' }}
-                      >
-                        Sektör
-                      </div>
-                      <div 
-                        className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
-                        style={{ color: '#e3dfd6' }}
-                      >
-                        {portfolio.startup.industry}
-                      </div>
-                    </div>
-                    
-                    <div 
-                      className="rounded-lg p-3 text-center"
-                      style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
-                    >
-                      <div 
-                        className="[font-family:'Inter',Helvetica] text-xs mb-1"
-                        style={{ color: '#aa95c7' }}
-                      >
-                        Risk
-                      </div>
-                      <div 
-                        className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
-                        style={{ 
-                          color: portfolio.startup.riskLevel === 'Yüksek' ? '#ff6b6b' : 
-                                 portfolio.startup.riskLevel === 'Orta' ? '#feca57' : '#48dbfb'
-                        }}
-                      >
-                        {portfolio.startup.riskLevel}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div 
-                    className="rounded-lg p-4 mb-4"
-                    style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
+                  </h2>
+                  <p 
+                    className="[font-family:'Inter',Helvetica] text-lg max-w-3xl mx-auto leading-relaxed"
+                    style={{ color: '#e3dfd6' }}
                   >
-                    <h4 
+                    {portfolio.startup.description}
+                  </p>
+                </div>
+
+                {/* Startup Stats Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                  <div 
+                    className="text-center p-6 rounded-lg border-2"
+                    style={{ 
+                      backgroundColor: 'rgba(0,0,0,0.3)',
+                      borderColor: '#cae304'
+                    }}
+                  >
+                    <div 
+                      className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
+                      style={{ backgroundColor: '#cae304' }}
+                    >
+                      <svg 
+                        className="w-8 h-8" 
+                        style={{ color: '#1b1b1b' }}
+                        fill="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                      </svg>
+                    </div>
+                    <h3 
                       className="[font-family:'Bowlby_One',Helvetica] font-normal text-sm mb-2"
                       style={{ color: '#cae304' }}
                     >
-                      Açıklama
-                    </h4>
+                      YATIRIM DEĞERİ
+                    </h3>
                     <p 
-                      className="[font-family:'Inter',Helvetica] text-sm leading-relaxed"
+                      className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl"
                       style={{ color: '#e3dfd6' }}
                     >
-                      {portfolio.startup.description}
+                      ₺{parseFloat(portfolio.startup.value).toLocaleString()}
+                    </p>
+                  </div>
+
+                  <div 
+                    className="text-center p-6 rounded-lg border-2"
+                    style={{ 
+                      backgroundColor: 'rgba(0,0,0,0.3)',
+                      borderColor: '#aa95c7'
+                    }}
+                  >
+                    <div 
+                      className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
+                      style={{ backgroundColor: '#aa95c7' }}
+                    >
+                      <svg 
+                        className="w-8 h-8" 
+                        style={{ color: '#1b1b1b' }}
+                        fill="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M3 7V5C3 3.89 3.89 3 5 3H19C20.11 3 21 3.89 21 5V19C21 20.11 20.11 21 19 21H5C3.89 21 3 20.11 3 19V17H21V9H3V7Z"/>
+                      </svg>
+                    </div>
+                    <h3 
+                      className="[font-family:'Bowlby_One',Helvetica] font-normal text-sm mb-2"
+                      style={{ color: '#aa95c7' }}
+                    >
+                      SEKTÖR
+                    </h3>
+                    <p 
+                      className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl"
+                      style={{ color: '#e3dfd6' }}
+                    >
+                      {portfolio.startup.industry}
+                    </p>
+                  </div>
+
+                  <div 
+                    className="text-center p-6 rounded-lg border-2"
+                    style={{ 
+                      backgroundColor: 'rgba(0,0,0,0.3)',
+                      borderColor: portfolio.startup.riskLevel === 'Yüksek' ? '#ff6b6b' : 
+                                   portfolio.startup.riskLevel === 'Orta' ? '#feca57' : '#48dbfb'
+                    }}
+                  >
+                    <div 
+                      className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
+                      style={{ 
+                        backgroundColor: portfolio.startup.riskLevel === 'Yüksek' ? '#ff6b6b' : 
+                                         portfolio.startup.riskLevel === 'Orta' ? '#feca57' : '#48dbfb'
+                      }}
+                    >
+                      <svg 
+                        className="w-8 h-8" 
+                        style={{ color: '#1b1b1b' }}
+                        fill="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2M11 14L17.25 7.76L18.66 9.17L11 16.83L6.91 12.75L8.33 11.34L11 14Z"/>
+                      </svg>
+                    </div>
+                    <h3 
+                      className="[font-family:'Bowlby_One',Helvetica] font-normal text-sm mb-2"
+                      style={{ 
+                        color: portfolio.startup.riskLevel === 'Yüksek' ? '#ff6b6b' : 
+                               portfolio.startup.riskLevel === 'Orta' ? '#feca57' : '#48dbfb'
+                      }}
+                    >
+                      RİSK SEVİYESİ
+                    </h3>
+                    <p 
+                      className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl"
+                      style={{ color: '#e3dfd6' }}
+                    >
+                      {portfolio.startup.riskLevel}
                     </p>
                   </div>
                 </div>
-              )}
-            </div>
 
-            {/* Portfolio Summary Section */}
-            <div 
-              className="p-4 rounded-lg border-4 h-fit"
-              style={{ 
-                backgroundColor: 'rgba(0,0,0,0.2)',
-                borderColor: '#aa95c7'
-              }}
-            >
-              <h2 
-                className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2"
-                style={{ color: '#e3dfd6' }}
-              >
-                Portföy Özeti
-              </h2>
-              <p 
-                className="[font-family:'Inter',Helvetica] text-sm mb-6"
-                style={{ color: '#e3dfd6' }}
-              >
-                Tüm Yatırımlarınız
-              </p>
-
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span 
-                    className="[font-family:'Inter',Helvetica] text-sm"
-                    style={{ color: '#e3dfd6' }}
-                  >
-                    Nakit Bakiye
-                  </span>
-                  <span 
-                    className="[font-family:'Bowlby_One',Helvetica] font-normal"
+                {/* Key Highlights */}
+                <div 
+                  className="rounded-lg p-6 border-2"
+                  style={{ 
+                    backgroundColor: 'rgba(0,0,0,0.3)',
+                    borderColor: '#e3dfd6'
+                  }}
+                >
+                  <h3 
+                    className="[font-family:'Bowlby_One',Helvetica] font-normal text-xl mb-6 text-center"
                     style={{ color: '#cae304' }}
                   >
-                    ₺{portfolio?.team?.cashBalance ? Math.round(parseFloat(portfolio.team.cashBalance)).toLocaleString() : "0"}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span 
-                    className="[font-family:'Inter',Helvetica] text-sm"
-                    style={{ color: '#e3dfd6' }}
-                  >
-                    Hisse Değeri
-                  </span>
-                  <span 
-                    className="[font-family:'Bowlby_One',Helvetica] font-normal"
-                    style={{ color: '#e3dfd6' }}
-                  >
-                    ₺{portfolio?.totalStockValue ? Math.round(parseFloat(portfolio.totalStockValue)).toLocaleString() : "0"}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span 
-                    className="[font-family:'Inter',Helvetica] text-sm"
-                    style={{ color: '#e3dfd6' }}
-                  >
-                    Döviz Değeri
-                  </span>
-                  <span 
-                    className="[font-family:'Bowlby_One',Helvetica] font-normal"
-                    style={{ color: '#e3dfd6' }}
-                  >
-                    ₺{portfolio?.totalCurrencyValue ? Math.round(parseFloat(portfolio.totalCurrencyValue)).toLocaleString() : "0"}
-                  </span>
-                </div>
-
-                <div 
-                  className="border-t pt-4"
-                  style={{ borderColor: '#aa95c7' }}
-                >
-                  <div className="flex justify-between items-center">
-                    <span 
-                      className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
-                      style={{ color: '#cae304' }}
-                    >
-                      Toplam
-                    </span>
-                    <span 
-                      className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
-                      style={{ color: '#cae304' }}
-                    >
-                      ₺{portfolio?.totalPortfolioValue ? Math.round(parseFloat(portfolio.totalPortfolioValue)).toLocaleString() : "0"}
-                    </span>
+                    ÖNE ÇIKAN ÖZELLIKLER
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="flex items-start space-x-3">
+                      <div 
+                        className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                        style={{ backgroundColor: '#cae304' }}
+                      ></div>
+                      <p 
+                        className="[font-family:'Inter',Helvetica] text-base"
+                        style={{ color: '#e3dfd6' }}
+                      >
+                        Yenilikçi teknoloji altyapısı ve güçlü patent portföyü
+                      </p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div 
+                        className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                        style={{ backgroundColor: '#aa95c7' }}
+                      ></div>
+                      <p 
+                        className="[font-family:'Inter',Helvetica] text-base"
+                        style={{ color: '#e3dfd6' }}
+                      >
+                        Deneyimli kurucu ekip ve güçlü danışman kurulu
+                      </p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div 
+                        className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                        style={{ backgroundColor: '#cae304' }}
+                      ></div>
+                      <p 
+                        className="[font-family:'Inter',Helvetica] text-base"
+                        style={{ color: '#e3dfd6' }}
+                      >
+                        Büyük pazar potansiyeli ve ölçeklenebilir iş modeli
+                      </p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div 
+                        className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                        style={{ backgroundColor: '#aa95c7' }}
+                      ></div>
+                      <p 
+                        className="[font-family:'Inter',Helvetica] text-base"
+                        style={{ color: '#e3dfd6' }}
+                      >
+                        Stratejik ortaklıklar ve çeşitlendirilmiş gelir akışı
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
