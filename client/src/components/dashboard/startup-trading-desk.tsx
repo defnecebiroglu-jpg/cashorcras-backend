@@ -304,8 +304,7 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
                     className="text-center p-6 rounded-lg border-2"
                     style={{ 
                       backgroundColor: 'rgba(0,0,0,0.3)',
-                      borderColor: portfolio.startup.riskLevel === 'Yüksek' ? '#ff6b6b' : 
-                                   portfolio.startup.riskLevel === 'Orta' ? '#feca57' : '#48dbfb'
+                      borderColor: '#aa95c7'
                     }}
                   >
                     <div 
