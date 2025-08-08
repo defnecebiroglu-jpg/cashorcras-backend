@@ -325,14 +325,12 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
                       </svg>
                     </div>
                     <h3 
-                      className="[font-family:'Bowlby_One',Helvetica] font-normal text-sm mb-2"
+                      className="[font-family:'Bowlby_One',Helvetica] font-normal text-sm mb-2 text-[#aa95c7]"
                       style={{ 
                         color: portfolio.startup.riskLevel === 'Yüksek' ? '#ff6b6b' : 
                                portfolio.startup.riskLevel === 'Orta' ? '#feca57' : '#48dbfb'
                       }}
-                    >
-                      RİSK SEVİYESİ
-                    </h3>
+                    >RISK SEVIYESI</h3>
                     <p 
                       className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl"
                       style={{ color: '#e3dfd6' }}
