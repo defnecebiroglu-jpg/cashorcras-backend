@@ -93,7 +93,7 @@ export default function CurrencyTradingDesk({ onTabChange }: CurrencyTradingDesk
                 style={{ backgroundColor: '#e3dfd6' }}
               />
               <span 
-                className="[font-family:'Bowlby_One',Helvetica] font-normal text-3xl"
+                className="[font-family:'Bowlby_One',Helvetica] font-normal text-[20px] text-[#e3dfd6]"
                 style={{ color: '#e3dfd6' }}
               >
                 {portfolio?.team?.name || "TAKIM 1"}
