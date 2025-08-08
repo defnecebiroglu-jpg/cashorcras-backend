@@ -309,7 +309,7 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
                     }}
                   >
                     <div 
-                      className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
+                      className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center bg-[#aa95c7]"
                       style={{ 
                         backgroundColor: portfolio.startup.riskLevel === 'Yüksek' ? '#ff6b6b' : 
                                          portfolio.startup.riskLevel === 'Orta' ? '#feca57' : '#48dbfb'
