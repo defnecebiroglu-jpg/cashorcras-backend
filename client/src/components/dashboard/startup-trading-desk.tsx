@@ -304,11 +304,12 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
                     className="text-center p-6 rounded-lg border-2"
                     style={{ 
                       backgroundColor: 'rgba(0,0,0,0.3)',
-                      borderColor: '#aa95c7'
+                      borderColor: portfolio.startup.riskLevel === 'Yüksek' ? '#ff6b6b' : 
+                                   portfolio.startup.riskLevel === 'Orta' ? '#feca57' : '#48dbfb'
                     }}
                   >
                     <div 
-                      className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center bg-[#aa95c7]"
+                      className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
                       style={{ 
                         backgroundColor: portfolio.startup.riskLevel === 'Yüksek' ? '#ff6b6b' : 
                                          portfolio.startup.riskLevel === 'Orta' ? '#feca57' : '#48dbfb'
@@ -324,12 +325,14 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
                       </svg>
                     </div>
                     <h3 
-                      className="[font-family:'Bowlby_One',Helvetica] font-normal text-sm mb-2 text-[#aa95c7]"
+                      className="[font-family:'Bowlby_One',Helvetica] font-normal text-sm mb-2"
                       style={{ 
                         color: portfolio.startup.riskLevel === 'Yüksek' ? '#ff6b6b' : 
                                portfolio.startup.riskLevel === 'Orta' ? '#feca57' : '#48dbfb'
                       }}
-                    >RISK SEVIYESI</h3>
+                    >
+                      RİSK SEVİYESİ
+                    </h3>
                     <p 
                       className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl"
                       style={{ color: '#e3dfd6' }}
