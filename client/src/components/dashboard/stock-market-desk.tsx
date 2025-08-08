@@ -1,7 +1,36 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import type { Company, TeamPortfolio } from "@shared/schema";
+import type { Company } from "@shared/schema";
+
+interface TeamPortfolioResponse {
+  team: {
+    id: number;
+    name: string;
+    cashBalance: string;
+    accessCode: string;
+    profilePicUrl: string | null;
+  };
+  stocks: Array<{
+    company: Company;
+    shares: number;
+  }>;
+  currencies: Array<{
+    currency: {
+      id: number;
+      name: string;
+      code: string;
+      rate: string;
+      sellRate: string;
+      logoUrl: string | null;
+    };
+    amount: string;
+  }>;
+  startup: any;
+  totalStockValue: string;
+  totalCurrencyValue: string;
+  totalPortfolioValue: string;
+}
 
 interface StockMarketDeskProps {
   onTabChange?: (tab: "stock" | "currency" | "startup") => void;
@@ -9,7 +38,7 @@ interface StockMarketDeskProps {
 
 export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
   const teamId = localStorage.getItem("teamId");
-  const { data: portfolio, isLoading: portfolioLoading } = useQuery<TeamPortfolio>({
+  const { data: portfolio, isLoading: portfolioLoading } = useQuery<TeamPortfolioResponse>({
     queryKey: ["/api/teams", teamId, "portfolio"],
     enabled: !!teamId,
   });
@@ -86,12 +115,7 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
                 className="[font-family:'Inter',Helvetica] text-3xl font-bold"
                 style={{ color: '#cae304' }}
               >
-                ₺{(() => {
-                  console.log("Stock - Full portfolio:", portfolio);
-                  console.log("Stock - Team data:", portfolio?.team);
-                  console.log("Stock - Cash balance:", portfolio?.team?.cashBalance);
-                  return portfolio?.team?.cashBalance ? Math.round(parseFloat(portfolio.team.cashBalance)).toLocaleString() : "0";
-                })()}
+                ₺{portfolio?.team?.cashBalance ? Math.round(parseFloat(portfolio.team.cashBalance)).toLocaleString() : "0"}
               </p>
             </div>
             
