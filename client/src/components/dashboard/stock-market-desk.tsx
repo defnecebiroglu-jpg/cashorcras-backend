@@ -294,14 +294,14 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
                       <div className="flex space-x-2">
                         <button 
                           className="w-20 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity text-center opacity-70"
-                          style={{ backgroundColor: '#aa95c7', color: '#e3dfd6' }}
+                          style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
                           onClick={() => console.log('Buy', company.name)}
                         >
                           ₺{Math.round(parseFloat(company.price))}
                         </button>
                         <button 
                           className="w-20 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity text-center opacity-70"
-                          style={{ backgroundColor: '#cae304', color: '#e3dfd6' }}
+                          style={{ backgroundColor: '#cae304', color: '#1b1b1b' }}
                           onClick={() => console.log('Sell', company.name)}
                         >
                           ₺{Math.round(parseFloat(company.sellPrice))}
