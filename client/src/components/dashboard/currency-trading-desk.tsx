@@ -87,13 +87,20 @@ export default function CurrencyTradingDesk({ onTabChange }: CurrencyTradingDesk
         <div className="max-w-7xl mx-auto space-y-8 p-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
               <div 
-                className="w-16 h-16 rounded-full"
-                style={{ backgroundColor: '#e3dfd6' }}
-              />
+                className="w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: '#cae304' }}
+              >
+                <span 
+                  className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
+                  style={{ color: '#1b1b1b' }}
+                >
+                  T
+                </span>
+              </div>
               <span 
-                className="[font-family:'Bowlby_One',Helvetica] font-normal text-[20px] text-[#e3dfd6]"
+                className="[font-family:'Bowlby_One',Helvetica] font-normal text-xl"
                 style={{ color: '#e3dfd6' }}
               >
                 {portfolio?.team?.name || "TAKIM 1"}
