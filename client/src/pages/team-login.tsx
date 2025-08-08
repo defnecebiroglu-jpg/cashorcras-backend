@@ -169,7 +169,7 @@ export default function TeamLogin() {
                   <span 
                     className="w-fit text-[32px] text-center tracking-[0] leading-normal"
                     style={{ 
-                      color: colors.buttonText, 
+                      color: '#1b1b1b', 
                       fontFamily: 'Bowlby One', 
                       fontWeight: 'normal' 
                     }}
