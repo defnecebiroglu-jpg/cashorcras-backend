@@ -254,7 +254,7 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
               </p>
 
               <div className="space-y-4">
-                {companies?.slice(0, 5).map((company) => (
+                {companies?.map((company) => (
                   <div key={company.id} className="flex items-start justify-between">
                     <div className="flex items-start space-x-3 flex-1 min-w-0">
                       <div 
