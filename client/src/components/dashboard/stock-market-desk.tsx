@@ -41,7 +41,7 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
       className="fixed inset-0 overflow-y-auto z-50"
       style={{ backgroundColor: '#1b1b1b' }}
     >
-      <div className="p-6">
+      <div className="p-6 min-h-full">
         <div className="max-w-7xl mx-auto space-y-8">
           {/* Header with Team Name and Exit Button */}
           <div className="flex items-center justify-between mb-8">
