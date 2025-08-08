@@ -136,7 +136,7 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
                 className="[font-family:'Inter',Helvetica] text-3xl font-bold"
                 style={{ color: '#cae304' }}
               >
-                ₺{portfolio?.totalPortfolioValue ? Math.round(parseFloat(portfolio.totalPortfolioValue)) : "0"}
+                ₺{portfolio?.totalPortfolioValue ? Math.round(parseFloat(portfolio.totalPortfolioValue)).toLocaleString() : "0"}
               </p>
             </div>
           </div>
