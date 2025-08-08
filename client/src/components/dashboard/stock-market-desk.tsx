@@ -39,7 +39,7 @@ interface StockMarketDeskProps {
 export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
   const teamId = localStorage.getItem("teamId");
   const { data: portfolio, isLoading: portfolioLoading } = useQuery<TeamPortfolioResponse>({
-    queryKey: ["/api/teams", teamId, "portfolio"],
+    queryKey: [`/api/teams/${teamId}/portfolio`],
     enabled: !!teamId,
   });
 

@@ -47,7 +47,7 @@ export default function CurrencyTradingDesk({ onTabChange }: CurrencyTradingDesk
   const teamId = localStorage.getItem("teamId");
   
   const { data: portfolioData, isLoading: portfolioLoading } = useQuery<TeamPortfolioAPI>({
-    queryKey: ['/api/teams', teamId, 'portfolio'],
+    queryKey: [`/api/teams/${teamId}/portfolio`],
     enabled: !!teamId,
   });
 
