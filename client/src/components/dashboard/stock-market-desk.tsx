@@ -151,10 +151,10 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
           </div>
 
           {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {/* Stock Portfolio Section */}
             <div 
-              className="p-4 rounded-lg border-4"
+              className="p-4 rounded-lg border-4 h-fit"
               style={{ 
                 backgroundColor: 'rgba(0,0,0,0.2)',
                 borderColor: '#cae304'
@@ -236,7 +236,7 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
 
             {/* Market Companies Section */}
             <div 
-              className="p-4 rounded-lg border-4"
+              className="p-4 rounded-lg border-4 h-fit"
               style={{ 
                 backgroundColor: 'rgba(0,0,0,0.2)',
                 borderColor: '#aa95c7'
