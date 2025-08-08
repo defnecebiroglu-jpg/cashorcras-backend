@@ -69,7 +69,7 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
               style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
               onClick={() => window.location.href = '/'}
             >
-              ÇIKIŞ
+              ÇIKIS
             </button>
           </div>
 
@@ -220,10 +220,10 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
                 style={{ borderColor: '#e3dfd6' }}
               >
                 <span 
-                  className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
+                  className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg text-[#e3dfd6]"
                   style={{ color: '#e3dfd6' }}
                 >
-                  Toplam Hisse Değeri:
+                  Toplam Hisse Degeri:
                 </span>
                 <span 
                   className="[font-family:'Bowlby_One',Helvetica] font-normal text-xl"
