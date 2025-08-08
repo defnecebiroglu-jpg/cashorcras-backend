@@ -131,7 +131,12 @@ export default function CurrencyTradingDesk({ onTabChange }: CurrencyTradingDesk
                 className="[font-family:'Inter',Helvetica] text-3xl font-bold"
                 style={{ color: '#cae304' }}
               >
-                ₺{portfolio?.team?.cashBalance ? Math.round(parseFloat(portfolio.team.cashBalance)) : "0"}
+                ₺{(() => {
+                  console.log("Currency - Full portfolio:", portfolio);
+                  console.log("Currency - Team data:", portfolio?.team);
+                  console.log("Currency - Cash balance:", portfolio?.team?.cashBalance);
+                  return portfolio?.team?.cashBalance ? Math.round(parseFloat(portfolio.team.cashBalance)).toLocaleString() : "0";
+                })()}
               </p>
             </div>
             

@@ -86,7 +86,12 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
                 className="[font-family:'Inter',Helvetica] text-3xl font-bold"
                 style={{ color: '#cae304' }}
               >
-                ₺{portfolio?.team?.cashBalance ? Math.round(parseFloat(portfolio.team.cashBalance)) : "0"}
+                ₺{(() => {
+                  console.log("Stock - Full portfolio:", portfolio);
+                  console.log("Stock - Team data:", portfolio?.team);
+                  console.log("Stock - Cash balance:", portfolio?.team?.cashBalance);
+                  return portfolio?.team?.cashBalance ? Math.round(parseFloat(portfolio.team.cashBalance)).toLocaleString() : "0";
+                })()}
               </p>
             </div>
             
