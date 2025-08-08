@@ -1,60 +1,99 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import type { Company, TeamPortfolio } from "@shared/schema";
+import { Currency, TeamCurrency } from "@shared/schema";
 
-interface StockMarketDeskProps {
+interface CurrencyTradingDeskProps {
   onTabChange?: (tab: "stock" | "currency" | "startup") => void;
 }
 
-export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
+interface CurrencyPortfolioResponse {
+  team: {
+    id: number;
+    name: string;
+    cashBalance: string;
+  };
+  currencies: Array<{
+    currency: Currency;
+    amount: string;
+  }>;
+  totalCurrencyValue: string;
+  totalPortfolioValue: string;
+}
+
+interface TeamPortfolioAPI {
+  team: {
+    id: number;
+    name: string;
+    cashBalance: string;
+  };
+  stocks: Array<{
+    company: {
+      id: number;
+      name: string;
+      price: string;
+      logoUrl: string | null;
+    };
+    shares: number;
+  }>;
+  currencies: Array<{
+    currency: Currency;
+    amount: string;
+  }>;
+  totalStockValue: string;
+  totalCurrencyValue: string;
+  totalPortfolioValue: string;
+}
+
+export default function CurrencyTradingDesk({ onTabChange }: CurrencyTradingDeskProps) {
   const teamId = localStorage.getItem("teamId");
-  const { data: portfolio, isLoading: portfolioLoading } = useQuery<TeamPortfolio>({
-    queryKey: ["/api/teams", teamId, "portfolio"],
+  
+  const { data: portfolioData, isLoading: portfolioLoading } = useQuery<TeamPortfolioAPI>({
+    queryKey: ['/api/teams', teamId, 'portfolio'],
     enabled: !!teamId,
   });
 
-  const { data: companies, isLoading: companiesLoading } = useQuery<Company[]>({
-    queryKey: ["/api/companies"],
+  // Transform the portfolio data to match currency-specific structure
+  const portfolio: CurrencyPortfolioResponse = portfolioData ? {
+    team: portfolioData.team,
+    currencies: portfolioData.currencies || [],
+    totalCurrencyValue: portfolioData.totalCurrencyValue,
+    totalPortfolioValue: portfolioData.totalPortfolioValue,
+  } : null;
+
+  const { data: currencies, isLoading: currenciesLoading } = useQuery<Currency[]>({
+    queryKey: ['/api/currencies'],
   });
 
-  if (portfolioLoading || companiesLoading) {
+  if (portfolioLoading || currenciesLoading) {
     return (
-      <div 
-        className="fixed inset-0 flex items-center justify-center z-50"
-        style={{ 
-          backgroundColor: '#1b1b1b',
-          color: '#e3dfd6'
-        }}
-      >
-        <div className="[font-family:'Inter',Helvetica] text-xl">Yükleniyor...</div>
+      <div className="flex items-center justify-center h-screen" style={{ backgroundColor: '#1b1b1b' }}>
+        <div className="text-center">
+          <div 
+            className="text-xl mb-4 [font-family:'Inter',Helvetica]"
+            style={{ color: '#e3dfd6' }}
+          >
+            Yükleniyor...
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
     <div 
-      className="fixed inset-0 overflow-y-auto z-50"
+      className="min-h-screen w-full"
       style={{ backgroundColor: '#1b1b1b' }}
     >
-      <div className="p-6 min-h-full">
-        <div className="max-w-7xl mx-auto space-y-8">
-          {/* Header with Team Name and Exit Button */}
+      <div className="w-full">
+        <div className="max-w-7xl mx-auto space-y-8 p-8">
+          {/* Header */}
           <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-4">
               <div 
-                className="w-12 h-12 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: '#cae304' }}
-              >
-                <span 
-                  className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
-                  style={{ color: '#1b1b1b' }}
-                >
-                  T
-                </span>
-              </div>
+                className="w-16 h-16 rounded-full"
+                style={{ backgroundColor: '#e3dfd6' }}
+              />
               <span 
-                className="[font-family:'Bowlby_One',Helvetica] font-normal text-xl"
+                className="[font-family:'Bowlby_One',Helvetica] font-normal text-3xl"
                 style={{ color: '#e3dfd6' }}
               >
                 {portfolio?.team?.name || "TAKIM 1"}
@@ -65,7 +104,7 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
               style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
               onClick={() => window.location.href = '/'}
             >
-              ÇIKIS
+              ÇIKIŞ
             </button>
           </div>
 
@@ -115,22 +154,22 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
           {/* Navigation Tabs */}
           <div className="flex space-x-6 mb-8">
             <div 
+              className="px-6 py-3 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+              style={{ 
+                backgroundColor: 'rgba(0,0,0,0.2)',
+                color: '#e3dfd6'
+              }}
+              onClick={() => onTabChange?.("stock")}
+            >
+              <span className="[font-family:'Bowlby_One',Helvetica] font-normal">BORSA MASASI</span>
+            </div>
+            <div 
               className="px-6 py-3 rounded-lg border-b-4 cursor-pointer"
               style={{ 
                 backgroundColor: '#cae304',
                 borderColor: '#cae304',
                 color: '#1b1b1b'
               }}
-            >
-              <span className="[font-family:'Bowlby_One',Helvetica] font-normal">BORSA MASASI</span>
-            </div>
-            <div 
-              className="px-6 py-3 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
-              style={{ 
-                backgroundColor: 'rgba(0,0,0,0.2)',
-                color: '#e3dfd6'
-              }}
-              onClick={() => onTabChange?.("currency")}
             >
               <span className="[font-family:'Bowlby_One',Helvetica] font-normal">DÖVIZ MASASI</span>
             </div>
@@ -148,7 +187,7 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
 
           {/* Main Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* Stock Portfolio Section */}
+            {/* Currency Portfolio Section */}
             <div 
               className="p-4 rounded-lg border-4 h-fit"
               style={{ 
@@ -160,28 +199,28 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
                 className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2"
                 style={{ color: '#e3dfd6' }}
               >
-                Hisse Portföyü
+                Döviz Portföyü
               </h2>
               <p 
                 className="[font-family:'Inter',Helvetica] text-sm mb-6"
                 style={{ color: '#e3dfd6' }}
               >
-                Sahip Olduğunuz Hisse Senetleri
+                Sahip Olduğunuz Dövizler
               </p>
 
               <div className="space-y-4 mb-6">
-                {portfolio?.stocks && portfolio.stocks.length > 0 ? (
-                  portfolio.stocks.map((stock, index) => (
+                {portfolio?.currencies && portfolio.currencies.length > 0 ? (
+                  portfolio.currencies.map((currency, index) => (
                     <div key={index} className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         <div 
                           className="w-8 h-8 rounded flex items-center justify-center overflow-hidden"
                           style={{ backgroundColor: '#e3dfd6' }}
                         >
-                          {stock.company.logoUrl ? (
+                          {currency.currency.logoUrl ? (
                             <img 
-                              src={stock.company.logoUrl} 
-                              alt={`${stock.company.name} logo`}
+                              src={currency.currency.logoUrl} 
+                              alt={`${currency.currency.name} logo`}
                               className="w-full h-full object-cover rounded"
                             />
                           ) : (
@@ -193,13 +232,13 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
                             className="[font-family:'Bowlby_One',Helvetica] font-normal"
                             style={{ color: '#e3dfd6' }}
                           >
-                            {stock.company.name}
+                            {currency.currency.name}
                           </div>
                           <div 
                             className="[font-family:'Inter',Helvetica] text-sm"
                             style={{ color: '#e3dfd6' }}
                           >
-                            {stock.shares} adet
+                            {parseFloat(currency.amount).toFixed(2)} {currency.currency.code}
                           </div>
                         </div>
                       </div>
@@ -207,7 +246,7 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
                         className="px-3 py-1 rounded [font-family:'Bowlby_One',Helvetica] font-normal"
                         style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
                       >
-                        ₺{Math.round(parseFloat(stock.company.price))}
+                        ₺{Math.round(parseFloat(currency.currency.rate))}
                       </div>
                     </div>
                   ))
@@ -216,7 +255,7 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
                     className="text-center py-8 [font-family:'Inter',Helvetica]"
                     style={{ color: '#e3dfd6' }}
                   >
-                    Henüz hisse senedi satın almadınız
+                    Henüz döviz satın almadınız
                   </div>
                 )}
               </div>
@@ -226,21 +265,21 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
                 style={{ borderColor: '#e3dfd6' }}
               >
                 <span 
-                  className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg text-[#e3dfd6]"
+                  className="[font-family:'Bowlby_One',Helvetica] font-normal text-lg"
                   style={{ color: '#e3dfd6' }}
                 >
-                  Toplam Hisse Degeri:
+                  Toplam Döviz Degeri:
                 </span>
                 <span 
                   className="[font-family:'Bowlby_One',Helvetica] font-normal text-xl"
                   style={{ color: '#cae304' }}
                 >
-                  ₺{portfolio ? Math.round(parseFloat(portfolio.totalStockValue)) : "0"}
+                  ₺{portfolio ? Math.round(parseFloat(portfolio.totalCurrencyValue)) : "0"}
                 </span>
               </div>
             </div>
 
-            {/* Market Companies Section */}
+            {/* Market Currencies Section */}
             <div 
               className="p-4 rounded-lg border-4 h-fit"
               style={{ 
@@ -251,30 +290,32 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
               <h2 
                 className="[font-family:'Bowlby_One',Helvetica] font-normal text-2xl mb-2 text-[#e3dfd6]"
                 style={{ color: '#e3dfd6' }}
-              >Piyasa Sirketleri</h2>
+              >Piyasa Dövizleri</h2>
               <p 
                 className="[font-family:'Inter',Helvetica] text-sm mb-6"
                 style={{ color: '#e3dfd6' }}
               >
-                Yatırım İçin Mevcut Hisse Senetleri
+                Alım Satım İçin Mevcut Dövizler
               </p>
 
               <div className="space-y-4">
-                {companies?.map((company) => (
-                  <div key={company.id} className="flex items-start justify-between">
+                {currencies?.map((currency) => (
+                  <div key={currency.id} className="flex items-start justify-between">
                     <div className="flex items-start space-x-3 flex-1 min-w-0">
                       <div 
                         className="w-12 h-12 rounded flex-shrink-0 flex items-center justify-center overflow-hidden"
                         style={{ backgroundColor: '#e3dfd6' }}
                       >
-                        {company.logoUrl ? (
+                        {currency.logoUrl ? (
                           <img 
-                            src={company.logoUrl} 
-                            alt={`${company.name} logo`}
+                            src={currency.logoUrl} 
+                            alt={`${currency.name} logo`}
                             className="w-full h-full object-cover rounded"
                           />
                         ) : (
-                          <div className="w-full h-full" />
+                          <div className="w-full h-full flex items-center justify-center text-xs font-bold text-[#1b1b1b]">
+                            {currency.code}
+                          </div>
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -282,13 +323,13 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
                           className="[font-family:'Bowlby_One',Helvetica] font-normal"
                           style={{ color: '#e3dfd6' }}
                         >
-                          {company.name}
+                          {currency.name}
                         </div>
                         <p 
                           className="[font-family:'Inter',Helvetica] text-sm mt-1 max-w-xs pr-4"
                           style={{ color: '#e3dfd6' }}
                         >
-                          {company.description}
+                          {currency.code} - Döviz Kuru
                         </p>
                       </div>
                     </div>
@@ -311,16 +352,16 @@ export default function StockMarketDesk({ onTabChange }: StockMarketDeskProps) {
                         <button 
                           className="w-20 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity text-center"
                           style={{ backgroundColor: '#aa95c7', color: '#1b1b1b' }}
-                          onClick={() => console.log('Buy', company.name)}
+                          onClick={() => console.log('Buy', currency.name)}
                         >
-                          ₺{Math.round(parseFloat(company.price))}
+                          ₺{parseFloat(currency.rate).toFixed(2)}
                         </button>
                         <button 
                           className="w-20 py-2 rounded [font-family:'Bowlby_One',Helvetica] font-normal hover:opacity-80 transition-opacity text-center"
                           style={{ backgroundColor: '#cae304', color: '#1b1b1b' }}
-                          onClick={() => console.log('Sell', company.name)}
+                          onClick={() => console.log('Sell', currency.name)}
                         >
-                          ₺{Math.round(parseFloat(company.sellPrice))}
+                          ₺{parseFloat(currency.sellRate).toFixed(2)}
                         </button>
                       </div>
                     </div>

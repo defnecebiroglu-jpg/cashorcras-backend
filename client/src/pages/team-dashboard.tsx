@@ -3,7 +3,8 @@ import { useLocation, useParams } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { NavigationTabs } from "@/components/dashboard/navigation-tabs";
-import { StockMarketDesk } from "@/components/dashboard/stock-market-desk";
+import StockMarketDesk from "@/components/dashboard/stock-market-desk";
+import CurrencyTradingDesk from "@/components/dashboard/currency-trading-desk";
 import { CurrencyDesk } from "@/components/dashboard/currency-desk";
 import { StartupDesk } from "@/components/dashboard/startup-desk";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -13,7 +14,7 @@ import type { TeamPortfolio } from "@shared/schema";
 export default function TeamDashboard() {
   const params = useParams();
   const [, setLocation] = useLocation();
-  const [activeTab, setActiveTab] = useState<"stocks" | "currency" | "startup">("stocks");
+  const [activeTab, setActiveTab] = useState<"stock" | "currency" | "startup">("stock");
   
   const teamId = parseInt(params.id || "0");
   const storedTeamId = localStorage.getItem("teamId");
@@ -59,8 +60,13 @@ export default function TeamDashboard() {
   }
 
   // When stocks tab is active, show full-screen custom design
-  if (activeTab === "stocks") {
-    return <StockMarketDesk teamId={teamId} onTabChange={setActiveTab} />;
+  if (activeTab === "stock") {
+    return <StockMarketDesk onTabChange={setActiveTab} />;
+  }
+
+  // When currency tab is active, show full-screen currency trading desk
+  if (activeTab === "currency") {
+    return <CurrencyTradingDesk onTabChange={setActiveTab} />;
   }
 
   return (
