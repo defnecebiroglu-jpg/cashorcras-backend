@@ -7,6 +7,7 @@ import StockMarketDesk from "@/components/dashboard/stock-market-desk";
 import CurrencyTradingDesk from "@/components/dashboard/currency-trading-desk";
 import { CurrencyDesk } from "@/components/dashboard/currency-desk";
 import { StartupDesk } from "@/components/dashboard/startup-desk";
+import StartupTradingDesk from "@/components/dashboard/startup-trading-desk";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { ChartLine, LogOut } from "lucide-react";
 import type { TeamPortfolio } from "@shared/schema";
@@ -67,6 +68,11 @@ export default function TeamDashboard() {
   // When currency tab is active, show full-screen currency trading desk
   if (activeTab === "currency") {
     return <CurrencyTradingDesk onTabChange={setActiveTab} />;
+  }
+
+  // When startup tab is active, show full-screen startup trading desk
+  if (activeTab === "startup") {
+    return <StartupTradingDesk onTabChange={setActiveTab} />;
   }
 
   return (
