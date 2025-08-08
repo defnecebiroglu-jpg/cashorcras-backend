@@ -202,11 +202,9 @@ export default function StartupTradingDesk({ onTabChange }: StartupTradingDeskPr
                   </svg>
                 </div>
                 <h2 
-                  className="[font-family:'Bowlby_One',Helvetica] font-normal text-3xl mb-4"
+                  className="[font-family:'Bowlby_One',Helvetica] font-normal text-3xl mb-4 text-[#aa95c7]"
                   style={{ color: '#cae304' }}
-                >
-                  GİRİŞİM ATAMASI BEKLENİYOR
-                </h2>
+                >GIRISIM ATAMASI BEKLENIYOR</h2>
                 <p 
                   className="[font-family:'Inter',Helvetica] text-lg max-w-md mx-auto"
                   style={{ color: '#e3dfd6' }}
