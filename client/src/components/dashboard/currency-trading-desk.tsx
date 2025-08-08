@@ -52,7 +52,7 @@ export default function CurrencyTradingDesk({ onTabChange }: CurrencyTradingDesk
   });
 
   // Transform the portfolio data to match currency-specific structure
-  const portfolio: CurrencyPortfolioResponse = portfolioData ? {
+  const portfolio: CurrencyPortfolioResponse | null = portfolioData ? {
     team: portfolioData.team,
     currencies: portfolioData.currencies || [],
     totalCurrencyValue: portfolioData.totalCurrencyValue,
