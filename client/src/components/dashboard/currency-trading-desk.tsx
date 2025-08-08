@@ -65,26 +65,25 @@ export default function CurrencyTradingDesk({ onTabChange }: CurrencyTradingDesk
 
   if (portfolioLoading || currenciesLoading) {
     return (
-      <div className="flex items-center justify-center h-screen" style={{ backgroundColor: '#1b1b1b' }}>
-        <div className="text-center">
-          <div 
-            className="text-xl mb-4 [font-family:'Inter',Helvetica]"
-            style={{ color: '#e3dfd6' }}
-          >
-            Yükleniyor...
-          </div>
-        </div>
+      <div 
+        className="fixed inset-0 flex items-center justify-center z-50"
+        style={{ 
+          backgroundColor: '#1b1b1b',
+          color: '#e3dfd6'
+        }}
+      >
+        <div className="[font-family:'Inter',Helvetica] text-xl">Yükleniyor...</div>
       </div>
     );
   }
 
   return (
     <div 
-      className="min-h-screen w-full"
+      className="fixed inset-0 overflow-y-auto z-50"
       style={{ backgroundColor: '#1b1b1b' }}
     >
-      <div className="w-full">
-        <div className="max-w-7xl mx-auto space-y-8 p-8">
+      <div className="p-6 min-h-full">
+        <div className="max-w-7xl mx-auto space-y-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center space-x-3">
