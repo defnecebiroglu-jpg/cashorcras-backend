@@ -179,9 +179,19 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
                     <div key={index} className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         <div 
-                          className="w-8 h-8 rounded"
+                          className="w-8 h-8 rounded flex items-center justify-center overflow-hidden"
                           style={{ backgroundColor: '#e3dfd6' }}
-                        />
+                        >
+                          {stock.company.logoUrl ? (
+                            <img 
+                              src={stock.company.logoUrl} 
+                              alt={`${stock.company.name} logo`}
+                              className="w-full h-full object-cover rounded"
+                            />
+                          ) : (
+                            <div className="w-full h-full" />
+                          )}
+                        </div>
                         <div>
                           <div 
                             className="[font-family:'Bowlby_One',Helvetica] font-normal"
@@ -258,9 +268,19 @@ export function StockMarketDesk({ teamId, onTabChange }: StockMarketDeskProps) {
                   <div key={company.id} className="flex items-start justify-between">
                     <div className="flex items-start space-x-3 flex-1 min-w-0">
                       <div 
-                        className="w-12 h-12 rounded flex-shrink-0"
+                        className="w-12 h-12 rounded flex-shrink-0 flex items-center justify-center overflow-hidden"
                         style={{ backgroundColor: '#e3dfd6' }}
-                      />
+                      >
+                        {company.logoUrl ? (
+                          <img 
+                            src={company.logoUrl} 
+                            alt={`${company.name} logo`}
+                            className="w-full h-full object-cover rounded"
+                          />
+                        ) : (
+                          <div className="w-full h-full" />
+                        )}
+                      </div>
                       <div className="flex-1 min-w-0">
                         <div 
                           className="[font-family:'Bowlby_One',Helvetica] font-normal"
