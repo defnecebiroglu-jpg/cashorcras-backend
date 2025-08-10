@@ -355,6 +355,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (req.file) {
         data.logoUrl = `/uploads/${req.file.filename}`;
       }
+      
+      // If price is being updated, also update the sellPrice
+      if (data.price) {
+        const priceValue = parseFloat(data.price);
+        if (!isNaN(priceValue) && priceValue > 0) {
+          data.sellPrice = (priceValue * 0.98).toFixed(2); // 2% spread for sell price
+        }
+      }
+      
       const company = await storage.updateCompany(parseInt(req.params.id), data);
       res.json(company);
     } catch (error) {
@@ -422,6 +431,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (req.file) {
         data.logoUrl = `/uploads/${req.file.filename}`;
       }
+      
+      // If rate is being updated, also update the sellRate
+      if (data.rate) {
+        const rateValue = parseFloat(data.rate);
+        if (!isNaN(rateValue) && rateValue > 0) {
+          data.sellRate = (rateValue * 0.98).toFixed(2); // 2% spread for sell rate
+        }
+      }
+      
       const currency = await storage.updateCurrency(parseInt(req.params.id), data);
       res.json(currency);
     } catch (error) {

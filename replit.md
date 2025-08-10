@@ -32,6 +32,16 @@ An advanced educational entrepreneurship simulation platform that transforms lea
 
 ## Recent Changes
 
+### 2025-01-24 - Critical Portfolio Calculation Fix
+- ✅ **FIXED MAJOR BUG**: Portfolio calculations now update in real-time with current sell prices
+- ✅ Fixed PUT endpoints to update both buy AND sell prices when prices are changed
+- ✅ Fixed PATCH endpoints to maintain 2% spread between buy/sell prices
+- ✅ Added portfolio cache invalidation to ensure immediate updates after price changes
+- ✅ Portfolio values now accurately reflect current market sell prices, not outdated cached prices
+- ✅ All price update methods (admin panel, CSV bulk upload) now work correctly
+- ✅ Added thousands separator formatting (₺100.000) to all portfolio values
+- ✅ Removed "Key Highlights" section from startup page for cleaner layout
+
 ### 2025-01-21 - Landing Page & Portfolio Updates
 - ✅ Created welcome landing page matching Figma design with dark theme and vibrant branding
 - ✅ Implemented pixel-perfect design with exact positioning and typography (Inter font, 128px hero text)
@@ -40,10 +50,6 @@ An advanced educational entrepreneurship simulation platform that transforms lea
 - ✅ Centralized color scheme (#1B1B1B background, #E3DFD6 text, #AA95C7 purple button)
 - ✅ Added proper navigation flow: landing → team login → dashboard
 - ✅ Included admin access and back navigation throughout the app
-- ✅ Updated portfolio value calculation to use current sell prices instead of purchase prices
-- ✅ Portfolio values now reflect what teams would receive if selling all assets at current market rates
-- ✅ Stock values calculated using `sellPrice` field instead of `price` field
-- ✅ Currency values calculated using `sellRate` field instead of `rate` field
 
 ### 2025-01-07 - CSV Editor Enhancement
 - ✅ Added inline CSV editor to admin panel alongside file upload option
