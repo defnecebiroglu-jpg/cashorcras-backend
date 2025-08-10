@@ -383,19 +383,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // PATCH endpoint for bulk price updates
   app.patch('/api/companies/:id', async (req, res) => {
     try {
-      const { price } = req.body;
-      if (!price || isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
-        return res.status(400).json({ message: 'Invalid price value' });
+      const { price, sellPrice } = req.body;
+      
+      // Validate at least one price is provided
+      if (!price && !sellPrice) {
+        return res.status(400).json({ message: 'Either price or sellPrice must be provided' });
       }
       
-      // Update both price and sellPrice to ensure portfolio calculations use the latest values
-      const priceValue = parseFloat(price);
-      const sellPriceValue = (priceValue * 0.98).toFixed(2); // 2% spread for sell price
+      let updateData: any = {};
       
-      const company = await storage.updateCompany(parseInt(req.params.id), { 
-        price: priceValue.toFixed(2), 
-        sellPrice: sellPriceValue 
-      });
+      // If only buy price provided, calculate sell price
+      if (price && !sellPrice) {
+        const priceValue = parseFloat(price);
+        if (isNaN(priceValue) || priceValue <= 0) {
+          return res.status(400).json({ message: 'Invalid price value' });
+        }
+        updateData.price = priceValue.toFixed(2);
+        updateData.sellPrice = (priceValue * 0.98).toFixed(2); // 2% spread
+      }
+      // If only sell price provided, calculate buy price
+      else if (!price && sellPrice) {
+        const sellPriceValue = parseFloat(sellPrice);
+        if (isNaN(sellPriceValue) || sellPriceValue <= 0) {
+          return res.status(400).json({ message: 'Invalid sellPrice value' });
+        }
+        updateData.sellPrice = sellPriceValue.toFixed(2);
+        updateData.price = (sellPriceValue / 0.98).toFixed(2); // Reverse calculate buy price
+      }
+      // If both provided, use them directly
+      else {
+        const priceValue = parseFloat(price);
+        const sellPriceValue = parseFloat(sellPrice);
+        if (isNaN(priceValue) || priceValue <= 0 || isNaN(sellPriceValue) || sellPriceValue <= 0) {
+          return res.status(400).json({ message: 'Invalid price values' });
+        }
+        updateData.price = priceValue.toFixed(2);
+        updateData.sellPrice = sellPriceValue.toFixed(2);
+      }
+      
+      const company = await storage.updateCompany(parseInt(req.params.id), updateData);
       res.json(company);
     } catch (error) {
       res.status(400).json({ message: 'Failed to update company price' });
@@ -459,19 +485,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // PATCH endpoint for bulk rate updates
   app.patch('/api/currencies/:id', async (req, res) => {
     try {
-      const { rate } = req.body;
-      if (!rate || isNaN(parseFloat(rate)) || parseFloat(rate) <= 0) {
-        return res.status(400).json({ message: 'Invalid rate value' });
+      const { rate, sellRate } = req.body;
+      
+      // Validate at least one rate is provided
+      if (!rate && !sellRate) {
+        return res.status(400).json({ message: 'Either rate or sellRate must be provided' });
       }
       
-      // Update both rate and sellRate to ensure portfolio calculations use the latest values
-      const rateValue = parseFloat(rate);
-      const sellRateValue = (rateValue * 0.98).toFixed(2); // 2% spread for sell rate
+      let updateData: any = {};
       
-      const currency = await storage.updateCurrency(parseInt(req.params.id), { 
-        rate: rateValue.toFixed(2), 
-        sellRate: sellRateValue 
-      });
+      // If only buy rate provided, calculate sell rate
+      if (rate && !sellRate) {
+        const rateValue = parseFloat(rate);
+        if (isNaN(rateValue) || rateValue <= 0) {
+          return res.status(400).json({ message: 'Invalid rate value' });
+        }
+        updateData.rate = rateValue.toFixed(4);
+        updateData.sellRate = (rateValue * 0.98).toFixed(4); // 2% spread
+      }
+      // If only sell rate provided, calculate buy rate
+      else if (!rate && sellRate) {
+        const sellRateValue = parseFloat(sellRate);
+        if (isNaN(sellRateValue) || sellRateValue <= 0) {
+          return res.status(400).json({ message: 'Invalid sellRate value' });
+        }
+        updateData.sellRate = sellRateValue.toFixed(4);
+        updateData.rate = (sellRateValue / 0.98).toFixed(4); // Reverse calculate buy rate
+      }
+      // If both provided, use them directly
+      else {
+        const rateValue = parseFloat(rate);
+        const sellRateValue = parseFloat(sellRate);
+        if (isNaN(rateValue) || rateValue <= 0 || isNaN(sellRateValue) || sellRateValue <= 0) {
+          return res.status(400).json({ message: 'Invalid rate values' });
+        }
+        updateData.rate = rateValue.toFixed(4);
+        updateData.sellRate = sellRateValue.toFixed(4);
+      }
+      
+      const currency = await storage.updateCurrency(parseInt(req.params.id), updateData);
       res.json(currency);
     } catch (error) {
       res.status(400).json({ message: 'Failed to update currency rate' });

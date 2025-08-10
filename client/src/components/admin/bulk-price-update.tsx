@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,10 +7,25 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
-import { Upload, FileText, CheckCircle, AlertTriangle, Edit3 } from "lucide-react";
+import { Upload, FileText, CheckCircle, AlertTriangle, Edit3, Save, RefreshCw, Calculator } from "lucide-react";
 import type { Company, Currency } from "@shared/schema";
+
+interface EditablePrice {
+  id: number;
+  name: string;
+  symbol?: string;
+  buyPrice: string;
+  sellPrice: string;
+  originalBuyPrice: string;
+  originalSellPrice: string;
+  hasChanges: boolean;
+  buyPriceValid: boolean;
+  sellPriceValid: boolean;
+  type: 'company' | 'currency';
+}
 
 interface PriceUpdate {
   id: number;
@@ -27,7 +42,10 @@ export function BulkPriceUpdate() {
   const [csvText, setCsvText] = useState<string>("");
   const [stockUpdates, setStockUpdates] = useState<PriceUpdate[]>([]);
   const [currencyUpdates, setCurrencyUpdates] = useState<PriceUpdate[]>([]);
+  const [editableCompanies, setEditableCompanies] = useState<EditablePrice[]>([]);
+  const [editableCurrencies, setEditableCurrencies] = useState<EditablePrice[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [activeTab, setActiveTab] = useState<'chart' | 'csv-editor' | 'csv-upload'>('chart');
 
   // Default CSV template
   const defaultCsvTemplate = `type,name,new_price
@@ -50,6 +68,142 @@ currency,İsviçre Frangı,38.54`;
     queryKey: ["/api/currencies"],
   });
 
+  // Initialize editable price data when companies/currencies load
+  useEffect(() => {
+    if (companies) {
+      const editableCompanyPrices = companies.map((company): EditablePrice => ({
+        id: company.id,
+        name: company.name,
+        symbol: company.symbol,
+        buyPrice: company.price,
+        sellPrice: company.sellPrice,
+        originalBuyPrice: company.price,
+        originalSellPrice: company.sellPrice,
+        hasChanges: false,
+        buyPriceValid: true,
+        sellPriceValid: true,
+        type: 'company'
+      }));
+      setEditableCompanies(editableCompanyPrices);
+    }
+  }, [companies]);
+
+  useEffect(() => {
+    if (currencies) {
+      const editableCurrencyPrices = currencies.map((currency): EditablePrice => ({
+        id: currency.id,
+        name: currency.name,
+        symbol: currency.code,
+        buyPrice: currency.rate,
+        sellPrice: currency.sellRate,
+        originalBuyPrice: currency.rate,
+        originalSellPrice: currency.sellRate,
+        hasChanges: false,
+        buyPriceValid: true,
+        sellPriceValid: true,
+        type: 'currency'
+      }));
+      setEditableCurrencies(editableCurrencyPrices);
+    }
+  }, [currencies]);
+
+  const validatePrice = (priceStr: string): boolean => {
+    const price = parseFloat(priceStr);
+    return !isNaN(price) && price > 0;
+  };
+
+  const updateEditablePrice = (
+    items: EditablePrice[], 
+    setItems: (items: EditablePrice[]) => void, 
+    id: number, 
+    field: 'buyPrice' | 'sellPrice', 
+    value: string
+  ) => {
+    const newItems = items.map(item => {
+      if (item.id === id) {
+        const updatedItem = {
+          ...item,
+          [field]: value,
+          [`${field}Valid`]: validatePrice(value),
+          hasChanges: 
+            value !== item.originalBuyPrice || 
+            (field === 'sellPrice' ? item.buyPrice !== item.originalBuyPrice : item.sellPrice !== item.originalSellPrice)
+        };
+        
+        // Check if there are actual changes
+        updatedItem.hasChanges = 
+          updatedItem.buyPrice !== updatedItem.originalBuyPrice || 
+          updatedItem.sellPrice !== updatedItem.originalSellPrice;
+          
+        return updatedItem;
+      }
+      return item;
+    });
+    setItems(newItems);
+  };
+
+  const autoCalculateSellPrice = (buyPrice: string): string => {
+    const price = parseFloat(buyPrice);
+    if (isNaN(price) || price <= 0) return buyPrice;
+    return (price * 0.98).toFixed(buyPrice.includes('.') ? buyPrice.split('.')[1].length : 2);
+  };
+
+  const autoCalculateBuyPrice = (sellPrice: string): string => {
+    const price = parseFloat(sellPrice);
+    if (isNaN(price) || price <= 0) return sellPrice;
+    return (price / 0.98).toFixed(sellPrice.includes('.') ? sellPrice.split('.')[1].length : 2);
+  };
+
+  const bulkUpdateCompaniesMutation = useMutation({
+    mutationFn: async (updates: { id: number; price: string; sellPrice: string }[]) => {
+      const results = [];
+      for (const update of updates) {
+        const response = await apiRequest(`/api/companies/${update.id}`, {
+          method: "PATCH",
+          body: JSON.stringify({ 
+            price: update.price, 
+            sellPrice: update.sellPrice 
+          }),
+        });
+        results.push(response);
+      }
+      return results;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/companies"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
+      toast({ title: "Hisse fiyatları başarıyla güncellendi" });
+    },
+    onError: () => {
+      toast({ title: "Hisse fiyatları güncellenemedi", variant: "destructive" });
+    },
+  });
+
+  const bulkUpdateCurrenciesMutation = useMutation({
+    mutationFn: async (updates: { id: number; rate: string; sellRate: string }[]) => {
+      const results = [];
+      for (const update of updates) {
+        const response = await apiRequest(`/api/currencies/${update.id}`, {
+          method: "PATCH",
+          body: JSON.stringify({ 
+            rate: update.rate, 
+            sellRate: update.sellRate 
+          }),
+        });
+        results.push(response);
+      }
+      return results;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/currencies"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
+      toast({ title: "Döviz kurları başarıyla güncellendi" });
+    },
+    onError: () => {
+      toast({ title: "Döviz kurları güncellenemedi", variant: "destructive" });
+    },
+  });
+
   const updateStockPricesMutation = useMutation({
     mutationFn: async (updates: { companyId: number; newPrice: string }[]) => {
       const results = [];
@@ -64,7 +218,6 @@ currency,İsviçre Frangı,38.54`;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/companies"] });
-      // Invalidate all portfolio data to reflect updated stock prices
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
       toast({ title: "Hisse fiyatları başarıyla güncellendi" });
       resetForm();
@@ -88,7 +241,6 @@ currency,İsviçre Frangı,38.54`;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/currencies"] });
-      // Invalidate all portfolio data to reflect updated currency rates
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
       toast({ title: "Döviz kurları başarıyla güncellendi" });
       resetForm();
@@ -97,6 +249,40 @@ currency,İsviçre Frangı,38.54`;
       toast({ title: "Döviz kurları güncellenemedi", variant: "destructive" });
     },
   });
+
+  const saveAllCompanyChanges = () => {
+    const companyUpdates = editableCompanies
+      .filter(company => company.hasChanges && company.buyPriceValid && company.sellPriceValid)
+      .map(company => ({
+        id: company.id,
+        price: company.buyPrice,
+        sellPrice: company.sellPrice
+      }));
+
+    if (companyUpdates.length === 0) {
+      toast({ title: "Kaydedilecek değişiklik bulunamadı", variant: "destructive" });
+      return;
+    }
+
+    bulkUpdateCompaniesMutation.mutate(companyUpdates);
+  };
+
+  const saveAllCurrencyChanges = () => {
+    const currencyUpdates = editableCurrencies
+      .filter(currency => currency.hasChanges && currency.buyPriceValid && currency.sellPriceValid)
+      .map(currency => ({
+        id: currency.id,
+        rate: currency.buyPrice,
+        sellRate: currency.sellPrice
+      }));
+
+    if (currencyUpdates.length === 0) {
+      toast({ title: "Kaydedilecek değişiklik bulunamadı", variant: "destructive" });
+      return;
+    }
+
+    bulkUpdateCurrenciesMutation.mutate(currencyUpdates);
+  };
 
   const resetForm = () => {
     setFile(null);
@@ -110,7 +296,6 @@ currency,İsviçre Frangı,38.54`;
     const stocks: PriceUpdate[] = [];
     const currencies: PriceUpdate[] = [];
 
-    // Skip header line if it exists
     const dataLines = lines.filter(line => 
       line.toLowerCase().includes('stock,') || 
       line.toLowerCase().includes('currency,')
@@ -241,6 +426,8 @@ currency,İsviçre Frangı,38.54`;
     updateCurrencyRatesMutation.mutate(validUpdates);
   };
 
+  const companyChangesCount = editableCompanies.filter(c => c.hasChanges).length;
+  const currencyChangesCount = editableCurrencies.filter(c => c.hasChanges).length;
   const validStocks = stockUpdates.filter(u => u.valid).length;
   const validCurrencies = currencyUpdates.filter(u => u.valid).length;
 
@@ -252,23 +439,239 @@ currency,İsviçre Frangı,38.54`;
           Toplu Fiyat Güncelleme
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          CSV dosyası veya metin editörü ile hisse ve döviz fiyatlarını toplu olarak güncelleyin
+          Hisse ve döviz fiyatlarını düzenli tablodan veya CSV ile toplu olarak güncelleyin
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
-        <Tabs defaultValue="editor" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="editor" className="flex items-center gap-2">
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="chart" className="flex items-center gap-2">
               <Edit3 className="h-4 w-4" />
+              Düzenli Tablo
+            </TabsTrigger>
+            <TabsTrigger value="csv-editor" className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
               CSV Editörü
             </TabsTrigger>
-            <TabsTrigger value="upload" className="flex items-center gap-2">
+            <TabsTrigger value="csv-upload" className="flex items-center gap-2">
               <Upload className="h-4 w-4" />
-              Dosya Yükle
+              CSV Yükle
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="editor" className="space-y-4">
+          <TabsContent value="chart" className="space-y-6">
+            <div className="space-y-6">
+              {/* Companies Chart */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <Calculator className="h-5 w-5" />
+                    Hisse Fiyatları
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    {companyChangesCount > 0 && (
+                      <Badge variant="secondary">{companyChangesCount} değişiklik</Badge>
+                    )}
+                    <Button
+                      onClick={saveAllCompanyChanges}
+                      disabled={companyChangesCount === 0 || bulkUpdateCompaniesMutation.isPending}
+                      className="flex items-center gap-2"
+                    >
+                      {bulkUpdateCompaniesMutation.isPending ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 animate-spin" />
+                          Kaydediliyor...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="h-4 w-4" />
+                          Tüm Değişiklikleri Kaydet
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="grid grid-cols-4 gap-4 p-3 bg-muted/50 font-medium text-sm">
+                    <div>Şirket</div>
+                    <div className="text-center">Alış Fiyatı (₺)</div>
+                    <div className="text-center">Satış Fiyatı (₺)</div>
+                    <div className="text-center">Durum</div>
+                  </div>
+                  <Separator />
+                  
+                  {editableCompanies.map((company) => (
+                    <div key={company.id} className={`grid grid-cols-4 gap-4 p-3 items-center ${
+                      company.hasChanges ? 'bg-yellow-50 dark:bg-yellow-950/20' : ''
+                    }`}>
+                      <div className="space-y-1">
+                        <div className="font-medium">{company.name}</div>
+                        <div className="text-sm text-muted-foreground">{company.symbol}</div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Input
+                          type="number"
+                          step="0.01"
+                          value={company.buyPrice}
+                          onChange={(e) => updateEditablePrice(editableCompanies, setEditableCompanies, company.id, 'buyPrice', e.target.value)}
+                          className={`text-center ${!company.buyPriceValid ? 'border-red-500' : ''}`}
+                        />
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            const newSellPrice = autoCalculateSellPrice(company.buyPrice);
+                            updateEditablePrice(editableCompanies, setEditableCompanies, company.id, 'sellPrice', newSellPrice);
+                          }}
+                          className="w-full text-xs"
+                        >
+                          Satış Hesapla
+                        </Button>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Input
+                          type="number"
+                          step="0.01"
+                          value={company.sellPrice}
+                          onChange={(e) => updateEditablePrice(editableCompanies, setEditableCompanies, company.id, 'sellPrice', e.target.value)}
+                          className={`text-center ${!company.sellPriceValid ? 'border-red-500' : ''}`}
+                        />
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            const newBuyPrice = autoCalculateBuyPrice(company.sellPrice);
+                            updateEditablePrice(editableCompanies, setEditableCompanies, company.id, 'buyPrice', newBuyPrice);
+                          }}
+                          className="w-full text-xs"
+                        >
+                          Alış Hesapla
+                        </Button>
+                      </div>
+                      
+                      <div className="text-center">
+                        {company.hasChanges ? (
+                          <Badge variant="secondary">Değiştirildi</Badge>
+                        ) : (
+                          <Badge variant="outline">Değişiklik Yok</Badge>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Currencies Chart */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <Calculator className="h-5 w-5" />
+                    Döviz Kurları
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    {currencyChangesCount > 0 && (
+                      <Badge variant="secondary">{currencyChangesCount} değişiklik</Badge>
+                    )}
+                    <Button
+                      onClick={saveAllCurrencyChanges}
+                      disabled={currencyChangesCount === 0 || bulkUpdateCurrenciesMutation.isPending}
+                      className="flex items-center gap-2"
+                    >
+                      {bulkUpdateCurrenciesMutation.isPending ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 animate-spin" />
+                          Kaydediliyor...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="h-4 w-4" />
+                          Tüm Değişiklikleri Kaydet
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="grid grid-cols-4 gap-4 p-3 bg-muted/50 font-medium text-sm">
+                    <div>Döviz</div>
+                    <div className="text-center">Alış Kuru (₺)</div>
+                    <div className="text-center">Satış Kuru (₺)</div>
+                    <div className="text-center">Durum</div>
+                  </div>
+                  <Separator />
+                  
+                  {editableCurrencies.map((currency) => (
+                    <div key={currency.id} className={`grid grid-cols-4 gap-4 p-3 items-center ${
+                      currency.hasChanges ? 'bg-yellow-50 dark:bg-yellow-950/20' : ''
+                    }`}>
+                      <div className="space-y-1">
+                        <div className="font-medium">{currency.name}</div>
+                        <div className="text-sm text-muted-foreground">{currency.symbol}</div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Input
+                          type="number"
+                          step="0.0001"
+                          value={currency.buyPrice}
+                          onChange={(e) => updateEditablePrice(editableCurrencies, setEditableCurrencies, currency.id, 'buyPrice', e.target.value)}
+                          className={`text-center ${!currency.buyPriceValid ? 'border-red-500' : ''}`}
+                        />
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            const newSellPrice = autoCalculateSellPrice(currency.buyPrice);
+                            updateEditablePrice(editableCurrencies, setEditableCurrencies, currency.id, 'sellPrice', newSellPrice);
+                          }}
+                          className="w-full text-xs"
+                        >
+                          Satış Hesapla
+                        </Button>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Input
+                          type="number"
+                          step="0.0001"
+                          value={currency.sellPrice}
+                          onChange={(e) => updateEditablePrice(editableCurrencies, setEditableCurrencies, currency.id, 'sellPrice', e.target.value)}
+                          className={`text-center ${!currency.sellPriceValid ? 'border-red-500' : ''}`}
+                        />
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            const newBuyPrice = autoCalculateBuyPrice(currency.sellPrice);
+                            updateEditablePrice(editableCurrencies, setEditableCurrencies, currency.id, 'buyPrice', newBuyPrice);
+                          }}
+                          className="w-full text-xs"
+                        >
+                          Alış Hesapla
+                        </Button>
+                      </div>
+                      
+                      <div className="text-center">
+                        {currency.hasChanges ? (
+                          <Badge variant="secondary">Değiştirildi</Badge>
+                        ) : (
+                          <Badge variant="outline">Değişiklik Yok</Badge>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="csv-editor" className="space-y-4">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <Label htmlFor="csv-text">CSV Verisi</Label>
@@ -337,7 +740,7 @@ currency,İsviçre Frangı,38.54`;
             </div>
           </TabsContent>
 
-          <TabsContent value="upload" className="space-y-4">
+          <TabsContent value="csv-upload" className="space-y-4">
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="csv-file">CSV Dosyası</Label>
               <Input
@@ -375,12 +778,12 @@ currency,İsviçre Frangı,38.54`;
           </div>
         )}
 
-        {/* Preview */}
+        {/* CSV Preview */}
         {!isProcessing && (stockUpdates.length > 0 || currencyUpdates.length > 0) && (
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
-              <span className="font-medium">Önizleme</span>
+              <span className="font-medium">CSV Önizlemesi</span>
             </div>
 
             <Tabs defaultValue="stocks" className="w-full">
