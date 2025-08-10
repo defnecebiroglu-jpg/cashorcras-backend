@@ -158,14 +158,18 @@ currency,İsviçre Frangı,38.54`;
     mutationFn: async (updates: { id: number; price: string; sellPrice: string }[]) => {
       const results = [];
       for (const update of updates) {
-        const response = await apiRequest(`/api/companies/${update.id}`, {
+        const response = await fetch(`/api/companies/${update.id}`, {
           method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({ 
             price: update.price, 
             sellPrice: update.sellPrice 
           }),
         });
-        results.push(response);
+        const data = await response.json();
+        results.push(data);
       }
       return results;
     },
@@ -183,14 +187,18 @@ currency,İsviçre Frangı,38.54`;
     mutationFn: async (updates: { id: number; rate: string; sellRate: string }[]) => {
       const results = [];
       for (const update of updates) {
-        const response = await apiRequest(`/api/currencies/${update.id}`, {
+        const response = await fetch(`/api/currencies/${update.id}`, {
           method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({ 
             rate: update.rate, 
             sellRate: update.sellRate 
           }),
         });
-        results.push(response);
+        const data = await response.json();
+        results.push(data);
       }
       return results;
     },
@@ -208,11 +216,15 @@ currency,İsviçre Frangı,38.54`;
     mutationFn: async (updates: { companyId: number; newPrice: string }[]) => {
       const results = [];
       for (const update of updates) {
-        const response = await apiRequest(`/api/companies/${update.companyId}`, {
+        const response = await fetch(`/api/companies/${update.companyId}`, {
           method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({ price: update.newPrice }),
         });
-        results.push(response);
+        const data = await response.json();
+        results.push(data);
       }
       return results;
     },
@@ -231,11 +243,15 @@ currency,İsviçre Frangı,38.54`;
     mutationFn: async (updates: { currencyId: number; newRate: string }[]) => {
       const results = [];
       for (const update of updates) {
-        const response = await apiRequest(`/api/currencies/${update.currencyId}`, {
+        const response = await fetch(`/api/currencies/${update.currencyId}`, {
           method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({ rate: update.newRate }),
         });
-        results.push(response);
+        const data = await response.json();
+        results.push(data);
       }
       return results;
     },
@@ -329,12 +345,12 @@ currency,İsviçre Frangı,38.54`;
           });
         }
       } else if (type.toLowerCase() === 'currency') {
-        const currency = currencies?.find(c => c.name.toLowerCase() === nameStr.toLowerCase());
-        if (currency && !isNaN(price) && price > 0) {
+        const foundCurrency = currencies?.find(c => c.name.toLowerCase() === nameStr.toLowerCase());
+        if (foundCurrency && !isNaN(price) && price > 0) {
           currencies.push({
-            id: currency.id,
-            name: currency.name,
-            currentPrice: currency.rate,
+            id: foundCurrency.id,
+            name: foundCurrency.name,
+            currentPrice: String(foundCurrency.rate),
             newPrice: price.toFixed(4),
             valid: true
           });
@@ -342,10 +358,10 @@ currency,İsviçre Frangı,38.54`;
           currencies.push({
             id: 0,
             name: nameStr,
-            currentPrice: currency?.rate || "0.0000",
+            currentPrice: foundCurrency?.rate ? String(foundCurrency.rate) : "0.0000",
             newPrice: priceStr,
             valid: false,
-            error: currency ? "Geçersiz kur" : "Döviz bulunamadı"
+            error: foundCurrency ? "Geçersiz kur" : "Döviz bulunamadı"
           });
         }
       }
