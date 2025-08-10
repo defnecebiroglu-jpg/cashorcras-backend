@@ -64,6 +64,8 @@ currency,İsviçre Frangı,38.54`;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/companies"] });
+      // Invalidate all portfolio data to reflect updated stock prices
+      queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
       toast({ title: "Hisse fiyatları başarıyla güncellendi" });
       resetForm();
     },
@@ -86,6 +88,8 @@ currency,İsviçre Frangı,38.54`;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/currencies"] });
+      // Invalidate all portfolio data to reflect updated currency rates
+      queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
       toast({ title: "Döviz kurları başarıyla güncellendi" });
       resetForm();
     },

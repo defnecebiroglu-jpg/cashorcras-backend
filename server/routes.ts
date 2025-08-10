@@ -379,7 +379,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Invalid price value' });
       }
       
-      const company = await storage.updateCompany(parseInt(req.params.id), { price });
+      // Update both price and sellPrice to ensure portfolio calculations use the latest values
+      const priceValue = parseFloat(price);
+      const sellPriceValue = (priceValue * 0.98).toFixed(2); // 2% spread for sell price
+      
+      const company = await storage.updateCompany(parseInt(req.params.id), { 
+        price: priceValue.toFixed(2), 
+        sellPrice: sellPriceValue 
+      });
       res.json(company);
     } catch (error) {
       res.status(400).json({ message: 'Failed to update company price' });
@@ -439,7 +446,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Invalid rate value' });
       }
       
-      const currency = await storage.updateCurrency(parseInt(req.params.id), { rate });
+      // Update both rate and sellRate to ensure portfolio calculations use the latest values
+      const rateValue = parseFloat(rate);
+      const sellRateValue = (rateValue * 0.98).toFixed(2); // 2% spread for sell rate
+      
+      const currency = await storage.updateCurrency(parseInt(req.params.id), { 
+        rate: rateValue.toFixed(2), 
+        sellRate: sellRateValue 
+      });
       res.json(currency);
     } catch (error) {
       res.status(400).json({ message: 'Failed to update currency rate' });
