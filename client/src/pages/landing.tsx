@@ -61,7 +61,7 @@ export default function Landing() {
             lineHeight: '80px'
           }}
         >
-          KAZANMAYA<br />CESARETIN VAR MI?
+          GİRİŞİMCİLİK<br />SİMÜLASYONU
         </h2>
 
         {/* Main Image/Content Section */}
@@ -104,7 +104,7 @@ export default function Landing() {
                 lineHeight: '70px'
               }}
             >
-              "BIR KARAR, HER SEYI DEGISTIRIR."
+              "HER KARAR BİR ÖĞRENME FIRSATIDIR."
             </blockquote>
 
             <div className="relative w-[423px] h-[111px] mt-4">

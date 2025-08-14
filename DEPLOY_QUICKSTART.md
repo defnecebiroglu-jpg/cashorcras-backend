@@ -3,12 +3,16 @@
 ## Render ile Deploy (Önerilen - Ücretsiz)
 
 1. **GitHub'a Push Et**: Projeyi GitHub repository'nize push edin
-2. **Render'da Deploy**: 
-   - https://render.com adresine gidiş yapın
+2. **Render'da Manual Deploy**: 
+   - https://render.com adresine giriş yapın
    - "New" > "Web Service" 
    - GitHub repo'nuzu seçin
-   - Render otomatik `render.yaml` algılar ✅
-   - "Create Web Service" tıkla
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `node dist/index.js`
+   - Environment Variables:
+     - `NODE_ENV=production`
+     - `SESSION_SECRET=your-secret-key`
+   - "Create Web Service" tıkla ✅
 3. **Sonuç**: `https://your-app.onrender.com` adresinde çalışır
 
 ## Railway ile Deploy

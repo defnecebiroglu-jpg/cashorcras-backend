@@ -6,14 +6,20 @@ Bu rehber, Cash or Crash uygulamasını Render ve Railway gibi bulut platformlar
 
 ### 1. Repository Hazırlığı
 - Projeyi GitHub'a push edin
-- `render.yaml` dosyası otomatik yapılandırma için mevcuttur
+- `render.yaml` veya manuel yapılandırma kullanabilirsiniz
 
-### 2. Render'da Deploy Etme
+### 2. Render'da Deploy Etme (Manuel - Önerilen)
 1. [Render](https://render.com) hesabınıza giriş yapın
 2. "New" > "Web Service" seçin
 3. GitHub repository'nizi bağlayın
-4. Render otomatik olarak `render.yaml` yapılandırmasını algılar
+4. Manuel yapılandırma seçin:
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `node dist/index.js`
+   - **Environment**: Node
 5. "Create Web Service" düğmesine tıklayın
+
+### 2B. Alternatif: render.yaml ile (Eğer manuel çalışmazsa)
+- `render-simple.yaml` dosyasını `render.yaml` olarak yeniden adlandırın
 
 ### 3. Environment Variables (Opsiyonel)
 Render otomatik olarak şunları ayarlar:
@@ -28,13 +34,21 @@ Render otomatik olarak şunları ayarlar:
 
 ### 1. Repository Hazırlığı
 - Projeyi GitHub'a push edin
-- `railway.json` ve `nixpacks.toml` dosyaları mevcuttur
 
-### 2. Railway'de Deploy Etme
+### 2. Railway'de Deploy Etme (Manuel - Önerilen)
 1. [Railway](https://railway.app) hesabınıza giriş yapın
 2. "New Project" > "Deploy from GitHub repo" seçin
 3. Repository'nizi seçin
-4. Railway otomatik olarak yapılandırmaları algılar
+4. Deploy sonrası Settings'e gidin:
+   - **Build Command**: `npm install && npm run build` (otomatik algılar)
+   - **Start Command**: `node dist/index.js`
+5. Redeploy yapın
+
+### 2B. Sorun Çözme
+Eğer otomatik build çalışmazsa:
+- `railway.json` ve `nixpacks.toml` dosyalarını geçici olarak silin
+- Railway'in otomatik algılamasını bekleyin
+- Start command'ı manuel olarak `node dist/index.js` yapın
 
 ### 3. Environment Variables
 Railway dashboard'dan şu değişkenleri ayarlayın:
