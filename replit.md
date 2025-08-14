@@ -81,7 +81,14 @@ An advanced educational entrepreneurship simulation platform that transforms lea
 - **Frontend**: Complete with all major features implemented
 - **Authentication**: Team and admin access control working
 - **Database**: In-memory storage with sample data
-- **Deployment**: Ready for production use
+- **Deployment**: Ready for production use with cloud platform support
+
+## Cloud Deployment
+- **Render**: Configured with render.yaml (automatic HTTPS, free tier)
+- **Railway**: Configured with railway.json and nixpacks.toml
+- **Docker**: Multi-stage Dockerfile for custom deployments
+- **HTTPS**: Session security configured for production
+- **Port**: Dynamic PORT environment variable support
 
 ## User Preferences
 - **Language**: Turkish localization preferred

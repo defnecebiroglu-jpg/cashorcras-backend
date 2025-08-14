@@ -12,7 +12,11 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'cashcrash-secret-key',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 24 hours
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax'
+  }
 }));
 
 app.use((req, res, next) => {
@@ -65,10 +69,8 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = 5000;
+  // Use environment PORT for cloud deployment, fallback to 5000 for local
+  const port = process.env.PORT || 5000;
   server.listen({
     port,
     host: "0.0.0.0",
