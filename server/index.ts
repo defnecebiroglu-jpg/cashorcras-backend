@@ -96,6 +96,11 @@ app.use((req, res, next) => {
   const port = config.PORT;
   const host = config.HOST;
   
+  // Railway-specific binding fixes
+  if (config.isRailway) {
+    log(`Railway deployment detected - binding to PORT=${port} HOST=${host}`);
+  }
+  
   // Graceful shutdown handling
   const shutdown = () => {
     log('Received shutdown signal, closing server...');
@@ -111,7 +116,7 @@ app.use((req, res, next) => {
   server.listen(port, host, () => {
     log(`serving on ${host}:${port} in ${config.NODE_ENV} mode`);
     log(`session config: secure=${sessionConfig.cookie.secure}, sameSite=${sessionConfig.cookie.sameSite}`);
-    log(`deployment: replit=${config.isReplit}, replit-production=${config.isReplitDeployment}`);
+    log(`deployment: replit=${config.isReplit}, railway=${config.isRailway}, production-mode=${config.isProduction}`);
     
     // Health check endpoint
     app.get('/health', (req, res) => {
@@ -121,8 +126,9 @@ app.use((req, res, next) => {
         environment: config.NODE_ENV,
         deployment: {
           replit: config.isReplit,
-          replitProduction: config.isReplitDeployment,
-          platform: 'replit-deployments'
+          railway: config.isRailway,
+          production: config.isProduction,
+          platform: config.isReplitDeployment ? 'replit-deployments' : config.isRailwayDeployment ? 'railway' : 'development'
         }
       });
     });

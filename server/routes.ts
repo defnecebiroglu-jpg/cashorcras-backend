@@ -56,6 +56,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Geçersiz erişim kodu' });
       }
       
+      // @ts-ignore - Session type extension
       if (req.session) {
         req.session.teamId = String(team.id);
       }
@@ -73,6 +74,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Geçersiz admin şifresi' });
       }
       
+      // @ts-ignore - Session type extension
       if (req.session) {
         req.session.isAdmin = true;
       }

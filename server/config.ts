@@ -21,18 +21,29 @@ export const config = {
   // Deployment detection
   isReplit: !!process.env.REPL_ID,
   isReplitDeployment: process.env.NODE_ENV === 'production' && !!process.env.REPL_ID,
+  isRailway: !!process.env.RAILWAY_ENVIRONMENT,
+  isRailwayDeployment: process.env.NODE_ENV === 'production' && !!process.env.RAILWAY_ENVIRONMENT,
 };
 
 // Validate required environment variables for production
-if (config.isProduction && config.isReplitDeployment) {
-  const required = ['SESSION_SECRET', 'REPL_ID'];
-  for (const key of required) {
-    if (!process.env[key]) {
-      console.warn(`Warning: ${key} environment variable not set in Replit production`);
+if (config.isProduction) {
+  if (config.isReplitDeployment) {
+    const required = ['SESSION_SECRET', 'REPL_ID'];
+    for (const key of required) {
+      if (!process.env[key]) {
+        console.warn(`Warning: ${key} environment variable not set in Replit production`);
+      }
     }
+    console.log('🚀 Replit deployment detected - optimized for Replit infrastructure');
+  } else if (config.isRailwayDeployment) {
+    const required = ['SESSION_SECRET', 'RAILWAY_ENVIRONMENT'];
+    for (const key of required) {
+      if (!process.env[key]) {
+        console.warn(`Warning: ${key} environment variable not set in Railway production`);
+      }
+    }
+    console.log('🚂 Railway deployment detected - optimized for Railway infrastructure');
   }
-  
-  console.log('🚀 Replit deployment detected - optimized for Replit infrastructure');
 }
 
 export default config;
