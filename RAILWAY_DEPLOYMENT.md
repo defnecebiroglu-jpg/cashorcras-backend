@@ -16,8 +16,8 @@ HOST=0.0.0.0
 ```
 
 #### 2. Build & Start Commands:
-- **Build Command**: `npm cache clean --force && npm install --omit=dev --no-audit --no-fund && npm run build`  
-- **Start Command**: `node dist/index.js`
+- **Build Command**: `npm cache clean --force && npm install --omit=dev --no-audit --no-fund && vite build && npx esbuild server/production.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/production.js`  
+- **Start Command**: `node dist/production.js`
 
 #### 3. Port Configuration:
 Railway otomatik olarak PORT environment variable atar. Server şu şekilde dinler:
@@ -54,10 +54,11 @@ Eğer hala 502 alıyorsanız:
 - `--omit=dev` kullanır (production dependencies only)  
 - `--no-audit --no-fund` ile gereksiz işlemler atlanır
 
-#### Path Resolution Error (import.meta.dirname):
-- Railway deployment'da import.meta.dirname undefined olabiliyor
-- Fixed: Multer upload path'i production'da `/tmp/uploads` kullanır
-- Build process otomatik olarak path resolution'u Railway için optimize eder
+#### ✅ Path Resolution FIXED (import.meta.dirname):
+- **ÇÖZÜLDÜ**: Production server artık Vite bağımlılığı kullanmıyor
+- **ÇÖZÜLDÜ**: server/production.ts import.meta.dirname içermiyor
+- **ÇÖZÜLDÜ**: Multer upload /tmp/uploads (Railway-safe)
+- **ÇÖZÜLDÜ**: Static file serving production-optimized
 
 #### 502 Connection Refused:
 - PORT ve HOST environment variables Railway tarafından otomatik ayarlanır
