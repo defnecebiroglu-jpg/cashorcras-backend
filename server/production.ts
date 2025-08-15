@@ -69,24 +69,42 @@ async function startProductionServer() {
     next();
   });
 
-  // Health check endpoint
+  // Health check endpoint - must be before registerRoutes
   app.get('/health', (req, res) => {
-    res.json({ 
-      status: 'ok', 
-      timestamp: new Date().toISOString(),
-      platform: isRailway ? 'railway' : isRender ? 'render' : 'unknown'
-    });
+    try {
+      res.json({ 
+        status: 'ok', 
+        timestamp: new Date().toISOString(),
+        platform: isRailway ? 'railway' : isRender ? 'render' : 'unknown',
+        port: process.env.PORT || 'unknown',
+        host: process.env.HOST || 'unknown'
+      });
+    } catch (error) {
+      res.status(500).json({ status: 'error', error: String(error) });
+    }
   });
 
   // Serve static files from dist/public first
   app.use(express.static(publicDir));
 
-  // Register API routes - this returns an HTTP server, not adding to app
-  const httpServer = await registerRoutes(app);
+  // Register API routes with error handling
+  let httpServer;
+  try {
+    httpServer = await registerRoutes(app);
+    log('API routes registered successfully');
+  } catch (error) {
+    log(`Error registering routes: ${error}`);
+    throw error;
+  }
   
   // SPA fallback - must be last
   app.get('*', (req, res) => {
-    res.sendFile(path.join(publicDir, 'index.html'));
+    try {
+      res.sendFile(path.join(publicDir, 'index.html'));
+    } catch (error) {
+      log(`Error serving SPA fallback: ${error}`);
+      res.status(500).send('Server Error');
+    }
   });
 
   // Start the HTTP server returned by registerRoutes
@@ -97,6 +115,26 @@ async function startProductionServer() {
     log(`serving on ${HOST}:${PORT} in production mode`);
     log(`platform: railway=${isRailway}, render=${isRender}`);
     log(`static files from: ${publicDir}`);
+  });
+
+  // Global error handlers
+  process.on('uncaughtException', (error) => {
+    log(`Uncaught Exception: ${error.message}`);
+    log(`Stack: ${error.stack}`);
+    process.exit(1);
+  });
+
+  process.on('unhandledRejection', (reason, promise) => {
+    log(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
+    process.exit(1);
+  });
+
+  // Graceful shutdown
+  process.on('SIGTERM', () => {
+    log('SIGTERM received, shutting down gracefully');
+    httpServer.close(() => {
+      log('Process terminated');
+    });
   });
 }
 

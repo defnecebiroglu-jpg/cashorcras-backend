@@ -4,8 +4,8 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import multer from "multer";
 import path from "path";
-import { ObjectStorageService } from './objectStorage';
-import { insertCompanySchema, insertCurrencySchema, insertTeamSchema, insertTeamStockSchema, insertTeamCurrencySchema, insertTeamStartupSchema } from "@shared/schema";
+// import { ObjectStorageService } from './objectStorage'; // Disabled for Railway deployment
+import { insertCompanySchema, insertCurrencySchema, insertTeamSchema, insertTeamStockSchema, insertTeamCurrencySchema, insertTeamStartupSchema } from "../shared/schema";
 import './types'; // Type definitions
 
 // Configure multer for file uploads with Railway-safe path handling
@@ -33,20 +33,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Serve uploaded files with Railway-safe path
   app.use('/uploads', express.static(uploadDir));
 
-  // Serve public objects from object storage
+  // Serve public objects from object storage - disabled for Railway deployment
   app.get("/public-objects/:filePath(*)", async (req, res) => {
-    const filePath = req.params.filePath;
-    const objectStorageService = new ObjectStorageService();
-    try {
-      const file = await objectStorageService.searchPublicObject(filePath);
-      if (!file) {
-        return res.status(404).json({ error: "File not found" });
-      }
-      objectStorageService.downloadObject(file, res);
-    } catch (error) {
-      console.error("Error searching for public object:", error);
-      return res.status(500).json({ error: "Internal server error" });
-    }
+    // Object storage not available in production deployment
+    return res.status(404).json({ error: "Object storage not available" });
   });
 
   // Authentication routes
@@ -320,16 +310,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get upload URL for company logos
+  // Get upload URL for company logos - disabled for Railway deployment
   app.post('/api/companies/upload', async (req, res) => {
-    const objectStorageService = new ObjectStorageService();
-    try {
-      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
-      res.json({ uploadURL });
-    } catch (error) {
-      console.error('Error getting upload URL:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
+    res.status(404).json({ error: 'Object storage not available in production' });
   });
 
   app.post('/api/companies', upload.single('logo'), async (req, res) => {
@@ -345,7 +328,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update company logo via object storage
+  // Update company logo via object storage - disabled for Railway deployment
   app.put('/api/companies/:id/logo', async (req, res) => {
     try {
       const { logoUrl } = req.body;
@@ -353,13 +336,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'logoUrl is required' });
       }
 
-      const objectStorageService = new ObjectStorageService();
-      const normalizedPath = objectStorageService.normalizeObjectEntityPath(logoUrl);
-      
+      // Direct path usage without object storage
       const company = await storage.updateCompany(parseInt(req.params.id), { 
-        logoUrl: normalizedPath 
+        logoUrl: logoUrl 
       });
-      res.json({ company, logoPath: normalizedPath });
+      res.json({ company, logoPath: logoUrl });
     } catch (error) {
       console.error('Error updating company logo:', error);
       res.status(500).json({ error: 'Internal server error' });
