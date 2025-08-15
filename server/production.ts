@@ -111,10 +111,25 @@ async function startProductionServer() {
   const PORT = parseInt(process.env.PORT || '5000');
   const HOST = process.env.HOST || '0.0.0.0';
 
-  httpServer.listen(PORT, HOST, () => {
-    log(`serving on ${HOST}:${PORT} in production mode`);
+  // Railway requires binding to 0.0.0.0 on the provided PORT
+  httpServer.listen(PORT, '0.0.0.0', () => {
+    log(`serving on 0.0.0.0:${PORT} in production mode`);
     log(`platform: railway=${isRailway}, render=${isRender}`);
     log(`static files from: ${publicDir}`);
+    log(`environment: NODE_ENV=${process.env.NODE_ENV}`);
+    
+    // Test server immediately after start
+    setTimeout(() => {
+      log('Server startup complete - ready for connections');
+    }, 100);
+  });
+
+  httpServer.on('error', (error) => {
+    log(`Server error: ${error.message}`);
+    if (error.message.includes('EADDRINUSE')) {
+      log(`Port ${PORT} is already in use`);
+      process.exit(1);
+    }
   });
 
   // Global error handlers

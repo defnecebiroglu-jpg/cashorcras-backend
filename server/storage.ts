@@ -4,7 +4,7 @@ import {
   type InsertCompany, type InsertCurrency, type InsertTeam, 
   type InsertTeamStock, type InsertTeamCurrency, type InsertTeamStartup,
   type TeamPortfolio
-} from "@shared/schema";
+} from "../shared/schema";
 
 export interface IStorage {
   // Companies
