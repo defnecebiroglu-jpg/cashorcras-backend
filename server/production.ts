@@ -73,18 +73,18 @@ async function startProductionServer() {
     });
   });
 
-  // Register API routes
-  const httpServer = await registerRoutes(app);
-
-  // Serve static files from dist/public
+  // Serve static files from dist/public first
   app.use(express.static(publicDir));
+
+  // Register API routes - this returns an HTTP server, not adding to app
+  const httpServer = await registerRoutes(app);
   
-  // SPA fallback
+  // SPA fallback - must be last
   app.get('*', (req, res) => {
     res.sendFile(path.join(publicDir, 'index.html'));
   });
 
-  // Start server
+  // Start the HTTP server returned by registerRoutes
   const PORT = parseInt(process.env.PORT || '5000');
   const HOST = process.env.HOST || '0.0.0.0';
 

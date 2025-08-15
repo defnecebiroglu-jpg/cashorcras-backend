@@ -60,6 +60,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // @ts-ignore - Session type extension
       if (req.session) {
+        // @ts-ignore - Session type extension
         req.session.teamId = String(team.id);
       }
       res.json({ team });
@@ -78,6 +79,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // @ts-ignore - Session type extension
       if (req.session) {
+        // @ts-ignore - Session type extension  
         req.session.isAdmin = true;
       }
       res.json({ success: true });
