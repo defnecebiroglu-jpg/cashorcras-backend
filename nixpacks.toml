@@ -1,5 +1,5 @@
 [phases.build]
-  cmd = "npm ci && npm run build"
+  cmd = "npm cache clean --force && npm install --omit=dev --no-audit --no-fund && npm run build"
 
 [phases.start]
   cmd = "node dist/index.js"
@@ -7,3 +7,6 @@
 [variables]
   NODE_VERSION = "20"
   NPM_CONFIG_PRODUCTION = "false"
+  NPM_CONFIG_CACHE = "/tmp/.npm"
+  NPM_CONFIG_AUDIT = "false"
+  NPM_CONFIG_FUND = "false"

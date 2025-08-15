@@ -16,7 +16,7 @@ HOST=0.0.0.0
 ```
 
 #### 2. Build & Start Commands:
-- **Build Command**: `npm ci && npm run build`  
+- **Build Command**: `npm cache clean --force && npm install --omit=dev --no-audit --no-fund && npm run build`  
 - **Start Command**: `node dist/index.js`
 
 #### 3. Port Configuration:
@@ -46,5 +46,11 @@ Eğer hala 502 alıyorsanız:
 2. `npm run build` local'da çalışıyor mu test edin  
 3. `node dist/index.js` komutu ile manuel start test edin
 4. PORT ve HOST environment variables doğru mu kontrol edin
+
+### NPM Cache Issues:
+Eğer build sırasında cache hatası alıyorsanız:
+- Build command otomatik olarak cache'i temizler: `npm cache clean --force`
+- `--omit=dev` kullanır (production dependencies only)
+- `--no-audit --no-fund` ile gereksiz işlemler atlanır
 
 **Railway deployment şimdi optimize edildi ve admin endpoints aktif!**
