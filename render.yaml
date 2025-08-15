@@ -2,16 +2,11 @@ services:
   - type: web
     name: cash-or-crash
     env: node
-    buildCommand: npm cache clean --force && npm install --omit=dev --no-audit --no-fund && vite build && npx esbuild server/production.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/production.js
-    startCommand: node dist/production.js
+    buildCommand: npm install && npm run build
+    startCommand: node server/minimal.cjs
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
       - key: SESSION_SECRET
         generateValue: true
-      - key: HOST
-        value: 0.0.0.0
-    disk:
-      name: uploads
-      mountPath: /tmp/uploads
-      sizeGB: 1

@@ -51,5 +51,9 @@ externalPort = 80
 localPort = 8080
 externalPort = 8080
 
+[[ports]]
+localPort = 10000
+externalPort = 3003
+
 [agent]
 integrations = ["javascript_object_storage==1.0.0"]
