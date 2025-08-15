@@ -1,1 +1,1 @@
-web: node server/simple-production.cjs
+web: node server/minimal.cjs

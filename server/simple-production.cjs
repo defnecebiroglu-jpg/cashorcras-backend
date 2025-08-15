@@ -6,6 +6,12 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+console.log('=== RAILWAY SERVER DEBUG ===');
+console.log('PORT:', PORT);
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('__dirname:', __dirname);
+console.log('==============================');
+
 // Basic middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,6 +26,18 @@ app.use(session({
 
 // Static files
 const publicPath = path.join(__dirname, '..', 'dist', 'public');
+console.log('Public path resolved to:', publicPath);
+
+// Check if public path exists
+const fs = require('fs');
+if (fs.existsSync(publicPath)) {
+  console.log('✅ Public path exists');
+  const files = fs.readdirSync(publicPath);
+  console.log('Files in public:', files.slice(0, 5));
+} else {
+  console.log('❌ Public path does not exist!');
+}
+
 app.use(express.static(publicPath));
 
 // Simple data
@@ -70,20 +88,55 @@ app.post('/api/admin/login', (req, res) => {
   res.json({ success: true });
 });
 
-app.get('/health', (req, res) => res.json({ 
-  status: 'OK', railway: true, port: PORT, time: new Date().toISOString() 
-}));
+app.get('/health', (req, res) => {
+  console.log('Health check accessed');
+  res.json({ 
+    status: 'OK', 
+    railway: true, 
+    port: PORT,
+    time: new Date().toISOString(),
+    staticPath: publicPath,
+    env: process.env.NODE_ENV
+  });
+});
 
 // Catch-all
 app.get('*', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
+  console.log('Catch-all route accessed:', req.path);
+  try {
+    const indexFile = path.join(publicPath, 'index.html');
+    console.log('Trying to send file:', indexFile);
+    res.sendFile(indexFile, (err) => {
+      if (err) {
+        console.error('Send file error:', err);
+        res.status(500).send('Error serving file: ' + err.message);
+      }
+    });
+  } catch (error) {
+    console.error('Catch-all error:', error);
+    res.status(500).send('Server error: ' + error.message);
+  }
 });
 
 // Error handling
 process.on('uncaughtException', console.error);
 process.on('unhandledRejection', console.error);
 
-app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚂 Railway server running on 0.0.0.0:${PORT}`);
   console.log(`Static files: ${publicPath}`);
+  console.log(`Health endpoint: http://0.0.0.0:${PORT}/health`);
+});
+
+// Add error handlers
+server.on('error', (err) => {
+  console.error('Server error:', err);
+});
+
+// Handle shutdown gracefully
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    console.log('Process terminated');
+  });
 });
