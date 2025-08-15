@@ -6,6 +6,7 @@ import multer from "multer";
 import path from "path";
 import { ObjectStorageService } from './objectStorage';
 import { insertCompanySchema, insertCurrencySchema, insertTeamSchema, insertTeamStockSchema, insertTeamCurrencySchema, insertTeamStartupSchema } from "@shared/schema";
+import './types'; // Type definitions
 
 // Configure multer for file uploads
 const upload = multer({
@@ -55,8 +56,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Geçersiz erişim kodu' });
       }
       
-      req.session = req.session || {};
-      req.session.teamId = team.id;
+      if (req.session) {
+        req.session.teamId = String(team.id);
+      }
       res.json({ team });
     } catch (error) {
       res.status(500).json({ message: 'Kimlik doğrulama hatası' });
@@ -71,8 +73,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Geçersiz admin şifresi' });
       }
       
-      req.session = req.session || {};
-      req.session.isAdmin = true;
+      if (req.session) {
+        req.session.isAdmin = true;
+      }
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ message: 'Kimlik doğrulama hatası' });
@@ -80,8 +83,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post('/api/auth/logout', (req, res) => {
-    req.session = {};
-    res.json({ success: true });
+    if (req.session) {
+      req.session.destroy((err) => {
+        if (err) {
+          return res.status(500).json({ error: 'Could not log out' });
+        }
+        res.json({ success: true });
+      });
+    } else {
+      res.json({ success: true });
+    }
   });
 
   // Admin dividend distribution endpoint

@@ -2,22 +2,42 @@ import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import "./types"; // Type definitions
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
-// Session middleware
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'cashcrash-secret-key',
+// Security and parsing middleware
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+
+// Security headers for production
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    next();
+  });
+}
+
+import config from "./config";
+
+// Session middleware - fixed for cloud deployment
+const sessionConfig = {
+  secret: config.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+    secure: config.SESSION_SECURE,
+    httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax'
+    sameSite: config.isProduction ? 'strict' as const : 'lax' as const
   }
-}));
+};
+
+// @ts-ignore - Express session type issue workaround
+app.use(session(sessionConfig));
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -57,7 +77,10 @@ app.use((req, res, next) => {
     const message = err.message || "Internal Server Error";
 
     res.status(status).json({ message });
-    throw err;
+    // Only log error in development, don't throw in production
+    if (process.env.NODE_ENV === 'development') {
+      console.error(err);
+    }
   });
 
   // importantly only setup vite in development and after
@@ -70,12 +93,38 @@ app.use((req, res, next) => {
   }
 
   // Use environment PORT for cloud deployment, fallback to 5000 for local
-  const port = process.env.PORT || 5000;
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
+  const port = config.PORT;
+  const host = config.HOST;
+  
+  // Graceful shutdown handling
+  const shutdown = () => {
+    log('Received shutdown signal, closing server...');
+    server.close(() => {
+      log('Server closed successfully');
+      process.exit(0);
+    });
+  };
+
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
+
+  server.listen(port, host, () => {
+    log(`serving on ${host}:${port} in ${config.NODE_ENV} mode`);
+    log(`session config: secure=${sessionConfig.cookie.secure}, sameSite=${sessionConfig.cookie.sameSite}`);
+    log(`deployment: render=${config.isRender}, railway=${config.isRailway}, replit=${config.isReplit}`);
+    
+    // Health check endpoint
+    app.get('/health', (req, res) => {
+      res.status(200).json({ 
+        status: 'healthy', 
+        timestamp: new Date().toISOString(),
+        environment: config.NODE_ENV,
+        deployment: {
+          render: config.isRender,
+          railway: config.isRailway,
+          replit: config.isReplit
+        }
+      });
+    });
   });
 })();
