@@ -16,6 +16,11 @@ function log(message: string, source = "express") {
     hour12: true,
   });
   console.log(`${formattedTime} [${source}] ${message}`);
+  
+  // Also log to stderr for Railway debugging
+  if (process.env.RAILWAY_ENVIRONMENT) {
+    console.error(`[RAILWAY] ${message}`);
+  }
 }
 
 // Production-safe path resolution

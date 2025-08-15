@@ -1,11 +1,14 @@
 [phases.build]
-  cmd = "npm cache clean --force && npm install --omit=dev --no-audit --no-fund && vite build && npx esbuild server/production.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/production.js"
+  cmd = "echo 'NODE VERSION:' && node --version && echo 'NPM VERSION:' && npm --version && echo 'CLEANING CACHE...' && npm cache clean --force && echo 'INSTALLING DEPS...' && npm install --omit=dev --no-audit --no-fund --verbose && echo 'VITE BUILD...' && npx vite build --mode=production && echo 'ESBUILD...' && npx esbuild server/production.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/production.js --log-level=verbose && echo 'BUILD COMPLETE - FILES:' && ls -la dist/ && echo 'PRODUCTION.JS HEAD:' && head -5 dist/production.js"
 
 [phases.start]
-  cmd = "node dist/production.js"
+  cmd = "echo 'STARTING SERVER...' && ls -la dist/ && node dist/production.js"
 
 [variables]
   NODE_VERSION = "20"
+  NODE_ENV = "production"
+  SESSION_SECRET = "railway-production-secret-2025"
+  HOST = "0.0.0.0"
   NPM_CONFIG_PRODUCTION = "false"
   NPM_CONFIG_CACHE = "/tmp/.npm"
   NPM_CONFIG_AUDIT = "false"

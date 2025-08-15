@@ -2,14 +2,14 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "npm cache clean --force && npm install --omit=dev --no-audit --no-fund && vite build && npx esbuild server/production.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/production.js"
+    "buildCommand": "echo 'NODE VERSION:' && node --version && echo 'NPM VERSION:' && npm --version && echo 'CLEANING CACHE...' && npm cache clean --force && echo 'INSTALLING DEPS...' && npm install --omit=dev --no-audit --no-fund --verbose && echo 'VITE BUILD...' && npx vite build --mode=production && echo 'ESBUILD...' && npx esbuild server/production.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/production.js --log-level=verbose && echo 'BUILD COMPLETE' && ls -la dist/"
   },
   "deploy": {
     "numReplicas": 1,
     "sleepApplication": false,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10,
-    "startCommand": "node dist/production.js"
+    "startCommand": "echo 'STARTING SERVER...' && ls -la dist/ && node dist/production.js"
   },
   "environments": {
     "production": {
