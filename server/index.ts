@@ -111,7 +111,7 @@ app.use((req, res, next) => {
   server.listen(port, host, () => {
     log(`serving on ${host}:${port} in ${config.NODE_ENV} mode`);
     log(`session config: secure=${sessionConfig.cookie.secure}, sameSite=${sessionConfig.cookie.sameSite}`);
-    log(`deployment: render=${config.isRender}, railway=${config.isRailway}, replit=${config.isReplit}`);
+    log(`deployment: replit=${config.isReplit}, replit-production=${config.isReplitDeployment}`);
     
     // Health check endpoint
     app.get('/health', (req, res) => {
@@ -120,9 +120,9 @@ app.use((req, res, next) => {
         timestamp: new Date().toISOString(),
         environment: config.NODE_ENV,
         deployment: {
-          render: config.isRender,
-          railway: config.isRailway,
-          replit: config.isReplit
+          replit: config.isReplit,
+          replitProduction: config.isReplitDeployment,
+          platform: 'replit-deployments'
         }
       });
     });

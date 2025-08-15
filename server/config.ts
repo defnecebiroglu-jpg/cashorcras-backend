@@ -19,19 +19,20 @@ export const config = {
   isProduction: process.env.NODE_ENV === 'production',
   
   // Deployment detection
-  isRender: !!process.env.RENDER,
-  isRailway: !!process.env.RAILWAY_ENVIRONMENT,
   isReplit: !!process.env.REPL_ID,
+  isReplitDeployment: process.env.NODE_ENV === 'production' && !!process.env.REPL_ID,
 };
 
 // Validate required environment variables for production
-if (config.isProduction) {
-  const required = ['SESSION_SECRET'];
+if (config.isProduction && config.isReplitDeployment) {
+  const required = ['SESSION_SECRET', 'REPL_ID'];
   for (const key of required) {
     if (!process.env[key]) {
-      console.warn(`Warning: ${key} environment variable not set in production`);
+      console.warn(`Warning: ${key} environment variable not set in Replit production`);
     }
   }
+  
+  console.log('🚀 Replit deployment detected - optimized for Replit infrastructure');
 }
 
 export default config;
