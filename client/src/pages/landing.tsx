@@ -1,7 +1,5 @@
 import { Link } from "wouter";
 
-import kalcc_borsa_gmail_com_kalcc_doviz_gmail_com_kalcc_girisimcilik_gmail_com from "@assets/kalcc.borsa@gmail.com kalcc.doviz@gmail.com kalcc.girisimcilik@gmail.com.png";
-
 const colors = {
   background: '#1B1B1B',
   textPrimary: '#E3DFD6',
@@ -108,11 +106,16 @@ export default function Landing() {
             </blockquote>
 
             <div className="relative w-[423px] h-[111px] mt-4">
-              <img
-                className="relative w-[423px] h-[111px]"
-                alt="Contact emails"
-                src={kalcc_borsa_gmail_com_kalcc_doviz_gmail_com_kalcc_girisimcilik_gmail_com}
-              />
+              <div 
+                className="relative w-[423px] h-[111px] bg-white rounded-lg flex items-center justify-center text-black font-medium text-sm"
+                style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+              >
+                <div className="text-center px-4">
+                  <div>kalcc.borsa@gmail.com</div>
+                  <div>kalcc.doviz@gmail.com</div>
+                  <div>kalcc.girisimcilik@gmail.com</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
