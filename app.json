@@ -1,0 +1,24 @@
+{
+  "name": "cash-or-crash",
+  "description": "Turkish High School Entrepreneurship Simulation",
+  "keywords": ["nodejs", "express", "react"],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "NODE_ENV": {
+      "description": "Node environment",
+      "value": "production"
+    },
+    "RAILWAY_ENVIRONMENT": {
+      "description": "Railway deployment flag",
+      "value": "true"
+    },
+    "SESSION_SECRET": {
+      "description": "Session secret key",
+      "generator": "secret"
+    }
+  }
+}

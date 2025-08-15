@@ -1,0 +1,1 @@
+web: NODE_ENV=production RAILWAY_ENVIRONMENT=true node dist/index.js

@@ -95,12 +95,12 @@ An advanced educational entrepreneurship simulation platform that transforms lea
 - ✅ Enhanced portfolio management with custom sell amounts
 - ✅ Improved admin salesman functionality
 
-## Current Status
+## Current Status  
 - **Backend**: Fully functional with all CRUD operations
 - **Frontend**: Complete with all major features implemented
 - **Authentication**: Team and admin access control working
 - **Database**: In-memory storage with sample data
-- **Deployment**: Ready for production use with cloud platform support
+- **Deployment**: RAILWAY DOCKER ISSUE - Server başlıyor ama Railway Docker kullanıyor (Node.js buildpack gerekli)
 
 ## Replit Deployment
 - **Replit Deployments**: Configured with .replit (automatic HTTPS, autoscale)

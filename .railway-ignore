@@ -1,0 +1,9 @@
+node_modules
+.git
+*.log
+uploads
+.cache
+.replit
+.nix
+.nixpacks
+*.docker*
