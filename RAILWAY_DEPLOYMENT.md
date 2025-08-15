@@ -40,6 +40,14 @@ Production'da secure cookies otomatik aktif olur (HTTPS gerektirir).
 4. Deploy butonuna basın
 5. Logs'ta server start mesajını kontrol edin
 
+## 🔥 CURRENT TEST - RAW HTTP SERVER
+
+**Durum**: Complex Express server yerine raw Node.js HTTP server kullanıyoruz
+- **Dosya**: `dist/raw-http.js` 
+- **Boyut**: ~1kb
+- **Dependency**: Sadece built-in Node.js modüller
+- **Amaç**: Express/dependency sorunları bypass etmek
+
 ### Debug:
 Eğer hala 502 alıyorsanız:
 1. Railway logs'ları kontrol edin

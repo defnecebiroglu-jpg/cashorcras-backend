@@ -1,8 +1,8 @@
 [phases.build]
-  cmd = "echo 'NODE VERSION:' && node --version && echo 'NPM VERSION:' && npm --version && echo 'CLEANING CACHE...' && npm cache clean --force && echo 'INSTALLING DEPS...' && npm install --omit=dev --no-audit --no-fund --verbose && echo 'VITE BUILD...' && npx vite build --mode=production && echo 'ESBUILD SIMPLE...' && npx esbuild server/simple-production.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/simple-production.js --log-level=verbose && echo 'BUILD COMPLETE - FILES:' && ls -la dist/ && echo 'SIMPLE-PRODUCTION.JS HEAD:' && head -5 dist/simple-production.js"
+  cmd = "echo 'NODE VERSION:' && node --version && echo 'NPM VERSION:' && npm --version && echo 'CLEANING CACHE...' && npm cache clean --force && echo 'INSTALLING DEPS...' && npm install --omit=dev --no-audit --no-fund && echo 'ESBUILD DEBUG...' && npx esbuild server/railway-debug.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/railway-debug.js && echo 'BUILD COMPLETE - FILES:' && ls -la dist/ && echo 'TESTING LOCALLY:' && cd dist && PORT=12345 timeout 2s node railway-debug.js || echo 'LOCAL TEST DONE'"
 
 [phases.start]
-  cmd = "echo 'STARTING SIMPLE SERVER...' && ls -la dist/ && echo 'NODE ENV:' $NODE_ENV && echo 'PORT:' $PORT && echo 'HOST:' $HOST && node dist/simple-production.js"
+  cmd = "echo 'STARTING DEBUG SERVER...' && ls -la dist/ && echo 'NODE ENV:' $NODE_ENV && echo 'PORT:' $PORT && echo 'HOST:' $HOST && node dist/railway-debug.js"
 
 [variables]
   NODE_VERSION = "20"
