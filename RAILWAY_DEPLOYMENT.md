@@ -47,10 +47,21 @@ Eğer hala 502 alıyorsanız:
 3. `node dist/index.js` komutu ile manuel start test edin
 4. PORT ve HOST environment variables doğru mu kontrol edin
 
-### NPM Cache Issues:
-Eğer build sırasında cache hatası alıyorsanız:
+### Common Issues & Fixes:
+
+#### NPM Cache Issues:
 - Build command otomatik olarak cache'i temizler: `npm cache clean --force`
-- `--omit=dev` kullanır (production dependencies only)
+- `--omit=dev` kullanır (production dependencies only)  
 - `--no-audit --no-fund` ile gereksiz işlemler atlanır
+
+#### Path Resolution Error (import.meta.dirname):
+- Railway deployment'da import.meta.dirname undefined olabiliyor
+- Fixed: Multer upload path'i production'da `/tmp/uploads` kullanır
+- Build process otomatik olarak path resolution'u Railway için optimize eder
+
+#### 502 Connection Refused:
+- PORT ve HOST environment variables Railway tarafından otomatik ayarlanır
+- Server `0.0.0.0:$PORT` üzerinde dinler (tüm interfaces)
+- Session security production'da HTTPS gerektirir
 
 **Railway deployment şimdi optimize edildi ve admin endpoints aktif!**

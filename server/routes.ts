@@ -8,9 +8,11 @@ import { ObjectStorageService } from './objectStorage';
 import { insertCompanySchema, insertCurrencySchema, insertTeamSchema, insertTeamStockSchema, insertTeamCurrencySchema, insertTeamStartupSchema } from "@shared/schema";
 import './types'; // Type definitions
 
-// Configure multer for file uploads
+// Configure multer for file uploads with Railway-safe path handling
+const uploadDir = process.env.NODE_ENV === 'production' ? '/tmp/uploads' : 'uploads';
+
 const upload = multer({
-  dest: 'uploads/',
+  dest: uploadDir,
   fileFilter: (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|svg/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -28,8 +30,8 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Serve uploaded files
-  app.use('/uploads', express.static('uploads'));
+  // Serve uploaded files with Railway-safe path
+  app.use('/uploads', express.static(uploadDir));
 
   // Serve public objects from object storage
   app.get("/public-objects/:filePath(*)", async (req, res) => {
