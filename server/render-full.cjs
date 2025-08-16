@@ -283,8 +283,20 @@ server.on('error', (err) => {
   console.error('💥 Server error:', err);
 });
 
-// Keep alive & memory monitoring
+// Keep alive & memory monitoring + anti-sleep ping
 setInterval(() => {
   const memUsage = process.memoryUsage();
   console.log(`💓 Server alive - uptime: ${Math.floor(process.uptime())}s, memory: ${Math.round(memUsage.rss/1024/1024)}MB`);
 }, 120000); // Every 2 minutes
+
+// Anti-sleep ping for Render free tier (ping self every 10 minutes)
+if (process.env.NODE_ENV === 'production') {
+  setInterval(async () => {
+    try {
+      const response = await fetch(`http://localhost:${PORT}/health`);
+      console.log('🏓 Anti-sleep ping:', response.ok ? 'OK' : 'FAIL');
+    } catch (err) {
+      console.log('🏓 Anti-sleep ping failed:', err.message);
+    }
+  }, 600000); // Every 10 minutes
+}
