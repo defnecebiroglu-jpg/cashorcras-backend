@@ -9,6 +9,9 @@ export const config = {
   SESSION_SECRET: process.env.SESSION_SECRET || 'cashcrash-secret-key-' + Math.random(),
   SESSION_SECURE: process.env.NODE_ENV === 'production' && process.env.HTTPS !== 'false',
   
+  // Database
+  DATABASE_URL: process.env.DATABASE_URL,
+  
   // Object Storage
   DEFAULT_OBJECT_STORAGE_BUCKET_ID: process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID,
   PRIVATE_OBJECT_DIR: process.env.PRIVATE_OBJECT_DIR,
@@ -55,6 +58,13 @@ if (config.isProduction) {
   // Universal validation
   if (!process.env.SESSION_SECRET) {
     console.warn(`Warning: SESSION_SECRET not set - using auto-generated secret`);
+  }
+  
+  // Database validation for production
+  if (process.env.DATABASE_URL) {
+    console.log('✅ PostgreSQL database detected - using persistent sessions');
+  } else if (config.isProduction) {
+    console.warn('Warning: No DATABASE_URL in production - using memory sessions');
   }
   
   console.log(`Platform: ${platform} | Production: ${config.isProduction}`);

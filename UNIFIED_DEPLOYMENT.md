@@ -22,10 +22,10 @@ isNetlify: !!process.env.NETLIFY
 ```
 
 ### Smart Session Management:
-- **Replit**: `sameSite: 'strict'`
-- **Render**: `sameSite: 'none'` (CORS için)
-- **Railway**: `sameSite: 'strict'`
-- **Development**: `sameSite: 'lax'`
+- **Production**: PostgreSQL session store (kalıcı, ölçeklenebilir)
+- **Development**: Memory session store (hızlı, test için ideal)
+- **SameSite**: Replit=strict, Render=none, Railway=strict, Dev=lax
+- **Auto-detection**: DATABASE_URL varsa PostgreSQL, yoksa memory
 
 ### Adaptive Server Configuration:
 - **Port**: Otomatik environment PORT detection
@@ -59,7 +59,8 @@ isNetlify: !!process.env.NETLIFY
 ### Required for Production:
 ```bash
 NODE_ENV=production
-SESSION_SECRET=your-secret-key  
+SESSION_SECRET=your-secret-key
+DATABASE_URL=postgresql://... (optional - otomatik PostgreSQL kullanır)
 ```
 
 ### Platform-Specific (Otomatik):

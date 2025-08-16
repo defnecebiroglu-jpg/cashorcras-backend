@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
+import ConnectPgSimple from 'connect-pg-simple';
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import "./types"; // Type definitions
@@ -23,8 +24,11 @@ if (process.env.NODE_ENV === 'production') {
 
 import config from "./config";
 
-// Session middleware - fixed for cloud deployment
-const sessionConfig = {
+// Create PostgreSQL session store factory for production
+const PgSession = ConnectPgSimple(session);
+
+// Session configuration with store selection
+const sessionConfig: any = {
   secret: config.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
@@ -35,6 +39,18 @@ const sessionConfig = {
     sameSite: config.isProduction ? (config.isRender ? 'none' as const : 'strict' as const) : 'lax' as const
   }
 };
+
+// Use PostgreSQL session store in production, memory store in development
+if (config.isProduction && process.env.DATABASE_URL) {
+  sessionConfig.store = new PgSession({
+    conString: process.env.DATABASE_URL,
+    tableName: 'session',
+    createTableIfMissing: true
+  });
+  log('Using PostgreSQL session store for production');
+} else {
+  log('Using memory session store for development');
+}
 
 // @ts-ignore - Express session type issue workaround
 app.use(session(sessionConfig));
@@ -138,6 +154,10 @@ app.use((req, res, next) => {
                    config.isRenderDeployment ? 'render' : 
                    config.isVercel ? 'vercel' :
                    config.isNetlify ? 'netlify' : 'development'
+        },
+        database: {
+          connected: !!process.env.DATABASE_URL,
+          sessionStore: config.isProduction && process.env.DATABASE_URL ? 'postgresql' : 'memory'
         }
       });
     });

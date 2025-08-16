@@ -56,4 +56,4 @@ localPort = 10000
 externalPort = 3003
 
 [agent]
-integrations = ["javascript_object_storage==1.0.0"]
+integrations = ["javascript_database==1.0.0", "javascript_object_storage==1.0.0"]
