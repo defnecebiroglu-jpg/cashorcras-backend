@@ -21,7 +21,7 @@
 ✅ Branch: main
 ✅ Runtime: Node
 ✅ Build Command: npm install && npm run build
-✅ Start Command: node server/minimal.cjs
+✅ Start Command: node server/render-full.cjs
 ✅ Instance Type: Free (başlangıç için yeterli)
 ```
 
@@ -48,7 +48,7 @@ services:
     name: cash-or-crash
     env: node
     buildCommand: npm install && npm run build
-    startCommand: node server/minimal.cjs
+    startCommand: node server/render-full.cjs
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
@@ -57,13 +57,13 @@ services:
         generateValue: true
 ```
 
-### server/minimal.cjs
-- ✅ Render için optimize edildi
-- ✅ Port 10000 default (Render'ın port'u)
-- ✅ Health check endpoint: `/health`
-- ✅ Test endpoint: `/test`
-- ✅ API endpoint: `/api/companies`
-- ✅ Güzel frontend ana sayfa
+### server/render-full.cjs
+- ✅ FULL Cash or Crash application
+- ✅ Complete Turkish simulation with all APIs
+- ✅ Team login (00012024) and Admin login (admin123)
+- ✅ React frontend serving + API endpoints
+- ✅ Companies, Currencies, Startups data
+- ✅ Session management and authentication
 
 ---
 
