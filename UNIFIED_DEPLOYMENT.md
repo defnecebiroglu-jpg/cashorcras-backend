@@ -109,4 +109,22 @@ Response:
 - ✅ Railway'de next deploy'da yansır
 - ✅ Tüm platformlarda aynı davranış
 
+## 🧹 CLEANED UP:
+
+**Silinen gereksiz dosyalar:**
+- ❌ server/render-full.cjs
+- ❌ server/render-optimized.cjs  
+- ❌ server/render-production.cjs
+- ❌ server/railway.cjs
+- ❌ server/railway-debug.ts
+- ❌ server/minimal.cjs
+- ❌ server/production.js/ts
+- ❌ server/simple-production.cjs
+
+**Kalan ana dosyalar:**
+- ✅ server/index.ts (Universal server)
+- ✅ server/config.ts (Platform detection)
+- ✅ server/routes.ts (API endpoints)
+- ✅ server/storage.ts (Data management)
+
 **Tek dosya seti, her yerde çalışır!** 🌍

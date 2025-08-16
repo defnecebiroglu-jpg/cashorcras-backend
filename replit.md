@@ -37,7 +37,7 @@ An advanced educational entrepreneurship simulation platform that transforms lea
 - ✅ **Auto Platform Detection**: Automatically detects deployment environment and optimizes
 - ✅ **Smart Session Management**: Platform-specific session configuration (strict/none/lax)
 - ✅ **Universal Commands**: `npm start` works everywhere, `npm run dev` for development
-- ✅ **No Separate Files**: Eliminated render-production.cjs, render-full.cjs - all unified
+- ✅ **No Separate Files**: Eliminated all render-*.cjs, railway.cjs, minimal.cjs files - all unified
 - ✅ **Configuration Unified**: server/config.ts handles all platform differences
 - ✅ **Health Checks**: Universal /health endpoint shows platform info
 - ✅ **Deploy Simplicity**: Same commands work on Render, Railway, Vercel, Netlify
