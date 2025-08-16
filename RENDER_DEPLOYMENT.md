@@ -21,7 +21,7 @@
 ✅ Branch: main
 ✅ Runtime: Node
 ✅ Build Command: npm install && npm run build
-✅ Start Command: node server/render-full.cjs
+✅ Start Command: node server/render-production.cjs
 ✅ Instance Type: Free (başlangıç için yeterli)
 ```
 
@@ -48,7 +48,7 @@ services:
     name: cash-or-crash
     env: node
     buildCommand: npm install && npm run build
-    startCommand: node server/render-full.cjs
+    startCommand: node server/render-production.cjs
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
@@ -57,13 +57,13 @@ services:
         generateValue: true
 ```
 
-### server/render-full.cjs
-- ✅ FULL Cash or Crash application
-- ✅ Complete Turkish simulation with all APIs
-- ✅ Team login (00012024) and Admin login (admin123)
-- ✅ React frontend serving + API endpoints
-- ✅ Companies, Currencies, Startups data
-- ✅ Session management and authentication
+### server/render-production.cjs
+- ✅ EXACT REPLIT CLONE - Same code, same functionality
+- ✅ All 10 teams (00012024 to 00102024) with portfolio data
+- ✅ Complete API endpoints matching Replit exactly
+- ✅ Admin panel (admin123) with bulk price updates
+- ✅ Session management identical to Replit
+- ✅ Team dashboard, trading, portfolio calculations
 
 ---
 
