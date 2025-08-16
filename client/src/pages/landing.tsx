@@ -12,36 +12,36 @@ const colors = {
 
 export default function Landing() {
   return (
-    <main className="flex flex-row justify-center w-full min-h-screen" style={{ backgroundColor: colors.background }}>
-      <div className="w-[1440px] h-[1810px] relative" style={{ backgroundColor: colors.background }}>
+    <main className="w-full min-h-screen" style={{ backgroundColor: colors.background }}>
+      <div className="container-responsive min-h-screen relative" style={{ backgroundColor: colors.background }}>
         
         {/* Header */}
-        <header className="flex w-[1440px] items-end justify-between p-8 absolute top-0 left-0">
+        <header className="flex w-full items-center justify-between p-4 md:p-8 relative">
           <h1 
-            className="relative w-fit h-[47px] text-2xl tracking-[0] leading-normal"
-            style={{ color: colors.textPrimary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
+            className="font-bowlby text-responsive-md text-white"
+            style={{ color: colors.textPrimary }}
           >
             KALGIRISIMCILIK
           </h1>
 
-          <nav className="flex w-fit items-end gap-10 relative">
+          <nav className="flex items-center gap-4 md:gap-10">
             <div 
-              className="relative w-fit h-[47px] text-2xl tracking-[0] leading-normal"
-              style={{ color: colors.textSecondary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
+              className="font-bowlby text-sm md:text-xl lg:text-2xl hidden sm:block"
+              style={{ color: colors.textSecondary }}
             >
               HAKKINDA
             </div>
 
             <Link href="/team-login">
               <button 
-                className="h-[50px] px-6 py-0 rounded-lg transition-colors hover:opacity-90"
+                className="h-10 md:h-[50px] px-4 md:px-6 rounded-lg transition-colors hover:opacity-90"
                 style={{ backgroundColor: colors.button }}
               >
                 <span 
-                  className="text-2xl text-center tracking-[0] leading-normal"
-                  style={{ color: colors.textSecondary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
+                  className="font-bowlby text-sm md:text-xl lg:text-2xl text-center"
+                  style={{ color: colors.textSecondary }}
                 >
-                  GIRIS YAP
+                  GİRİŞ YAP
                 </span>
               </button>
             </Link>
@@ -49,29 +49,25 @@ export default function Landing() {
         </header>
 
         {/* Hero Section */}
-        <h2 
-          className="absolute w-[1111px] top-[148px] left-[165px] text-center tracking-[0] leading-[80px] whitespace-nowrap"
-          style={{ 
-            color: colors.textPrimary,
-            fontFamily: 'Bowlby One',
-            fontWeight: 'normal',
-            fontSize: '96px',
-            lineHeight: '80px'
-          }}
-        >
-          GİRİŞİMCİLİK<br />SİMÜLASYONU
-        </h2>
+        <div className="mt-8 md:mt-16 px-4 text-center">
+          <h2 
+            className="font-bowlby text-responsive-xl leading-tight"
+            style={{ color: colors.textPrimary }}
+          >
+            GİRİŞİMCİLİK<br />SİMÜLASYONU
+          </h2>
+        </div>
 
         {/* Main Image/Content Section */}
-        <section className="absolute w-[1306px] h-[776px] top-[316px] left-[93px]">
-          {/* Decorative vector graphics */}
+        <section className="mt-8 md:mt-16 px-4 relative">
+          {/* Decorative vector graphics - hidden on mobile */}
           <img
-            className="absolute w-[265px] h-[229px] top-[199px] left-8"
+            className="hidden lg:block absolute w-[200px] h-[180px] left-0 top-1/2 transform -translate-y-1/2"
             alt="Vector graphic"
             src="/figmaAssets/vector-4.svg"
           />
           <img
-            className="absolute w-[265px] h-[229px] top-[199px] left-[994px]"
+            className="hidden lg:block absolute w-[200px] h-[180px] right-0 top-1/2 transform -translate-y-1/2"
             alt="Vector graphic"
             src="/figmaAssets/vector-5.svg"
           />

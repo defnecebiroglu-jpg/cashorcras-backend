@@ -60,39 +60,27 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="flex flex-row justify-center w-full min-h-screen" style={{ backgroundColor: colors.background }}>
-      <div className="w-[1440px] h-[1165px] relative overflow-hidden" style={{ backgroundColor: colors.background }}>
+    <div className="w-full min-h-screen" style={{ backgroundColor: colors.background }}>
+      <div className="container-responsive min-h-screen relative" style={{ backgroundColor: colors.background }}>
         
         {/* Header */}
-        <header className="flex w-[1440px] items-end justify-between p-8 absolute top-0 left-0">
+        <header className="flex w-full items-center justify-between p-4 md:p-8 relative">
           <Link href="/">
             <h1 
-              className="relative w-fit h-[47px] text-2xl tracking-[0] leading-normal cursor-pointer hover:opacity-80 transition-opacity"
-              style={{ color: colors.textPrimary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
+              className="font-bowlby text-responsive-md cursor-pointer hover:opacity-80 transition-opacity"
+              style={{ color: colors.textPrimary }}
             >
               KALGIRISIMCILIK
             </h1>
           </Link>
 
-          <nav className="flex w-fit items-end gap-10 relative">
+          <nav className="flex items-center">
             <div 
-              className="relative w-fit h-[47px] text-2xl tracking-[0] leading-normal"
-              style={{ color: colors.textSecondary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
+              className="font-bowlby text-sm md:text-xl lg:text-2xl hidden sm:block"
+              style={{ color: colors.textSecondary }}
             >
               HAKKINDA
             </div>
-
-            <Button 
-              className="h-[50px] px-6 py-0 rounded-lg transition-colors hover:opacity-90"
-              style={{ backgroundColor: colors.accent }}
-            >
-              <span 
-                className="text-2xl text-center tracking-[0] leading-normal"
-                style={{ color: colors.textSecondary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
-              >
-                GIRIS YAP
-              </span>
-            </Button>
           </nav>
         </header>
 

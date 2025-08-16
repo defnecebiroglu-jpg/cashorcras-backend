@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Google Fonts - Bowlby One ve Inter with Turkish character support */
+@import url('https://fonts.googleapis.com/css2?family=Bowlby+One&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* Mobile-first responsive design */
+html {
+  font-size: 16px;
+}
+
+/* Ensure mobile viewport is handled correctly */
+body {
+  overflow-x: hidden;
+}
+
 :root {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(222.2, 84%, 4.9%);
@@ -63,5 +76,36 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  /* Bowlby One font with fallback for Turkish characters */
+  .font-bowlby {
+    font-family: 'Bowlby One', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: normal;
+  }
+  
+  /* Inter font with proper Turkish character support */
+  .font-inter {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Custom responsive utilities */
+@layer utilities {
+  .container-responsive {
+    @apply w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .text-responsive-xl {
+    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl;
+  }
+  
+  .text-responsive-lg {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl;
+  }
+  
+  .text-responsive-md {
+    @apply text-lg sm:text-xl md:text-2xl;
   }
 }
