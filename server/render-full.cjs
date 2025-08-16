@@ -25,12 +25,17 @@ app.use(session({
   }
 }));
 
-// CORS headers
+// CORS headers - more permissive for Render
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS,PATCH');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+    return;
+  }
   next();
 });
 
@@ -126,12 +131,21 @@ app.get('/api/startups', (req, res) => {
 
 // Team authentication
 app.post('/api/teams/login', (req, res) => {
-  console.log('🔐 Team login attempt:', req.body.accessCode);
+  console.log('🔐 Team login attempt:', req.body?.accessCode || 'NO_CODE');
+  console.log('Request body:', JSON.stringify(req.body));
+  
+  if (!req.body || !req.body.accessCode) {
+    return res.status(400).json({ error: 'Erişim kodu gerekli' });
+  }
+  
   const team = data.teams.find(t => t.accessCode === req.body.accessCode);
   if (!team) {
+    console.log('❌ Invalid access code:', req.body.accessCode);
     return res.status(401).json({ error: 'Geçersiz erişim kodu' });
   }
+  
   req.session.teamId = team.id;
+  console.log('✅ Team login successful:', team.name);
   res.json(team);
 });
 
@@ -146,10 +160,19 @@ app.get('/api/teams/me', (req, res) => {
 // Admin authentication
 app.post('/api/admin/login', (req, res) => {
   console.log('👨‍💼 Admin login attempt');
+  console.log('Request body:', JSON.stringify(req.body));
+  
+  if (!req.body || !req.body.password) {
+    return res.status(400).json({ error: 'Şifre gerekli' });
+  }
+  
   if (req.body.password !== 'admin123') {
+    console.log('❌ Invalid admin password:', req.body.password);
     return res.status(401).json({ error: 'Geçersiz şifre' });
   }
+  
   req.session.isAdmin = true;
+  console.log('✅ Admin login successful');
   res.json({ success: true });
 });
 
@@ -291,12 +314,28 @@ setInterval(() => {
 
 // Anti-sleep ping for Render free tier (ping self every 10 minutes)
 if (process.env.NODE_ENV === 'production') {
-  setInterval(async () => {
-    try {
-      const response = await fetch(`http://localhost:${PORT}/health`);
-      console.log('🏓 Anti-sleep ping:', response.ok ? 'OK' : 'FAIL');
-    } catch (err) {
+  // Use node-fetch alternative for older Node versions
+  const https = require('https');
+  const http = require('http');
+  
+  setInterval(() => {
+    const protocol = process.env.NODE_ENV === 'production' ? https : http;
+    const hostname = process.env.NODE_ENV === 'production' ? 'cashcrash.onrender.com' : 'localhost';
+    const port = process.env.NODE_ENV === 'production' ? 443 : PORT;
+    
+    const req = protocol.request({
+      hostname,
+      port: process.env.NODE_ENV === 'production' ? undefined : port,
+      path: '/health',
+      method: 'GET'
+    }, (res) => {
+      console.log('🏓 Anti-sleep ping: OK');
+    });
+    
+    req.on('error', (err) => {
       console.log('🏓 Anti-sleep ping failed:', err.message);
-    }
+    });
+    
+    req.end();
   }, 600000); // Every 10 minutes
 }
