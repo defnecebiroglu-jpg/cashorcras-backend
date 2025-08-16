@@ -3,7 +3,7 @@ services:
     name: cash-or-crash
     env: node
     buildCommand: npm install && npm run build
-    startCommand: node server/render-production.cjs
+    startCommand: npm start
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV

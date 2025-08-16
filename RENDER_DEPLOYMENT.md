@@ -21,7 +21,7 @@
 ✅ Branch: main
 ✅ Runtime: Node
 ✅ Build Command: npm install && npm run build
-✅ Start Command: node server/render-production.cjs
+✅ Start Command: npm start
 ✅ Instance Type: Free (başlangıç için yeterli)
 ```
 
@@ -48,7 +48,7 @@ services:
     name: cash-or-crash
     env: node
     buildCommand: npm install && npm run build
-    startCommand: node server/render-production.cjs
+    startCommand: npm start
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
@@ -57,13 +57,13 @@ services:
         generateValue: true
 ```
 
-### server/render-production.cjs
-- ✅ EXACT REPLIT CLONE - Same code, same functionality
-- ✅ All 10 teams (00012024 to 00102024) with portfolio data
-- ✅ Complete API endpoints matching Replit exactly
-- ✅ Admin panel (admin123) with bulk price updates
-- ✅ Session management identical to Replit
-- ✅ Team dashboard, trading, portfolio calculations
+### Universal System (server/index.ts)
+- ✅ SINGLE CODEBASE - Works on all platforms automatically
+- ✅ Platform auto-detection (Replit, Render, Railway, Vercel)
+- ✅ Smart session management per platform
+- ✅ Same functionality everywhere
+- ✅ No separate files needed anymore
+- ✅ One change updates all platforms
 
 ---
 

@@ -32,7 +32,7 @@ const sessionConfig = {
     secure: config.SESSION_SECURE,
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: config.isProduction ? 'strict' as const : 'lax' as const
+    sameSite: config.isProduction ? (config.isRender ? 'none' as const : 'strict' as const) : 'lax' as const
   }
 };
 
@@ -96,9 +96,13 @@ app.use((req, res, next) => {
   const port = config.PORT;
   const host = config.HOST;
   
-  // Railway-specific binding fixes
+  // Platform-specific optimizations
   if (config.isRailway) {
-    log(`Railway deployment detected - binding to PORT=${port} HOST=${host}`);
+    log(`Railway detected - optimized binding PORT=${port} HOST=${host}`);
+  } else if (config.isRender) {
+    log(`Render detected - optimized for Render.com deployment`);
+  } else if (config.isReplit) {
+    log(`Replit detected - using Replit infrastructure`);
   }
   
   // Graceful shutdown handling
@@ -116,7 +120,7 @@ app.use((req, res, next) => {
   server.listen(port, host, () => {
     log(`serving on ${host}:${port} in ${config.NODE_ENV} mode`);
     log(`session config: secure=${sessionConfig.cookie.secure}, sameSite=${sessionConfig.cookie.sameSite}`);
-    log(`deployment: replit=${config.isReplit}, railway=${config.isRailway}, production-mode=${config.isProduction}`);
+    log(`deployment: replit=${config.isReplit}, railway=${config.isRailway}, render=${config.isRender}, production=${config.isProduction}`);
     
     // Health check endpoint
     app.get('/health', (req, res) => {
@@ -127,8 +131,13 @@ app.use((req, res, next) => {
         deployment: {
           replit: config.isReplit,
           railway: config.isRailway,
+          render: config.isRender,
           production: config.isProduction,
-          platform: config.isReplitDeployment ? 'replit-deployments' : config.isRailwayDeployment ? 'railway' : 'development'
+          platform: config.isReplitDeployment ? 'replit' : 
+                   config.isRailwayDeployment ? 'railway' : 
+                   config.isRenderDeployment ? 'render' : 
+                   config.isVercel ? 'vercel' :
+                   config.isNetlify ? 'netlify' : 'development'
         }
       });
     });

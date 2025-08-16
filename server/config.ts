@@ -18,32 +18,46 @@ export const config = {
   isDevelopment: process.env.NODE_ENV === 'development',
   isProduction: process.env.NODE_ENV === 'production',
   
-  // Deployment detection
+  // Universal deployment detection
   isReplit: !!process.env.REPL_ID,
-  isReplitDeployment: process.env.NODE_ENV === 'production' && !!process.env.REPL_ID,
   isRailway: !!process.env.RAILWAY_ENVIRONMENT,
+  isRender: !!(process.env.RENDER || process.env.RENDER_SERVICE_ID),
+  isVercel: !!process.env.VERCEL,
+  isNetlify: !!process.env.NETLIFY,
+  
+  // Production deployment detection
+  isReplitDeployment: process.env.NODE_ENV === 'production' && !!process.env.REPL_ID,
   isRailwayDeployment: process.env.NODE_ENV === 'production' && !!process.env.RAILWAY_ENVIRONMENT,
+  isRenderDeployment: process.env.NODE_ENV === 'production' && !!(process.env.RENDER || process.env.RENDER_SERVICE_ID),
 };
 
-// Validate required environment variables for production
+// Universal deployment validation
 if (config.isProduction) {
+  // Detect platform and validate
+  let platform = 'generic';
   if (config.isReplitDeployment) {
-    const required = ['SESSION_SECRET', 'REPL_ID'];
-    for (const key of required) {
-      if (!process.env[key]) {
-        console.warn(`Warning: ${key} environment variable not set in Replit production`);
-      }
-    }
-    console.log('🚀 Replit deployment detected - optimized for Replit infrastructure');
+    platform = 'replit';
+    console.log('🚀 Replit deployment detected');
   } else if (config.isRailwayDeployment) {
-    const required = ['SESSION_SECRET', 'RAILWAY_ENVIRONMENT'];
-    for (const key of required) {
-      if (!process.env[key]) {
-        console.warn(`Warning: ${key} environment variable not set in Railway production`);
-      }
-    }
-    console.log('🚂 Railway deployment detected - optimized for Railway infrastructure');
+    platform = 'railway';
+    console.log('🚂 Railway deployment detected');
+  } else if (config.isRenderDeployment) {
+    platform = 'render';
+    console.log('🎨 Render deployment detected');
+  } else if (config.isVercel) {
+    platform = 'vercel';
+    console.log('▲ Vercel deployment detected');
+  } else if (config.isNetlify) {
+    platform = 'netlify';
+    console.log('🌐 Netlify deployment detected');
   }
+  
+  // Universal validation
+  if (!process.env.SESSION_SECRET) {
+    console.warn(`Warning: SESSION_SECRET not set - using auto-generated secret`);
+  }
+  
+  console.log(`Platform: ${platform} | Production: ${config.isProduction}`);
 }
 
 export default config;
