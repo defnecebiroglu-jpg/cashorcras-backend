@@ -61,41 +61,55 @@ export default function TeamLogin() {
   };
 
   return (
-    <div className="w-full min-h-screen" style={{ backgroundColor: colors.background }}>
-      <div className="container-responsive min-h-screen relative" style={{ backgroundColor: colors.background }}>
+    <div className="flex flex-row justify-center w-full min-h-screen" style={{ backgroundColor: colors.background }}>
+      <div className="w-[1440px] h-[1165px] relative overflow-hidden" style={{ backgroundColor: colors.background }}>
         
         {/* Header */}
-        <header className="flex w-full items-center justify-between p-4 md:p-8 relative">
+        <header className="flex w-[1440px] items-end justify-between p-8 absolute top-0 left-0">
           <Link href="/">
             <h1 
-              className="font-bowlby text-responsive-md cursor-pointer hover:opacity-80 transition-opacity"
-              style={{ color: colors.textPrimary }}
+              className="relative w-fit h-[47px] text-2xl tracking-[0] leading-normal cursor-pointer hover:opacity-80 transition-opacity"
+              style={{ color: colors.textPrimary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
             >
               KALGIRISIMCILIK
             </h1>
           </Link>
 
-          <nav className="flex items-center">
+          <nav className="flex w-fit items-end gap-10 relative">
             <div 
-              className="font-bowlby text-sm md:text-xl lg:text-2xl hidden sm:block"
-              style={{ color: colors.textSecondary }}
+              className="relative w-fit h-[47px] text-2xl tracking-[0] leading-normal"
+              style={{ color: colors.textSecondary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
             >
               HAKKINDA
             </div>
+
+            <Button 
+              className="h-[50px] px-6 py-0 rounded-lg transition-colors hover:opacity-90"
+              style={{ backgroundColor: colors.accent }}
+            >
+              <span 
+                className="text-2xl text-center tracking-[0] leading-normal"
+                style={{ color: colors.textSecondary, fontFamily: 'Bowlby One', fontWeight: 'normal' }}
+              >
+                GIRIS YAP
+              </span>
+            </Button>
           </nav>
         </header>
 
-        {/* Banner text - responsive */}
+        {/* Banner text */}
         <div 
-          className="hidden lg:block absolute w-[3432px] top-[154px] left-[-996px] text-8xl text-center tracking-[0] leading-[80px] whitespace-nowrap"
+          className="absolute w-[3432px] top-[154px] left-[-996px] text-8xl text-center tracking-[0] leading-[80px] whitespace-nowrap"
           style={{ 
-            color: colors.linkHighlight
+            color: colors.linkHighlight, 
+            fontFamily: 'Bowlby One', 
+            fontWeight: 'normal' 
           }}
         >
-          <span className="font-bowlby">CASH OR CRASH OR CASH OR CRASH</span>
+          RASH OR CASH OR CRASH OR CAS
         </div>
 
-        <div className="mt-8 md:mt-16 px-4 flex flex-col lg:flex-row items-center justify-center min-h-[60vh]">
+        <div className="absolute w-[1186px] h-[710px] top-[289px] left-[127px]">
           {/* Vector graphics */}
           <img
             className="absolute top-[401px] left-0 w-[265px] h-[229px]"
@@ -108,30 +122,36 @@ export default function TeamLogin() {
             src="/figmaAssets/vector-3.svg"
           />
 
-          {/* Login card - Team version - responsive */}
+          {/* Login card - Team version */}
           <Card 
-            className="w-full max-w-[700px] mx-auto rounded-[25px] border-4 border-solid relative z-10"
+            className="w-[700px] absolute top-[123px] left-[243px] rounded-[25px] border-4 border-solid"
             style={{ 
               backgroundColor: colors.background, 
               borderColor: colors.cardBorder 
             }}
           >
-            <CardContent className="flex flex-col items-center gap-6 md:gap-[42px] p-6 md:p-10">
+            <CardContent className="flex flex-col items-start gap-[42px] p-10">
               <h1 
-                className="font-bowlby text-responsive-lg text-center w-full"
-                style={{ color: colors.textPrimary }}
+                className="relative self-stretch h-[74px] mt-[-4.00px] text-5xl text-center tracking-[0] leading-[80px] whitespace-nowrap w-full"
+                style={{ 
+                  color: colors.textPrimary, 
+                  fontFamily: 'Bowlby One', 
+                  fontWeight: 'normal' 
+                }}
               >
-                TAKIM GİRİŞİ
+                TAKIM GIRISI
               </h1>
 
-              <form onSubmit={handleSubmit} className="w-full space-y-6 md:space-y-[42px]">
+              <form onSubmit={handleSubmit} className="w-full space-y-[42px]">
                 <div className="w-full">
                   <Input
-                    className="h-12 md:h-[60px] rounded-lg border-2 border-solid text-lg md:text-[30px] font-inter px-4 md:px-5"
+                    className="h-[60px] rounded-lg border-2 border-solid text-[30px] tracking-[0] leading-10 pl-[20px] pr-[20px]"
                     style={{ 
                       backgroundColor: colors.inputBg,
                       borderColor: colors.cardBorder,
-                      color: colors.textPrimary
+                      color: colors.textPrimary,
+                      fontFamily: 'Inter',
+                      fontWeight: 'normal'
                     }}
                     placeholder="Takım erişim kodunu giriniz"
                     value={accessCode}
@@ -159,17 +179,25 @@ export default function TeamLogin() {
                 </Button>
               </form>
 
-              <div className="w-full text-center">
+              <div className="w-full h-10 text-center">
                 <span 
-                  className="font-inter text-lg md:text-3xl"
-                  style={{ color: colors.textPrimary }}
+                  className="text-3xl tracking-[0] leading-10 whitespace-nowrap"
+                  style={{ 
+                    color: colors.textPrimary, 
+                    fontFamily: 'Inter', 
+                    fontWeight: 'normal' 
+                  }}
                 >
                   Admin girişi için{" "}
                 </span>
                 <Link href="/admin-login">
                   <button 
-                    className="font-inter text-lg md:text-3xl font-medium hover:underline transition-all"
-                    style={{ color: colors.linkHighlight }}
+                    className="text-3xl tracking-[0] leading-10 whitespace-nowrap hover:underline transition-all"
+                    style={{ 
+                      color: colors.linkHighlight, 
+                      fontFamily: 'Inter', 
+                      fontWeight: 500 
+                    }}
                   >
                     buraya tıklayınız
                   </button>
