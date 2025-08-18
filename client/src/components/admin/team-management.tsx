@@ -7,12 +7,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Settings, DollarSign, TrendingUp, Briefcase, Edit, Trash2 } from "lucide-react";
+import { Plus, Settings, DollarSign, TrendingUp, Briefcase, Edit, Trash2, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
-import { insertTeamStockSchema, insertTeamCurrencySchema, insertTeamStartupSchema, type Team, type Company, type Currency } from "@shared/schema";
+import { insertTeamStockSchema, insertTeamCurrencySchema, insertTeamStartupSchema, type Team, type Company, type Currency, type TeamStartup, type TeamPortfolio } from "@shared/schema";
 import { z } from "zod";
 
 const teamStockFormSchema = insertTeamStockSchema;
@@ -23,6 +24,8 @@ export function TeamManagement() {
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [managementType, setManagementType] = useState<"stocks" | "currencies" | "startup">("stocks");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingStartup, setEditingStartup] = useState<TeamStartup | null>(null);
+  const [isStartupListDialogOpen, setIsStartupListDialogOpen] = useState(false);
   const { toast } = useToast();
 
   const { data: teams, isLoading: teamsLoading } = useQuery<Team[]>({
@@ -35,6 +38,12 @@ export function TeamManagement() {
 
   const { data: currencies } = useQuery<Currency[]>({
     queryKey: ["/api/currencies"],
+  });
+
+  // Query for team portfolio to get startup details
+  const { data: teamPortfolio } = useQuery<TeamPortfolio>({
+    queryKey: [`/api/teams/${selectedTeam?.id}/portfolio`],
+    enabled: !!selectedTeam && isStartupListDialogOpen,
   });
 
   const stockForm = useForm({
@@ -121,6 +130,7 @@ export function TeamManagement() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/teams/${selectedTeam?.id}/portfolio`] });
       toast({ title: "Girişim başarıyla atandı" });
       setIsDialogOpen(false);
       startupForm.reset();
@@ -130,26 +140,98 @@ export function TeamManagement() {
     },
   });
 
+  const updateStartupMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: Partial<z.infer<typeof teamStartupFormSchema>> }) => {
+      const response = await fetch(`/api/team-startups/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error("Failed to update startup");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/teams/${selectedTeam?.id}/portfolio`] });
+      toast({ title: "Girişim başarıyla güncellendi" });
+      setIsDialogOpen(false);
+      setEditingStartup(null);
+      startupForm.reset();
+    },
+    onError: () => {
+      toast({ title: "Girişim güncellenemedi", variant: "destructive" });
+    },
+  });
+
+  const deleteStartupMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await fetch(`/api/team-startups/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Failed to delete startup");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/teams/${selectedTeam?.id}/portfolio`] });
+      toast({ title: "Girişim başarıyla satıldı" });
+      setIsStartupListDialogOpen(false);
+    },
+    onError: () => {
+      toast({ title: "Girişim satılamadı", variant: "destructive" });
+    },
+  });
+
   const handleManageTeam = (team: Team, type: "stocks" | "currencies" | "startup") => {
     setSelectedTeam(team);
     setManagementType(type);
     
     if (type === "stocks") {
       stockForm.reset({ teamId: team.id, companyId: 0, shares: 0 });
+      setIsDialogOpen(true);
     } else if (type === "currencies") {
       currencyForm.reset({ teamId: team.id, currencyId: 0, amount: "" });
+      setIsDialogOpen(true);
     } else if (type === "startup") {
-      startupForm.reset({ 
-        teamId: team.id, 
-        name: "", 
-        description: "", 
-        value: "", 
-        industry: "", 
-        riskLevel: "" 
-      });
+      // For startup management, first show the startup list/management dialog
+      setIsStartupListDialogOpen(true);
     }
-    
+  };
+
+  const handleAddNewStartup = (team: Team) => {
+    setSelectedTeam(team);
+    setManagementType("startup");
+    setEditingStartup(null);
+    startupForm.reset({ 
+      teamId: team.id, 
+      name: "", 
+      description: "", 
+      value: "", 
+      industry: "", 
+      riskLevel: "" 
+    });
+    setIsStartupListDialogOpen(false);
     setIsDialogOpen(true);
+  };
+
+  const handleEditStartup = (startup: TeamStartup) => {
+    setEditingStartup(startup);
+    setManagementType("startup");
+    startupForm.reset({
+      teamId: startup.teamId,
+      name: startup.name,
+      description: startup.description,
+      value: startup.value,
+      industry: startup.industry,
+      riskLevel: startup.riskLevel,
+    });
+    setIsStartupListDialogOpen(false);
+    setIsDialogOpen(true);
+  };
+
+  const handleSellStartup = async (startup: TeamStartup) => {
+    if (window.confirm(`"${startup.name}" girişimini satmak istediğinizden emin misiniz?`)) {
+      deleteStartupMutation.mutate(startup.id);
+    }
   };
 
   const onSubmitStock = (data: z.infer<typeof teamStockFormSchema>) => {
@@ -161,7 +243,13 @@ export function TeamManagement() {
   };
 
   const onSubmitStartup = (data: z.infer<typeof teamStartupFormSchema>) => {
-    createStartupMutation.mutate(data);
+    if (editingStartup) {
+      // Update existing startup
+      updateStartupMutation.mutate({ id: editingStartup.id, data });
+    } else {
+      // Create new startup
+      createStartupMutation.mutate(data);
+    }
   };
 
   if (teamsLoading) {
@@ -218,11 +306,106 @@ export function TeamManagement() {
         ))}
       </div>
 
+      {/* Startup Management Dialog */}
+      <Dialog open={isStartupListDialogOpen} onOpenChange={setIsStartupListDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>
+              {selectedTeam?.name} - Girişim Yönetimi
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            {teamPortfolio?.startup ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Briefcase className="h-5 w-5" />
+                      {teamPortfolio.startup.name}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEditStartup(teamPortfolio.startup!)}
+                      >
+                        <Edit className="h-4 w-4 mr-1" />
+                        Düzenle
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleSellStartup(teamPortfolio.startup!)}
+                        disabled={deleteStartupMutation.isPending}
+                      >
+                        <Trash2 className="h-4 w-4 mr-1" />
+                        Sat
+                      </Button>
+                    </div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Açıklama</p>
+                      <p className="font-medium">{teamPortfolio.startup.description}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Sektör</p>
+                      <p className="font-medium">{teamPortfolio.startup.industry}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Risk Seviyesi</p>
+                      <Badge variant={
+                        teamPortfolio.startup.riskLevel === 'Düşük' ? 'default' :
+                        teamPortfolio.startup.riskLevel === 'Orta' ? 'secondary' :
+                        teamPortfolio.startup.riskLevel === 'Orta-Yüksek' ? 'destructive' : 'destructive'
+                      }>
+                        {teamPortfolio.startup.riskLevel}
+                      </Badge>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Yatırım Değeri</p>
+                      <p className="font-medium">
+                        ₺{parseFloat(teamPortfolio.startup.value).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="text-center py-8">
+                <Briefcase className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                <p className="text-muted-foreground mb-4">Bu takımın henüz girişimi yok.</p>
+                <Button onClick={() => selectedTeam && handleAddNewStartup(selectedTeam)}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Yeni Girişim Ekle
+                </Button>
+              </div>
+            )}
+            
+            {teamPortfolio?.startup && (
+              <div className="pt-4 border-t">
+                <Button 
+                  variant="outline" 
+                  onClick={() => selectedTeam && handleAddNewStartup(selectedTeam)}
+                  className="w-full"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Yeni Girişim Ekle
+                </Button>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>
-              {selectedTeam?.name} Yönetimi - {managementType === "stocks" ? "Hisseler" : managementType === "currencies" ? "Dövizler" : "Girişim"}
+              {selectedTeam?.name} Yönetimi - {managementType === "stocks" ? "Hisseler" : managementType === "currencies" ? "Dövizler" : editingStartup ? "Girişim Düzenle" : "Yeni Girişim"}
             </DialogTitle>
           </DialogHeader>
           
@@ -381,7 +564,7 @@ export function TeamManagement() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Risk Seviyesi</FormLabel>
-                      <Select onValueChange={field.onChange}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Risk seviyesi seçin" />
@@ -398,8 +581,8 @@ export function TeamManagement() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full" disabled={createStartupMutation.isPending}>
-                  Girişim Ata
+                <Button type="submit" className="w-full" disabled={createStartupMutation.isPending || updateStartupMutation.isPending}>
+                  {editingStartup ? "Girişimi Güncelle" : "Girişim Ata"}
                 </Button>
               </form>
             </Form>
