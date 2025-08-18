@@ -45,6 +45,7 @@ export interface IStorage {
 
   // Team Startups
   getTeamStartup(teamId: number): Promise<TeamStartup | null>;
+  getStartupById(id: number): Promise<TeamStartup | null>;
   createTeamStartup(teamStartup: InsertTeamStartup): Promise<TeamStartup>;
   updateTeamStartup(id: number, teamStartup: Partial<InsertTeamStartup>): Promise<TeamStartup>;
   deleteTeamStartup(id: number): Promise<void>;
@@ -389,6 +390,10 @@ export class MemStorage implements IStorage {
   // Team Startups
   async getTeamStartup(teamId: number): Promise<TeamStartup | null> {
     return Array.from(this.teamStartups.values()).find(s => s.teamId === teamId) || null;
+  }
+
+  async getStartupById(id: number): Promise<TeamStartup | null> {
+    return this.teamStartups.get(id) || null;
   }
 
   async createTeamStartup(teamStartup: InsertTeamStartup): Promise<TeamStartup> {

@@ -888,10 +888,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/team-startups/:id', async (req, res) => {
     try {
-      await storage.deleteTeamStartup(parseInt(req.params.id));
-      res.status(204).send();
+      const startupId = parseInt(req.params.id);
+      
+      // First get the startup to find its team and value
+      const startup = await storage.getStartupById(startupId);
+      if (!startup) {
+        return res.status(404).json({ message: 'Startup not found' });
+      }
+      
+      // Get the team to update cash balance
+      const team = await storage.getTeam(startup.teamId);
+      if (!team) {
+        return res.status(404).json({ message: 'Team not found' });
+      }
+      
+      // Add startup value to team's cash balance
+      const currentBalance = parseFloat(team.cashBalance);
+      const startupValue = parseFloat(startup.value);
+      const newBalance = currentBalance + startupValue;
+      
+      // Update team cash balance
+      await storage.updateTeam(startup.teamId, {
+        cashBalance: newBalance.toFixed(2)
+      });
+      
+      // Delete the startup
+      await storage.deleteTeamStartup(startupId);
+      
+      res.json({ 
+        success: true, 
+        soldValue: startupValue,
+        newCashBalance: newBalance.toFixed(2)
+      });
     } catch (error) {
-      res.status(500).json({ message: 'Failed to delete team startup' });
+      res.status(500).json({ message: 'Failed to sell team startup' });
     }
   });
 

@@ -169,11 +169,15 @@ export function TeamManagement() {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Failed to delete startup");
+      return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
       queryClient.invalidateQueries({ queryKey: [`/api/teams/${selectedTeam?.id}/portfolio`] });
-      toast({ title: "Girişim başarıyla satıldı" });
+      toast({ 
+        title: "Girişim başarıyla satıldı", 
+        description: `₺${parseFloat(data.soldValue).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} nakit bakiyeye eklendi`
+      });
       setIsStartupListDialogOpen(false);
     },
     onError: () => {
@@ -229,7 +233,8 @@ export function TeamManagement() {
   };
 
   const handleSellStartup = async (startup: TeamStartup) => {
-    if (window.confirm(`"${startup.name}" girişimini satmak istediğinizden emin misiniz?`)) {
+    const startupValue = parseFloat(startup.value).toLocaleString('tr-TR', { minimumFractionDigits: 2 });
+    if (window.confirm(`"${startup.name}" girişimini satmak istediğinizden emin misiniz?\n\n₺${startupValue} takımın nakit bakiyesine eklenecek.`)) {
       deleteStartupMutation.mutate(startup.id);
     }
   };
