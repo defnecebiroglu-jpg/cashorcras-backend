@@ -59,7 +59,7 @@ export default function Landing() {
             lineHeight: '80px'
           }}
         >
-          GİRİŞİMCİLİK<br />SİMÜLASYONU
+          KAZANMAYA<br />CESARETIN VAR MI?
         </h2>
 
         {/* Main Image/Content Section */}
@@ -102,15 +102,15 @@ export default function Landing() {
                 lineHeight: '70px'
               }}
             >
-              "HER KARAR BİR ÖĞRENME FIRSATIDIR."
+              "BIR KARAR, HER SEYI DEGISTIRIR."
             </blockquote>
 
-            <div className="relative w-[423px] h-[111px] mt-4">
+            <div className="relative w-[423px] h-[111px] mt-8">
               <div 
-                className="relative w-[423px] h-[111px] bg-white rounded-lg flex items-center justify-center text-black font-medium text-sm"
-                style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+                className="relative w-[423px] h-[111px] bg-white rounded-lg flex items-center justify-center text-black font-semibold text-xl"
+                style={{ backgroundColor: '#b9d007' }}
               >
-                <div className="text-center px-4">
+                <div className="text-right px-8">
                   <div>kalcc.borsa@gmail.com</div>
                   <div>kalcc.doviz@gmail.com</div>
                   <div>kalcc.girisimcilik@gmail.com</div>
