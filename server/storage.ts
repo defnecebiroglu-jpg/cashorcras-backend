@@ -57,6 +57,9 @@ export interface IStorage {
   // Password Management
   updateTeamAccessCode(teamId: number, newAccessCode: string): Promise<Team>;
   updateAdminPassword(newPassword: string): Promise<boolean>;
+
+  // Team Management
+  updateTeamName(teamId: number, newName: string): Promise<Team>;
 }
 
 export class MemStorage implements IStorage {
@@ -449,6 +452,15 @@ export class MemStorage implements IStorage {
   async updateAdminPassword(newPassword: string): Promise<boolean> {
     this.adminPassword = newPassword;
     return true;
+  }
+
+  async updateTeamName(teamId: number, newName: string): Promise<Team> {
+    const team = this.teams.get(teamId);
+    if (!team) throw new Error("Team not found");
+    
+    const updated = { ...team, name: newName };
+    this.teams.set(teamId, updated);
+    return updated;
   }
 }
 

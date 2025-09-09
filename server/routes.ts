@@ -347,6 +347,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.put('/api/admin/update-team-name', async (req, res) => {
+    try {
+      // @ts-ignore - Session type extension
+      if (!req.session?.isAdmin) {
+        return res.status(401).json({ message: 'Admin authentication required' });
+      }
+
+      const { teamId, newName } = req.body;
+      
+      if (!teamId || !newName) {
+        return res.status(400).json({ message: 'Team ID and new name are required' });
+      }
+
+      if (newName.trim().length < 2) {
+        return res.status(400).json({ message: 'Team name must be at least 2 characters long' });
+      }
+
+      const updatedTeam = await storage.updateTeamName(teamId, newName.trim());
+      res.json({ 
+        success: true, 
+        message: 'Team name updated successfully',
+        team: updatedTeam
+      });
+    } catch (error: any) {
+      if (error.message === 'Team not found') {
+        return res.status(404).json({ message: error.message });
+      }
+      res.status(500).json({ message: 'Failed to update team name' });
+    }
+  });
+
   // Companies
   app.get('/api/companies', async (req, res) => {
     try {
