@@ -53,6 +53,10 @@ export interface IStorage {
   // Authentication
   authenticateTeam(accessCode: string): Promise<Team | null>;
   authenticateAdmin(password: string): Promise<boolean>;
+
+  // Password Management
+  updateTeamAccessCode(teamId: number, newAccessCode: string): Promise<Team>;
+  updateAdminPassword(newPassword: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -62,6 +66,7 @@ export class MemStorage implements IStorage {
   private teamStocks: Map<number, TeamStock> = new Map();
   private teamCurrencies: Map<number, TeamCurrency> = new Map();
   private teamStartups: Map<number, TeamStartup> = new Map();
+  private adminPassword: string = process.env.ADMIN_PASSWORD || "admin123";
   
   private currentCompanyId = 1;
   private currentCurrencyId = 1;
@@ -422,9 +427,28 @@ export class MemStorage implements IStorage {
   }
 
   async authenticateAdmin(password: string): Promise<boolean> {
-    // You can change this password or make it environment-based
-    const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
-    return password === adminPassword;
+    return password === this.adminPassword;
+  }
+
+  // Password Management
+  async updateTeamAccessCode(teamId: number, newAccessCode: string): Promise<Team> {
+    const team = this.teams.get(teamId);
+    if (!team) throw new Error("Team not found");
+    
+    // Check if access code is already used by another team
+    const existingTeam = Array.from(this.teams.values()).find(t => t.accessCode === newAccessCode && t.id !== teamId);
+    if (existingTeam) {
+      throw new Error("Bu erişim kodu zaten kullanılıyor");
+    }
+    
+    const updated = { ...team, accessCode: newAccessCode };
+    this.teams.set(teamId, updated);
+    return updated;
+  }
+
+  async updateAdminPassword(newPassword: string): Promise<boolean> {
+    this.adminPassword = newPassword;
+    return true;
   }
 }
 
