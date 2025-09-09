@@ -288,6 +288,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Password Management Routes (Admin only)
+  app.put('/api/admin/update-team-password', async (req, res) => {
+    try {
+      // @ts-ignore - Session type extension
+      if (!req.session?.isAdmin) {
+        return res.status(401).json({ message: 'Admin authentication required' });
+      }
+
+      const { teamId, newAccessCode } = req.body;
+      
+      if (!teamId || !newAccessCode) {
+        return res.status(400).json({ message: 'Team ID and new access code are required' });
+      }
+
+      if (newAccessCode.length < 4) {
+        return res.status(400).json({ message: 'Access code must be at least 4 characters long' });
+      }
+
+      const updatedTeam = await storage.updateTeamAccessCode(teamId, newAccessCode);
+      res.json({ 
+        success: true, 
+        message: 'Team access code updated successfully',
+        team: updatedTeam
+      });
+    } catch (error: any) {
+      if (error.message === 'Bu erişim kodu zaten kullanılıyor') {
+        return res.status(400).json({ message: error.message });
+      }
+      res.status(500).json({ message: 'Failed to update team access code' });
+    }
+  });
+
+  app.put('/api/admin/update-admin-password', async (req, res) => {
+    try {
+      // @ts-ignore - Session type extension
+      if (!req.session?.isAdmin) {
+        return res.status(401).json({ message: 'Admin authentication required' });
+      }
+
+      const { newPassword } = req.body;
+      
+      if (!newPassword) {
+        return res.status(400).json({ message: 'New password is required' });
+      }
+
+      if (newPassword.length < 6) {
+        return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+      }
+
+      await storage.updateAdminPassword(newPassword);
+      res.json({ 
+        success: true, 
+        message: 'Admin password updated successfully'
+      });
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to update admin password' });
+    }
+  });
+
   // Companies
   app.get('/api/companies', async (req, res) => {
     try {
