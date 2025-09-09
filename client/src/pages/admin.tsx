@@ -12,6 +12,7 @@ import { FinancialOverview } from "@/components/admin/financial-overview";
 import { PortfolioOverview } from "@/components/admin/portfolio-overview";
 import { DividendDistribution } from "@/components/admin/dividend-distribution";
 import { BulkPriceUpdate } from "@/components/admin/bulk-price-update";
+import { PasswordManagement } from "@/components/admin/password-management";
 
 export default function Admin() {
   return (
@@ -40,7 +41,7 @@ export default function Admin() {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="portfolios" className="w-full">
-              <TabsList className="grid w-full grid-cols-7">
+              <TabsList className="grid w-full grid-cols-8">
                 <TabsTrigger value="portfolios">Portföyler</TabsTrigger>
                 <TabsTrigger value="financial">Mali Durum</TabsTrigger>
                 <TabsTrigger value="dividend">Temettü</TabsTrigger>
@@ -48,6 +49,7 @@ export default function Admin() {
                 <TabsTrigger value="companies">Şirketler</TabsTrigger>
                 <TabsTrigger value="currencies">Dövizler</TabsTrigger>
                 <TabsTrigger value="teams">Takımlar</TabsTrigger>
+                <TabsTrigger value="passwords">Şifreler</TabsTrigger>
               </TabsList>
               
               <TabsContent value="portfolios" className="mt-6">
@@ -76,6 +78,10 @@ export default function Admin() {
               
               <TabsContent value="teams" className="mt-6">
                 <TeamManagement />
+              </TabsContent>
+              
+              <TabsContent value="passwords" className="mt-6">
+                <PasswordManagement />
               </TabsContent>
             </Tabs>
           </CardContent>
