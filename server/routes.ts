@@ -94,6 +94,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin dividend distribution endpoint
   app.post('/api/admin/distribute-dividend/:companyId', async (req, res) => {
     try {
+      // @ts-ignore - Session type extension
+      if (!req.session?.isAdmin) {
+        return res.status(401).json({ message: 'Admin authentication required' });
+      }
+
       const companyId = parseInt(req.params.companyId);
       const company = await storage.getCompany(companyId);
       
@@ -146,6 +151,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin salesman endpoints for managing team portfolios
   app.post('/api/admin/assign-stock', async (req, res) => {
     try {
+      // @ts-ignore - Session type extension
+      if (!req.session?.isAdmin) {
+        return res.status(401).json({ message: 'Admin authentication required' });
+      }
+
       const { teamId, companyId, shares } = req.body;
       
       const team = await storage.getTeam(teamId);
@@ -178,6 +188,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/admin/unassign-stock', async (req, res) => {
     try {
+      // @ts-ignore - Session type extension
+      if (!req.session?.isAdmin) {
+        return res.status(401).json({ message: 'Admin authentication required' });
+      }
+
       const { teamId, companyId, shares } = req.body;
       
       const team = await storage.getTeam(teamId);
@@ -218,6 +233,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/admin/assign-currency', async (req, res) => {
     try {
+      // @ts-ignore - Session type extension
+      if (!req.session?.isAdmin) {
+        return res.status(401).json({ message: 'Admin authentication required' });
+      }
+
       const { teamId, currencyId, amount } = req.body;
       
       const team = await storage.getTeam(teamId);
@@ -250,6 +270,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/admin/unassign-currency', async (req, res) => {
     try {
+      // @ts-ignore - Session type extension
+      if (!req.session?.isAdmin) {
+        return res.status(401).json({ message: 'Admin authentication required' });
+      }
+
       const { teamId, currencyId, amount } = req.body;
       
       const team = await storage.getTeam(teamId);
@@ -721,6 +746,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/teams', async (req, res) => {
     try {
+      // @ts-ignore - Session type extension
+      if (!req.session?.isAdmin) {
+        return res.status(401).json({ message: 'Admin authentication required' });
+      }
+
       const data = insertTeamSchema.parse(req.body);
       const team = await storage.createTeam(data);
       res.status(201).json(team);
