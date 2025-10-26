@@ -265,9 +265,21 @@ export class MemStorage implements IStorage {
     // Initialize teams
     const initialTeams: InsertTeam[] = [
       {
-        name: "1 Takımı",
+        name: "1. Takım",
         cashBalance: "100000.00",
         accessCode: "00012024",
+        profilePicUrl: null,
+      },
+      {
+        name: "1. Takım",
+        cashBalance: "100000.00",
+        accessCode: "00012024",
+        profilePicUrl: null,
+      },
+      {
+        name: "Panelle",
+        cashBalance: "100000.00",
+        accessCode: "004224",
         profilePicUrl: null,
       },
       {
