@@ -54,12 +54,19 @@ export const teamStartups = pgTable("team_startups", {
   riskLevel: text("risk_level").notNull(),
 });
 
+export const settings = pgTable("settings", {
+  id: serial("id").primaryKey(),
+  key: text("key").notNull().unique(),
+  value: text("value").notNull(),
+});
+
 export const insertCompanySchema = createInsertSchema(companies).omit({ id: true });
 export const insertCurrencySchema = createInsertSchema(currencies).omit({ id: true });
 export const insertTeamSchema = createInsertSchema(teams).omit({ id: true });
 export const insertTeamStockSchema = createInsertSchema(teamStocks).omit({ id: true });
 export const insertTeamCurrencySchema = createInsertSchema(teamCurrencies).omit({ id: true });
 export const insertTeamStartupSchema = createInsertSchema(teamStartups).omit({ id: true });
+export const insertSettingSchema = createInsertSchema(settings).omit({ id: true });
 
 export type Company = typeof companies.$inferSelect;
 export type Currency = typeof currencies.$inferSelect;
@@ -67,6 +74,7 @@ export type Team = typeof teams.$inferSelect;
 export type TeamStock = typeof teamStocks.$inferSelect;
 export type TeamCurrency = typeof teamCurrencies.$inferSelect;
 export type TeamStartup = typeof teamStartups.$inferSelect;
+export type Setting = typeof settings.$inferSelect;
 
 export type InsertCompany = z.infer<typeof insertCompanySchema>;
 export type InsertCurrency = z.infer<typeof insertCurrencySchema>;
@@ -74,6 +82,7 @@ export type InsertTeam = z.infer<typeof insertTeamSchema>;
 export type InsertTeamStock = z.infer<typeof insertTeamStockSchema>;
 export type InsertTeamCurrency = z.infer<typeof insertTeamCurrencySchema>;
 export type InsertTeamStartup = z.infer<typeof insertTeamStartupSchema>;
+export type InsertSetting = z.infer<typeof insertSettingSchema>;
 
 // Extended types for frontend
 export type TeamPortfolio = {

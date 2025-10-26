@@ -19,6 +19,7 @@ import {
   type InsertTeamStartup,
   type TeamPortfolio,
 } from "../shared/schema";
+import { getSetting, setSetting } from './db';
 
 export interface IStorage {
   // Companies
@@ -658,7 +659,10 @@ export class MemStorage implements IStorage {
   }
 
   async authenticateAdmin(password: string): Promise<boolean> {
-    return password === this.adminPassword;
+    // Try to get admin password from database first (for persistence across restarts)
+    const dbPassword = await getSetting('admin_password');
+    const actualPassword = dbPassword || this.adminPassword;
+    return password === actualPassword;
   }
 
   // Password Management
@@ -683,7 +687,17 @@ export class MemStorage implements IStorage {
   }
 
   async updateAdminPassword(newPassword: string): Promise<boolean> {
+    // Update in-memory password
     this.adminPassword = newPassword;
+    
+    // Try to persist to database for universal deployment
+    const saved = await setSetting('admin_password', newPassword);
+    
+    // Return true even if database save fails (degraded mode with in-memory only)
+    if (!saved) {
+      console.warn('Warning: Admin password saved to memory only. Changes will be lost on server restart. Set DATABASE_URL for persistence.');
+    }
+    
     return true;
   }
 
