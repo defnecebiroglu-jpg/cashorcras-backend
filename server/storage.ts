@@ -19,7 +19,7 @@ import {
   type InsertTeamStartup,
   type TeamPortfolio,
 } from "../shared/schema";
-import { getSetting, setSetting } from './db';
+import { getSetting, setSetting } from "./db";
 
 export interface IStorage {
   // Companies
@@ -267,73 +267,194 @@ export class MemStorage implements IStorage {
       {
         name: "1. Takım",
         cashBalance: "100000.00",
-        accessCode: "00012024",
+        accessCode: "teambiznizz6",
         profilePicUrl: null,
       },
       {
-        name: "1. Takım",
+        name: "2. Takım",
         cashBalance: "100000.00",
-        accessCode: "00012024",
+        accessCode: "borsakrali8",
         profilePicUrl: null,
       },
       {
-        name: "Panelle",
+        name: "3. Takım",
         cashBalance: "100000.00",
-        accessCode: "004224",
+        accessCode: "sinsipanelle2",
         profilePicUrl: null,
       },
       {
-        name: "2 Takımı",
+        name: "4. Takım",
         cashBalance: "100000.00",
-        accessCode: "00022024",
+        accessCode: "gymbroinnovix",
         profilePicUrl: null,
       },
       {
-        name: "3 Takımı",
+        name: "5. Takım",
         cashBalance: "100000.00",
-        accessCode: "00032024",
+        accessCode: "zargelirhep6",
         profilePicUrl: null,
       },
       {
-        name: "4 Takımı",
+        name: "6. Takım",
         cashBalance: "100000.00",
-        accessCode: "00042024",
+        accessCode: "kursoyvseyupb",
         profilePicUrl: null,
       },
       {
-        name: "5 Takımı",
+        name: "7. Takım",
         cashBalance: "100000.00",
-        accessCode: "00052024",
+        accessCode: "biznizzyineasik",
         profilePicUrl: null,
       },
       {
-        name: "6 Takımı",
+        name: "8. Takım",
         cashBalance: "100000.00",
-        accessCode: "00062024",
+        accessCode: "borsacoktu11",
         profilePicUrl: null,
       },
       {
-        name: "7 Takımı",
+        name: "9. Takım",
         cashBalance: "100000.00",
-        accessCode: "00072024",
+        accessCode: "krizegirdik777",
         profilePicUrl: null,
       },
       {
-        name: "8 Takımı",
+        name: "10. Takım",
         cashBalance: "100000.00",
-        accessCode: "00082024",
+        accessCode: "borsissarabeni",
         profilePicUrl: null,
       },
       {
-        name: "9 Takımı",
+        name: "11. Takım",
         cashBalance: "100000.00",
-        accessCode: "00092024",
+        accessCode: "krizpygergin",
         profilePicUrl: null,
       },
       {
-        name: "10 Takımı",
+        name: "12. Takım",
         cashBalance: "100000.00",
-        accessCode: "00102024",
+        accessCode: "kriziscoming",
+        profilePicUrl: null,
+      },
+      {
+        name: "13. Takım",
+        cashBalance: "100000.00",
+        accessCode: "girisimciolucaz",
+        profilePicUrl: null,
+      },
+      {
+        name: "14. Takım",
+        cashBalance: "100000.00",
+        accessCode: "paraparanoya",
+        profilePicUrl: null,
+      },
+      {
+        name: "15. Takım",
+        cashBalance: "100000.00",
+        accessCode: "sansdonermi0",
+        profilePicUrl: null,
+      },
+      {
+        name: "16. Takım",
+        cashBalance: "100000.00",
+        accessCode: "altinavcisi5",
+        profilePicUrl: null,
+      },
+      {
+        name: "17. Takım",
+        cashBalance: "100000.00",
+        accessCode: "borsabebesi9",
+        profilePicUrl: null,
+      },
+      {
+        name: "18. Takım",
+        cashBalance: "100000.00",
+        accessCode: "bitcoinlover4",
+        profilePicUrl: null,
+      },
+      {
+        name: "19. Takım",
+        cashBalance: "100000.00",
+        accessCode: "krizyonetimi0",
+        profilePicUrl: null,
+      },
+      {
+        name: "20. Takım",
+        cashBalance: "100000.00",
+        accessCode: "enflasyon%200",
+        profilePicUrl: null,
+      },
+      {
+        name: "21. Takım",
+        cashBalance: "100000.00",
+        accessCode: "riskbudur111",
+        profilePicUrl: null,
+      },
+      {
+        name: "22. Takım",
+        cashBalance: "100000.00",
+        accessCode: "cashmicrashmi",
+        profilePicUrl: null,
+      },
+
+      {
+        name: "23. Takım",
+        cashBalance: "100000.00",
+        accessCode: "kursoylapiyasa",
+        profilePicUrl: null,
+      },
+      {
+        name: "24. Takım",
+        cashBalance: "100000.00",
+        accessCode: "biznizzisbuldu",
+        profilePicUrl: null,
+      },
+      {
+        name: "25. Takım",
+        cashBalance: "100000.00",
+        accessCode: "elonmuskolcaz",
+        profilePicUrl: null,
+      },
+      {
+        name: "26. Takım",
+        cashBalance: "100000.00",
+        accessCode: "parababası55",
+        profilePicUrl: null,
+      },
+      {
+        name: "27. Takım",
+        cashBalance: "100000.00",
+        accessCode: "kursoyyksde1",
+        profilePicUrl: null,
+      },
+      {
+        name: "28. Takım",
+        cashBalance: "100000.00",
+        accessCode: "burjuvapanelle",
+        profilePicUrl: null,
+      },
+      {
+        name: "29. Takım",
+        cashBalance: "100000.00",
+        accessCode: "biznizzpozitif6",
+        profilePicUrl: null,
+      },
+      {
+        name: "30. Takım",
+        cashBalance: "100000.00",
+        accessCode: "borsisssayısalcı",
+        profilePicUrl: null,
+      },
+      {
+        name: "Yedek Takım 1",
+        cashBalance: "100000.00",
+        accessCode: "yedek1",
+        profilePicUrl: null,
+      },
+      {
+        name: "Yedek Takım 2",
+        cashBalance: "100000.00",
+        accessCode: "yedek2",
         profilePicUrl: null,
       },
     ];
@@ -672,7 +793,7 @@ export class MemStorage implements IStorage {
 
   async authenticateAdmin(password: string): Promise<boolean> {
     // Try to get admin password from database first (for persistence across restarts)
-    const dbPassword = await getSetting('admin_password');
+    const dbPassword = await getSetting("admin_password");
     const actualPassword = dbPassword || this.adminPassword;
     return password === actualPassword;
   }
@@ -701,15 +822,17 @@ export class MemStorage implements IStorage {
   async updateAdminPassword(newPassword: string): Promise<boolean> {
     // Update in-memory password
     this.adminPassword = newPassword;
-    
+
     // Try to persist to database for universal deployment
-    const saved = await setSetting('admin_password', newPassword);
-    
+    const saved = await setSetting("admin_password", newPassword);
+
     // Return true even if database save fails (degraded mode with in-memory only)
     if (!saved) {
-      console.warn('Warning: Admin password saved to memory only. Changes will be lost on server restart. Set DATABASE_URL for persistence.');
+      console.warn(
+        "Warning: Admin password saved to memory only. Changes will be lost on server restart. Set DATABASE_URL for persistence.",
+      );
     }
-    
+
     return true;
   }
 
