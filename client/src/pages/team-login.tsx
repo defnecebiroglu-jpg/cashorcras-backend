@@ -144,7 +144,7 @@ export default function TeamLogin() {
                     }}
                     placeholder="Takım erişim kodunu giriniz"
                     value={accessCode}
-                    onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
+                    onChange={(e) => setAccessCode(e.target.value.toLowerCase())}
                     required
                   />
                 </div>
