@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
+import api from "@/lib/api";
 
 const colors = {
   background: '#1B1B1B',
@@ -29,29 +30,16 @@ export default function AdminLogin() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/auth/admin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem("isAdmin", "true");
-        setLocation("/admin");
-        toast({ title: "Admin girişi başarılı!" });
-      } else {
-        toast({ 
-          title: "Giriş Hatası", 
-          description: data.message || "Geçersiz şifre",
-          variant: "destructive" 
-        });
-      }
-    } catch (error) {
+      const response = await api.post("/api/auth/admin", { password });
+      
+      localStorage.setItem("isAdmin", "true");
+      setLocation("/admin");
+      toast({ title: "Admin girişi başarılı!" });
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || "Geçersiz şifre";
       toast({ 
-        title: "Bağlantı Hatası", 
-        description: "Sunucu ile bağlantı kurulamadı",
+        title: "Giriş Hatası", 
+        description: errorMessage,
         variant: "destructive" 
       });
     } finally {

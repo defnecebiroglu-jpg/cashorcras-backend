@@ -1,4 +1,5 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
+import api from "./api";
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
@@ -40,6 +41,24 @@ export const getQueryFn: <T>(options: {
     await throwIfResNotOk(res);
     return await res.json();
   };
+
+// New axios-based API request function
+export async function apiAxiosRequest(
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH",
+  url: string,
+  data?: unknown | undefined,
+): Promise<any> {
+  try {
+    const response = await api.request({
+      method,
+      url,
+      data,
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+}
 
 export const queryClient = new QueryClient({
   defaultOptions: {

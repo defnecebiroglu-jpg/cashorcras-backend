@@ -1,11 +1,25 @@
 import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
 import ConnectPgSimple from 'connect-pg-simple';
+import cors from "cors";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import "./types"; // Type definitions
 
 const app = express();
+
+// CORS configuration
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:3000", 
+    "https://cashorcrash.store",
+    "https://www.cashorcrash.store"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
+}));
 
 // Security and parsing middleware
 app.use(express.json({ limit: '10mb' }));
@@ -86,6 +100,16 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Root endpoint for testing
+  app.get('/', (req, res) => {
+    res.json({ 
+      message: 'Cash or Crash Backend API', 
+      status: 'running',
+      timestamp: new Date().toISOString(),
+      version: '1.0.0'
+    });
+  });
+
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -105,7 +129,8 @@ app.use((req, res, next) => {
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
-    serveStatic(app);
+    // In production, only serve API endpoints, not static files
+    // serveStatic(app); // Commented out to prevent serving frontend files
   }
 
   // Use environment PORT for cloud deployment, fallback to 5000 for local
