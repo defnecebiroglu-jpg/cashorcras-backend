@@ -16,6 +16,9 @@ api.interceptors.request.use(
     const adminCode = localStorage.getItem("adminCode");
     if (adminCode) {
       config.headers["x-admin-code"] = adminCode;
+      console.log(`[api] Adding x-admin-code header for ${config.method?.toUpperCase()} ${config.url}`);
+    } else if (config.url?.includes('/admin') || config.url?.includes('/api/admin')) {
+      console.warn(`[api] Admin request detected but no adminCode in localStorage: ${config.method?.toUpperCase()} ${config.url}`);
     }
     return config;
   },
@@ -27,11 +30,11 @@ api.interceptors.request.use(
 // Add request interceptor for debugging
 api.interceptors.request.use(
   (config) => {
-    console.log(`Making ${config.method?.toUpperCase()} request to: ${config.baseURL}${config.url}`);
+    console.log(`[api] Making ${config.method?.toUpperCase()} request to: ${config.baseURL}${config.url}`);
     return config;
   },
   (error) => {
-    console.error("Request error:", error);
+    console.error("[api] Request error:", error);
     return Promise.reject(error);
   }
 );

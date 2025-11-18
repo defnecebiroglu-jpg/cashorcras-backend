@@ -31,13 +31,19 @@ export default function AdminLogin() {
 
     try {
       const trimmedPassword = password.trim();
+      console.log("[admin-login] Attempting login with code:", trimmedPassword ? `${trimmedPassword.substring(0, 3)}...` : "empty");
+      
       const response = await api.post("/api/auth/admin", { code: trimmedPassword });
       
-      if (response.data.ok) {
+      console.log("[admin-login] Response:", response.data);
+      
+      if (response.data.ok === true) {
         localStorage.setItem("adminCode", trimmedPassword);
+        console.log("[admin-login] Admin code stored in localStorage");
         setLocation("/admin");
         toast({ title: "Admin girişi başarılı!" });
       } else {
+        console.warn("[admin-login] Login failed - ok:", response.data.ok);
         toast({ 
           title: "Giriş Hatası", 
           description: "Geçersiz admin kodu",
@@ -45,6 +51,8 @@ export default function AdminLogin() {
         });
       }
     } catch (error: any) {
+      console.error("[admin-login] Error:", error);
+      console.error("[admin-login] Error response:", error.response?.data);
       const errorMessage = error.response?.data?.message || "Geçersiz admin kodu";
       toast({ 
         title: "Giriş Hatası", 
