@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { DollarSign, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
+import api from "@/lib/api";
 import { type Company, type Team } from "@shared/schema";
 
 export function DividendDistribution() {
@@ -25,12 +26,8 @@ export function DividendDistribution() {
 
   const distributeDividendMutation = useMutation({
     mutationFn: async (companyId: number) => {
-      const response = await fetch(`/api/admin/distribute-dividend/${companyId}`, {
-        method: "POST",
-      });
-      
-      if (!response.ok) throw new Error("Failed to distribute dividend");
-      return response.json();
+      const response = await api.post(`/api/admin/distribute-dividend/${companyId}`);
+      return response.data;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });

@@ -28,13 +28,8 @@ export function PortfolioOverview() {
 
   const unassignStockMutation = useMutation({
     mutationFn: async ({ teamId, companyId, shares }: { teamId: number; companyId: number; shares: number }) => {
-      const response = await fetch("/api/admin/unassign-stock", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ teamId, companyId, shares }),
-      });
-      if (!response.ok) throw new Error("Failed to unassign stock");
-      return response.json();
+      const response = await api.post("/api/admin/unassign-stock", { teamId, companyId, shares });
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
@@ -49,13 +44,8 @@ export function PortfolioOverview() {
 
   const unassignCurrencyMutation = useMutation({
     mutationFn: async ({ teamId, currencyId, amount }: { teamId: number; currencyId: number; amount: string }) => {
-      const response = await fetch("/api/admin/unassign-currency", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ teamId, currencyId, amount }),
-      });
-      if (!response.ok) throw new Error("Failed to unassign currency");
-      return response.json();
+      const response = await api.post("/api/admin/unassign-currency", { teamId, currencyId, amount });
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
@@ -119,9 +109,8 @@ export function PortfolioOverview() {
     queryFn: async () => {
       if (!teams) return [];
       const portfolioPromises = teams.map(async (team) => {
-        const response = await fetch(`/api/teams/${team.id}/portfolio`);
-        if (!response.ok) throw new Error("Failed to fetch portfolio");
-        return response.json();
+        const response = await api.get(`/api/teams/${team.id}/portfolio`);
+        return response.data;
       });
       return Promise.all(portfolioPromises);
     },

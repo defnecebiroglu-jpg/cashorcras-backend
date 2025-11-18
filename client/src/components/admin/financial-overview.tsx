@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus, Minus, DollarSign, TrendingUp, TrendingDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { queryClient, apiRequest } from "@/lib/queryClient";
+import { queryClient } from "@/lib/queryClient";
+import api from "@/lib/api";
 import { type Team } from "@shared/schema";
 
 export function FinancialOverview() {
@@ -33,13 +34,8 @@ export function FinancialOverview() {
         throw new Error("Insufficient funds");
       }
 
-      const response = await fetch(`/api/teams/${teamId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cashBalance: newBalance.toFixed(2) }),
-      });
-      if (!response.ok) throw new Error("Failed to update balance");
-      return response.json();
+      const response = await api.patch(`/api/teams/${teamId}`, { cashBalance: newBalance.toFixed(2) });
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });

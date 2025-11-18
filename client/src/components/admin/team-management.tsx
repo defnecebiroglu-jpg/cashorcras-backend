@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Settings, DollarSign, TrendingUp, Briefcase, Edit, Trash2, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
+import api from "@/lib/api";
 import { insertTeamStockSchema, insertTeamCurrencySchema, insertTeamStartupSchema, type Team, type Company, type Currency, type TeamStartup, type TeamPortfolio } from "@shared/schema";
 import { z } from "zod";
 
@@ -78,13 +79,8 @@ export function TeamManagement() {
 
   const createStockMutation = useMutation({
     mutationFn: async (data: z.infer<typeof teamStockFormSchema>) => {
-      const response = await fetch("/api/admin/assign-stock", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) throw new Error("Failed to assign stock");
-      return response.json();
+      const response = await api.post("/api/admin/assign-stock", data);
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
@@ -99,13 +95,8 @@ export function TeamManagement() {
 
   const createCurrencyMutation = useMutation({
     mutationFn: async (data: z.infer<typeof teamCurrencyFormSchema>) => {
-      const response = await fetch("/api/admin/assign-currency", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) throw new Error("Failed to assign currency");
-      return response.json();
+      const response = await api.post("/api/admin/assign-currency", data);
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
@@ -120,13 +111,8 @@ export function TeamManagement() {
 
   const createStartupMutation = useMutation({
     mutationFn: async (data: z.infer<typeof teamStartupFormSchema>) => {
-      const response = await fetch("/api/team-startups", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) throw new Error("Failed to assign startup");
-      return response.json();
+      const response = await api.post("/api/team-startups", data);
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
@@ -142,13 +128,8 @@ export function TeamManagement() {
 
   const updateStartupMutation = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: Partial<z.infer<typeof teamStartupFormSchema>> }) => {
-      const response = await fetch(`/api/team-startups/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) throw new Error("Failed to update startup");
-      return response.json();
+      const response = await api.put(`/api/team-startups/${id}`, data);
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
@@ -165,11 +146,8 @@ export function TeamManagement() {
 
   const deleteStartupMutation = useMutation({
     mutationFn: async (id: number) => {
-      const response = await fetch(`/api/team-startups/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Failed to delete startup");
-      return response.json();
+      const response = await api.delete(`/api/team-startups/${id}`);
+      return response.data;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });

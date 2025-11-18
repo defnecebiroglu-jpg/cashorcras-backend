@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
+import api from "@/lib/api";
 import { insertCurrencySchema, type Currency } from "@shared/schema";
 import { z } from "zod";
 
@@ -48,13 +49,10 @@ export function CurrencyManagement() {
         formData.append("logo", data.logo[0]);
       }
 
-      const response = await fetch("/api/currencies", {
-        method: "POST",
-        body: formData,
+      const response = await api.post("/api/currencies", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      
-      if (!response.ok) throw new Error("Failed to create currency");
-      return response.json();
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/currencies"] });
@@ -77,13 +75,10 @@ export function CurrencyManagement() {
         formData.append("logo", data.logo[0]);
       }
 
-      const response = await fetch(`/api/currencies/${id}`, {
-        method: "PUT",
-        body: formData,
+      const response = await api.put(`/api/currencies/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      
-      if (!response.ok) throw new Error("Failed to update currency");
-      return response.json();
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/currencies"] });
@@ -99,11 +94,7 @@ export function CurrencyManagement() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      const response = await fetch(`/api/currencies/${id}`, {
-        method: "DELETE",
-      });
-      
-      if (!response.ok) throw new Error("Failed to delete currency");
+      await api.delete(`/api/currencies/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/currencies"] });

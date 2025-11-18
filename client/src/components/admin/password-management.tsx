@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Key, Users, Shield, Edit, Plus, UserPlus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
+import api from "@/lib/api";
 import { type Team } from "@shared/schema";
 import { z } from "zod";
 
@@ -76,16 +77,8 @@ export function PasswordManagement() {
 
   const updateTeamPasswordMutation = useMutation({
     mutationFn: async (data: z.infer<typeof teamPasswordFormSchema>) => {
-      const response = await fetch("/api/admin/update-team-password", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to update team password");
-      }
-      return response.json();
+      const response = await api.put("/api/admin/update-team-password", data);
+      return response.data;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
@@ -107,16 +100,8 @@ export function PasswordManagement() {
 
   const createTeamMutation = useMutation({
     mutationFn: async (data: z.infer<typeof createTeamFormSchema>) => {
-      const response = await fetch("/api/teams", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to create team");
-      }
-      return response.json();
+      const response = await api.post("/api/teams", data);
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
@@ -137,16 +122,8 @@ export function PasswordManagement() {
 
   const updateTeamNameMutation = useMutation({
     mutationFn: async (data: z.infer<typeof editTeamNameFormSchema>) => {
-      const response = await fetch("/api/admin/update-team-name", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to update team name");
-      }
-      return response.json();
+      const response = await api.put("/api/admin/update-team-name", data);
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/teams"] });
@@ -168,16 +145,8 @@ export function PasswordManagement() {
 
   const updateAdminPasswordMutation = useMutation({
     mutationFn: async (data: z.infer<typeof adminPasswordFormSchema>) => {
-      const response = await fetch("/api/admin/update-admin-password", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to update admin password");
-      }
-      return response.json();
+      const response = await api.put("/api/admin/update-admin-password", data);
+      return response.data;
     },
     onSuccess: () => {
       toast({ 

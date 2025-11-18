@@ -9,7 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { queryClient, apiRequest } from "@/lib/queryClient";
+import { queryClient } from "@/lib/queryClient";
+import api from "@/lib/api";
 import { Upload, FileText, CheckCircle, AlertTriangle, Edit3, Save, RefreshCw, Calculator } from "lucide-react";
 import type { Company, Currency } from "@shared/schema";
 
@@ -158,18 +159,11 @@ currency,İsviçre Frangı,38.54`;
     mutationFn: async (updates: { id: number; price: string; sellPrice: string }[]) => {
       const results = [];
       for (const update of updates) {
-        const response = await fetch(`/api/companies/${update.id}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ 
-            price: update.price, 
-            sellPrice: update.sellPrice 
-          }),
+        const response = await api.patch(`/api/companies/${update.id}`, { 
+          price: update.price, 
+          sellPrice: update.sellPrice 
         });
-        const data = await response.json();
-        results.push(data);
+        results.push(response.data);
       }
       return results;
     },
@@ -187,18 +181,11 @@ currency,İsviçre Frangı,38.54`;
     mutationFn: async (updates: { id: number; rate: string; sellRate: string }[]) => {
       const results = [];
       for (const update of updates) {
-        const response = await fetch(`/api/currencies/${update.id}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ 
-            rate: update.rate, 
-            sellRate: update.sellRate 
-          }),
+        const response = await api.patch(`/api/currencies/${update.id}`, { 
+          rate: update.rate, 
+          sellRate: update.sellRate 
         });
-        const data = await response.json();
-        results.push(data);
+        results.push(response.data);
       }
       return results;
     },
@@ -216,15 +203,8 @@ currency,İsviçre Frangı,38.54`;
     mutationFn: async (updates: { companyId: number; newPrice: string }[]) => {
       const results = [];
       for (const update of updates) {
-        const response = await fetch(`/api/companies/${update.companyId}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ price: update.newPrice }),
-        });
-        const data = await response.json();
-        results.push(data);
+        const response = await api.patch(`/api/companies/${update.companyId}`, { price: update.newPrice });
+        results.push(response.data);
       }
       return results;
     },
@@ -243,15 +223,8 @@ currency,İsviçre Frangı,38.54`;
     mutationFn: async (updates: { currencyId: number; newRate: string }[]) => {
       const results = [];
       for (const update of updates) {
-        const response = await fetch(`/api/currencies/${update.currencyId}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ rate: update.newRate }),
-        });
-        const data = await response.json();
-        results.push(data);
+        const response = await api.patch(`/api/currencies/${update.currencyId}`, { rate: update.newRate });
+        results.push(response.data);
       }
       return results;
     },
