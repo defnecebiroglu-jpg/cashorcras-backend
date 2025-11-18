@@ -4,11 +4,25 @@ export const API_BASE = import.meta.env.VITE_API_URL || "https://cashorcras-back
 
 const api = axios.create({
   baseURL: API_BASE,
-  withCredentials: true, // Important for session management
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
 });
+
+// Add request interceptor to include admin code in headers when available
+api.interceptors.request.use(
+  (config) => {
+    const adminCode = localStorage.getItem("adminCode");
+    if (adminCode) {
+      config.headers["x-admin-code"] = adminCode;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // Add request interceptor for debugging
 api.interceptors.request.use(

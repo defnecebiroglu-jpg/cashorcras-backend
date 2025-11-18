@@ -11,6 +11,8 @@ import AdminLogin from "@/pages/admin-login";
 import TeamDashboard from "@/pages/team-dashboard";
 import Admin from "@/pages/admin";
 import ApiTest from "@/components/ApiTest";
+import ConnectionTest from "@/components/ConnectionTest";
+import RealtimeAssignments from "@/components/RealtimeAssignments";
 import api from "@/lib/api";
 
 function Router() {
@@ -22,6 +24,8 @@ function Router() {
       <Route path="/team/:id" component={TeamDashboard} />
       <Route path="/admin" component={Admin} />
       <Route path="/api-test" component={ApiTest} />
+      <Route path="/connection-test" component={ConnectionTest} />
+      <Route path="/assignments" component={RealtimeAssignments} />
     </Switch>
   );
 }

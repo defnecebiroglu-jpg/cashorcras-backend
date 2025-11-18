@@ -1,7 +1,10 @@
 import express, { type Request, Response, NextFunction } from "express";
-import session from "express-session";
-import ConnectPgSimple from 'connect-pg-simple';
 import cors from "cors";
+import { createServer } from "http";
+import { Server as SocketIOServer } from "socket.io";
+import { Low } from "lowdb";
+import { JSONFile } from "lowdb/node";
+import path from "path";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import "./types"; // Type definitions
@@ -18,7 +21,7 @@ app.use(cors({
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "x-admin-code"]
 }));
 
 // Security and parsing middleware
@@ -37,37 +40,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 import config from "./config";
-
-// Create PostgreSQL session store factory for production
-const PgSession = ConnectPgSimple(session);
-
-// Session configuration with store selection
-const sessionConfig: any = {
-  secret: config.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: { 
-    secure: config.SESSION_SECURE,
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: config.isProduction ? (config.isRender ? 'none' as const : 'strict' as const) : 'lax' as const
-  }
-};
-
-// Use PostgreSQL session store in production, memory store in development
-if (config.isProduction && process.env.DATABASE_URL) {
-  sessionConfig.store = new PgSession({
-    conString: process.env.DATABASE_URL,
-    tableName: 'session',
-    createTableIfMissing: true
-  });
-  log('Using PostgreSQL session store for production');
-} else {
-  log('Using memory session store for development');
-}
-
-// @ts-ignore - Express session type issue workaround
-app.use(session(sessionConfig));
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -160,7 +132,6 @@ app.use((req, res, next) => {
 
   server.listen(port, host, () => {
     log(`serving on ${host}:${port} in ${config.NODE_ENV} mode`);
-    log(`session config: secure=${sessionConfig.cookie.secure}, sameSite=${sessionConfig.cookie.sameSite}`);
     log(`deployment: replit=${config.isReplit}, railway=${config.isRailway}, render=${config.isRender}, production=${config.isProduction}`);
     
     // Health check endpoint
@@ -181,8 +152,7 @@ app.use((req, res, next) => {
                    config.isNetlify ? 'netlify' : 'development'
         },
         database: {
-          connected: !!process.env.DATABASE_URL,
-          sessionStore: config.isProduction && process.env.DATABASE_URL ? 'postgresql' : 'memory'
+          connected: !!process.env.DATABASE_URL
         }
       });
     });

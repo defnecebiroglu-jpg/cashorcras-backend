@@ -30,7 +30,8 @@ export default function TeamLogin() {
     setIsLoading(true);
 
     try {
-      const response = await api.post("/api/auth/team", { accessCode });
+      const trimmedCode = accessCode.trim();
+      const response = await api.post("/api/auth/team", { accessCode: trimmedCode });
       const data = response.data;
 
       localStorage.setItem("teamId", data.team.id.toString());
@@ -144,7 +145,7 @@ export default function TeamLogin() {
                     }}
                     placeholder="Takım erişim kodunu giriniz"
                     value={accessCode}
-                    onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
+                    onChange={(e) => setAccessCode(e.target.value)}
                     required
                   />
                 </div>

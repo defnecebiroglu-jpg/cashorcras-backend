@@ -788,7 +788,12 @@ export class MemStorage implements IStorage {
   // Authentication methods
   async authenticateTeam(accessCode: string): Promise<Team | null> {
     const teams = Array.from(this.teams.values());
-    return teams.find((team) => team.accessCode === accessCode) || null;
+    const trimmedCode = accessCode.trim();
+    // Try exact match first (for backward compatibility), then case-insensitive
+    return teams.find((team) => 
+      team.accessCode === trimmedCode || 
+      team.accessCode?.toLowerCase() === trimmedCode.toLowerCase()
+    ) || null;
   }
 
   async authenticateAdmin(password: string): Promise<boolean> {

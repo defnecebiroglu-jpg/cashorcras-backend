@@ -5,9 +5,8 @@ export const config = {
   HOST: process.env.HOST || '0.0.0.0',
   NODE_ENV: process.env.NODE_ENV || 'development',
   
-  // Session
-  SESSION_SECRET: process.env.SESSION_SECRET || 'cashcrash-secret-key-' + Math.random(),
-  SESSION_SECURE: process.env.NODE_ENV === 'production' && process.env.HTTPS !== 'false',
+  // Admin
+  ADMIN_CODE: process.env.ADMIN_CODE || 'admin123',
   
   // Database
   DATABASE_URL: process.env.DATABASE_URL,
@@ -55,16 +54,9 @@ if (config.isProduction) {
     console.log('🌐 Netlify deployment detected');
   }
   
-  // Universal validation
-  if (!process.env.SESSION_SECRET) {
-    console.warn(`Warning: SESSION_SECRET not set - using auto-generated secret`);
-  }
-  
-  // Database validation for production
-  if (process.env.DATABASE_URL) {
-    console.log('✅ PostgreSQL database detected - using persistent sessions');
-  } else if (config.isProduction) {
-    console.warn('Warning: No DATABASE_URL in production - using memory sessions');
+  // Admin code validation
+  if (!process.env.ADMIN_CODE) {
+    console.warn(`Warning: ADMIN_CODE not set - using default 'admin123'`);
   }
   
   console.log(`Platform: ${platform} | Production: ${config.isProduction}`);
