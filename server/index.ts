@@ -11,7 +11,7 @@ import "./types"; // Type definitions
 
 const app = express();
 
-// CORS configuration
+// CORS configuration - CRITICAL: Must allow x-admin-code header
 app.use(cors({
   origin: [
     "http://localhost:5173",
@@ -21,7 +21,16 @@ app.use(cors({
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "x-admin-code"]
+  allowedHeaders: [
+    "Content-Type", 
+    "Authorization", 
+    "X-Requested-With", 
+    "x-admin-code",
+    "X-Admin-Code",  // Also allow uppercase for compatibility
+    "accept",
+    "origin"
+  ],
+  exposedHeaders: ["x-admin-code", "X-Admin-Code"]
 }));
 
 // Security and parsing middleware

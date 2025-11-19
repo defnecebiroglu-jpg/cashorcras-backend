@@ -56,8 +56,11 @@ if (config.isProduction) {
   
   // Admin code validation
   if (!process.env.ADMIN_CODE) {
-    console.warn(`Warning: ADMIN_CODE not set - using default 'admin123'`);
+    console.warn(`⚠️  Warning: ADMIN_CODE not set - using default 'admin123'`);
+  } else {
+    console.log(`✅ ADMIN_CODE is set (length: ${config.ADMIN_CODE.length})`);
   }
+  console.log(`[config] ADMIN_CODE length: ${config.ADMIN_CODE.length}`);
   
   console.log(`Platform: ${platform} | Production: ${config.isProduction}`);
 }
