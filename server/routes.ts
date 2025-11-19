@@ -35,15 +35,6 @@ const upload = multer({
   }
 });
 
-// Require admin middleware
-// TEMPORARY: Admin authorization DISABLED for simulation.
-// All admin routes are open. Do NOT re-enable this without adding proper auth.
-function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  // TEMPORARY: Admin authorization disabled for simulation.
-  // All admin routes are open. Do NOT re-enable this without adding proper auth.
-  console.log("[requireAdmin] Admin authorization DISABLED – allowing all requests");
-  next();
-}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Serve uploaded files with Railway-safe path
@@ -95,7 +86,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin dividend distribution endpoint
-  app.post('/api/admin/distribute-dividend/:companyId', requireAdmin, async (req, res) => {
+  app.post('/api/admin/distribute-dividend/:companyId', async (req, res) => {
     try {
 
       const companyId = parseInt(req.params.companyId);
@@ -148,7 +139,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin salesman endpoints for managing team portfolios
-  app.post('/api/admin/assign-stock', requireAdmin, async (req, res) => {
+  app.post('/api/admin/assign-stock', async (req, res) => {
     try {
 
       const { teamId, companyId, shares } = req.body;
@@ -181,7 +172,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/unassign-stock', requireAdmin, async (req, res) => {
+  app.post('/api/admin/unassign-stock', async (req, res) => {
     try {
 
       const { teamId, companyId, shares } = req.body;
@@ -222,7 +213,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/assign-currency', requireAdmin, async (req, res) => {
+  app.post('/api/admin/assign-currency', async (req, res) => {
     try {
 
       const { teamId, currencyId, amount } = req.body;
@@ -255,7 +246,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/unassign-currency', requireAdmin, async (req, res) => {
+  app.post('/api/admin/unassign-currency', async (req, res) => {
     try {
 
       const { teamId, currencyId, amount } = req.body;
@@ -297,7 +288,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Password Management Routes (Admin only)
-  app.put('/api/admin/update-team-password', requireAdmin, async (req, res) => {
+  app.put('/api/admin/update-team-password', async (req, res) => {
     try {
 
       const { teamId, newAccessCode } = req.body;
@@ -324,7 +315,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/admin/update-admin-password', requireAdmin, async (req, res) => {
+  app.put('/api/admin/update-admin-password', async (req, res) => {
     try {
 
       const { newPassword } = req.body;
@@ -347,7 +338,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/admin/update-team-name', requireAdmin, async (req, res) => {
+  app.put('/api/admin/update-team-name', async (req, res) => {
     try {
 
       const { teamId, newName } = req.body;
@@ -401,7 +392,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.status(404).json({ error: 'Object storage not available in production' });
   });
 
-  app.post('/api/companies', requireAdmin, upload.single('logo'), async (req, res) => {
+  app.post('/api/companies', upload.single('logo'), async (req, res) => {
     try {
       const data = insertCompanySchema.parse(req.body);
       if (req.file) {
@@ -415,7 +406,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update company logo via object storage - disabled for Railway deployment
-  app.put('/api/companies/:id/logo', requireAdmin, async (req, res) => {
+  app.put('/api/companies/:id/logo', async (req, res) => {
     try {
       const { logoUrl } = req.body;
       if (!logoUrl) {
@@ -433,7 +424,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/companies/:id', requireAdmin, upload.single('logo'), async (req, res) => {
+  app.put('/api/companies/:id', upload.single('logo'), async (req, res) => {
     try {
       const data = { ...req.body };
       if (req.file) {
@@ -455,7 +446,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete('/api/companies/:id', requireAdmin, async (req, res) => {
+  app.delete('/api/companies/:id', async (req, res) => {
     try {
       await storage.deleteCompany(parseInt(req.params.id));
       res.status(204).send();
@@ -465,7 +456,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // PATCH endpoint for bulk price updates
-  app.patch('/api/companies/:id', requireAdmin, async (req, res) => {
+  app.patch('/api/companies/:id', async (req, res) => {
     try {
       const { price, sellPrice } = req.body;
       
@@ -522,7 +513,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/currencies', requireAdmin, upload.single('logo'), async (req, res) => {
+  app.post('/api/currencies', upload.single('logo'), async (req, res) => {
     try {
       const data = insertCurrencySchema.parse(req.body);
       if (req.file) {
@@ -535,7 +526,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/currencies/:id', requireAdmin, upload.single('logo'), async (req, res) => {
+  app.put('/api/currencies/:id', upload.single('logo'), async (req, res) => {
     try {
       const data = { ...req.body };
       if (req.file) {
@@ -557,7 +548,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete('/api/currencies/:id', requireAdmin, async (req, res) => {
+  app.delete('/api/currencies/:id', async (req, res) => {
     try {
       await storage.deleteCurrency(parseInt(req.params.id));
       res.status(204).send();
@@ -567,7 +558,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // PATCH endpoint for bulk rate updates
-  app.patch('/api/currencies/:id', requireAdmin, async (req, res) => {
+  app.patch('/api/currencies/:id', async (req, res) => {
     try {
       const { rate, sellRate } = req.body;
       
@@ -715,7 +706,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/teams', requireAdmin, async (req, res) => {
+  app.post('/api/teams', async (req, res) => {
     try {
 
       const data = insertTeamSchema.parse(req.body);
