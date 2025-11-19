@@ -56,6 +56,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json({ team });
     } catch (error) {
+      console.error('[POST /api/auth/team] Error:', error);
       res.status(500).json({ message: 'Kimlik doğrulama hatası' });
     }
   });
@@ -371,19 +372,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const companies = await storage.getCompanies();
       res.json(companies);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to get companies' });
+      console.error('[GET /api/companies] Error:', error);
+      res.status(500).json({ ok: false, message: 'Failed to get companies' });
     }
   });
 
   app.get('/api/companies/:id', async (req, res) => {
     try {
-      const company = await storage.getCompany(parseInt(req.params.id));
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ ok: false, message: 'Invalid company ID' });
+      }
+      const company = await storage.getCompany(id);
       if (!company) {
-        return res.status(404).json({ message: 'Company not found' });
+        return res.status(404).json({ ok: false, message: 'Company not found' });
       }
       res.json(company);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to get company' });
+      console.error(`[GET /api/companies/:id] Error for id ${req.params.id}:`, error);
+      res.status(500).json({ ok: false, message: 'Failed to get company' });
     }
   });
 
@@ -401,7 +408,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const company = await storage.createCompany(data);
       res.status(201).json(company);
     } catch (error) {
-      res.status(400).json({ message: 'Invalid company data' });
+      console.error('[POST /api/companies] Error:', error);
+      res.status(400).json({ ok: false, message: 'Invalid company data' });
     }
   });
 
@@ -448,10 +456,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/companies/:id', async (req, res) => {
     try {
-      await storage.deleteCompany(parseInt(req.params.id));
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ message: 'Failed to delete company' });
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ ok: false, message: 'Invalid company ID' });
+      }
+      await storage.deleteCompany(id);
+      res.status(200).json({ ok: true, message: 'Company deleted successfully' });
+    } catch (error: any) {
+      console.error('[DELETE /api/companies/:id] Error:', error);
+      const statusCode = error.message === 'Company not found' ? 404 : 500;
+      res.status(statusCode).json({ ok: false, message: error.message || 'Failed to delete company' });
     }
   });
 
@@ -550,10 +564,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/currencies/:id', async (req, res) => {
     try {
-      await storage.deleteCurrency(parseInt(req.params.id));
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ message: 'Failed to delete currency' });
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ ok: false, message: 'Invalid currency ID' });
+      }
+      await storage.deleteCurrency(id);
+      res.status(200).json({ ok: true, message: 'Currency deleted successfully' });
+    } catch (error: any) {
+      console.error('[DELETE /api/currencies/:id] Error:', error);
+      const statusCode = error.message === 'Currency not found' ? 404 : 500;
+      res.status(statusCode).json({ ok: false, message: error.message || 'Failed to delete currency' });
     }
   });
 
@@ -741,10 +761,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/teams/:id', async (req, res) => {
     try {
-      await storage.deleteTeam(parseInt(req.params.id));
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ message: 'Takım silme hatası' });
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ ok: false, message: 'Invalid team ID' });
+      }
+      await storage.deleteTeam(id);
+      res.status(200).json({ ok: true, message: 'Team deleted successfully' });
+    } catch (error: any) {
+      console.error('[DELETE /api/teams/:id] Error:', error);
+      const statusCode = error.message === 'Team not found' ? 404 : 500;
+      res.status(statusCode).json({ ok: false, message: error.message || 'Takım silme hatası' });
     }
   });
 
@@ -839,10 +865,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/team-stocks/:id', async (req, res) => {
     try {
-      await storage.deleteTeamStock(parseInt(req.params.id));
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ message: 'Failed to delete team stock' });
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ ok: false, message: 'Invalid team stock ID' });
+      }
+      await storage.deleteTeamStock(id);
+      res.status(200).json({ ok: true, message: 'Team stock deleted successfully' });
+    } catch (error: any) {
+      console.error('[DELETE /api/team-stocks/:id] Error:', error);
+      const statusCode = error.message === 'Team stock not found' ? 404 : 500;
+      res.status(statusCode).json({ ok: false, message: error.message || 'Failed to delete team stock' });
     }
   });
 
@@ -937,10 +969,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/team-currencies/:id', async (req, res) => {
     try {
-      await storage.deleteTeamCurrency(parseInt(req.params.id));
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ message: 'Failed to delete team currency' });
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ ok: false, message: 'Invalid team currency ID' });
+      }
+      await storage.deleteTeamCurrency(id);
+      res.status(200).json({ ok: true, message: 'Team currency deleted successfully' });
+    } catch (error: any) {
+      console.error('[DELETE /api/team-currencies/:id] Error:', error);
+      const statusCode = error.message === 'Team currency not found' ? 404 : 500;
+      res.status(statusCode).json({ ok: false, message: error.message || 'Failed to delete team currency' });
     }
   });
 
