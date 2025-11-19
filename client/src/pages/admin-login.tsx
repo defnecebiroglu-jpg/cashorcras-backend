@@ -38,8 +38,24 @@ export default function AdminLogin() {
       console.log("[admin-login] Response:", response.data);
       
       if (response.data.ok === true) {
+        // CRITICAL: Store admin code in localStorage
         localStorage.setItem("adminCode", trimmedPassword);
-        console.log("[admin-login] Admin code stored in localStorage");
+        console.log("[admin-login] ✅ Admin code stored in localStorage");
+        console.log("[admin-login] Stored code length:", trimmedPassword.length);
+        console.log("[admin-login] Verification: localStorage.getItem('adminCode'):", localStorage.getItem("adminCode")?.substring(0, 3) + "...");
+        
+        // Verify it's stored before navigation
+        const verifyCode = localStorage.getItem("adminCode");
+        if (!verifyCode) {
+          console.error("[admin-login] ❌ CRITICAL: adminCode NOT stored in localStorage!");
+          toast({ 
+            title: "Hata", 
+            description: "Admin kodu kaydedilemedi. Lütfen tekrar deneyin.",
+            variant: "destructive" 
+          });
+          return;
+        }
+        
         setLocation("/admin");
         toast({ title: "Admin girişi başarılı!" });
       } else {
