@@ -1,3 +1,8 @@
+// ⚠️ TEMPORARY: Admin authorization is DISABLED for simulation.
+// All admin routes (requireAdmin middleware) currently allow all requests without authentication.
+// This must be RE-ENABLED after the simulation by restoring the proper requireAdmin implementation.
+// DO NOT deploy this to production without re-enabling admin authentication.
+
 import type { Express, Request, Response, NextFunction } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
@@ -31,13 +36,12 @@ const upload = multer({
 });
 
 // Require admin middleware
+// TEMPORARY: Admin authorization DISABLED for simulation.
+// All admin routes are open. Do NOT re-enable this without adding proper auth.
 function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  const adminCode = req.headers["x-admin-code"];
-  
-  if (!adminCode || adminCode !== config.ADMIN_CODE) {
-    return res.status(403).json({ message: 'Admin authentication required' });
-  }
-  
+  // TEMPORARY: Admin authorization disabled for simulation.
+  // All admin routes are open. Do NOT re-enable this without adding proper auth.
+  console.log("[requireAdmin] Admin authorization DISABLED – allowing all requests");
   next();
 }
 
@@ -68,12 +72,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/auth/admin', async (req, res) => {
     try {
       const { code } = req.body;
-      if (code === config.ADMIN_CODE) {
+      const trimmedCode = (code || "").trim();
+      const matches = trimmedCode === config.ADMIN_CODE;
+      
+      // Debug logging (sanitized for production)
+      console.log("[admin login]", {
+        received: trimmedCode ? "present" : "missing",
+        length: trimmedCode.length,
+        expectedLength: config.ADMIN_CODE?.length || 0,
+        match: matches
+      });
+      
+      if (matches) {
         res.json({ ok: true });
       } else {
         res.json({ ok: false });
       }
     } catch (error) {
+      console.error("[admin login error]", error);
       res.status(500).json({ message: 'Kimlik doğrulama hatası' });
     }
   });
